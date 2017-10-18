@@ -7,6 +7,8 @@ sudo: enabled
 install:
   - ./travis-install.sh
 
-test:
+script:
   - ./travis-test.sh
 
+notifications:
+  email: false
