@@ -26,6 +26,7 @@
     "bootstrap": "^3.3.5",
     "history": "^3.0.0",
     "moment": "^2.10.6",
+    "normalize.css": "^7.0.0",
     "react": "15.3.0",
     "react-dom": "15.3.0",
     "react-router": "2.6.1",

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { Router, Route, browserHistory } from 'react-router'
 
 import EtheroscopeContainer from './app/scenes/Etheroscope'
+import 'normalize.css'
 
 ReactDOM.render(
   <Router history={browserHistory}>
