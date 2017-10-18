@@ -10,5 +10,3 @@ install:
 test:
   - travis-test.sh
 
-deploy:
-  - travis-deploy.sh
