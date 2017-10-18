@@ -7,7 +7,7 @@ import FooterContainer from './Footer'
 
 const Wrapper = styled.div`
   background-color: white;
-`
+`;
 
 const EtheroscopeContainer = ({...props}) => {
   return (
@@ -17,6 +17,6 @@ const EtheroscopeContainer = ({...props}) => {
       <FooterContainer />
     </Wrapper>
   )
-}
+};
 
 export default EtheroscopeContainer

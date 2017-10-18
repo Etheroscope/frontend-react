@@ -10,22 +10,14 @@ const Wrapper = styled.div`
   width: 100%;
 `
 
-const Work = styled.a`
-  color: black;
-  margin-left: 50px;
-  width: 40%;
-`
-
 const AliceImage = styled.img`
-  display: flex;
   height: 100px;
-  width: 250px;
+  margin: 0 auto -10px auto; /* The -10px is because the image needs cropping */
 `
 
 const Header = ({...props}) => {
   return (
     <Wrapper>
-        <Work href='#'>How it Works</Work>
       <AliceImage src='https://s3.eu-west-2.amazonaws.com/alice-res/Logotype_right.png' />
     </Wrapper>
   )

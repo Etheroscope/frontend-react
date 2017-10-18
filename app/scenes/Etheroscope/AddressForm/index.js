@@ -5,14 +5,12 @@ import AddressForm from './template.js'
 class AddressFormContainer extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {value: ''}
-  
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
     }
   
     handleChange(event) {
-      this.setState({value: event.target.value});
+      // Propagate up
     }
   
     handleSubmit(event) {
@@ -23,7 +21,7 @@ class AddressFormContainer extends React.Component {
     render() {
       return (
         <AddressForm 
-        value={this.state.value}
+        address={this.props.address || 'contract address'}
         handleChange={this.handleChange}
         handleSubmit={this.handleSubmit} />
       )

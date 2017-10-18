@@ -2,38 +2,46 @@ import React from 'react'
 import styled from 'styled-components'
 
 import AddressFormContainer from './AddressForm'
+import ContractViewer from './ContractViewer.js'
+import Favourites from './Favourites.js'
 
 const Wrapper = styled.div`
   background-color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
-`
+`;
 
 const Banner = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
-  height: 150px;
   background-color: rgb(25, 152, 162);
-  color: white;  
-`
+  padding-top: 50px;
+`;
 
-const PageText = styled.p`
-  display: flex;
-  align-self: center;
-`
+class Etheroscope extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { contract: {} };
+  }
 
-const Etheroscope = ({...props}) => {
-  return (
-    <Wrapper>
-      <Banner>
-        <AddressFormContainer />
-      </Banner>
-      <PageText>Some page text</PageText>
-    </Wrapper>
-  )
+  render() {
+    return (
+      <Wrapper>
+        <Banner style={{ fontSize: '20px', color: 'white' }}>
+          <div style={{
+            width: '90%',
+            margin: '0 auto',
+            display: 'flex',
+            flexDirection: 'column'
+          }}>
+            <AddressFormContainer address={this.state.contract.address}/>
+            <Favourites favourites={this.props.favourites}/>
+          </div>
+        </Banner>
+        <ContractViewer/>
+      </Wrapper>
+    )
+  }
 }
 
 export default Etheroscope
