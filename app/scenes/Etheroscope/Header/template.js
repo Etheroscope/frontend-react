@@ -14,17 +14,19 @@ const Work = styled.li`
 const AliceImage = styled.img`
   display: flex;
   align-self: center;
+  height: 30px;
+  width: 50px;
 `
 
-const Header = ({...props}) => (
-  <Header>
+const Header = ({...props}) => {
+  return (
     <Wrapper>
       <ul>
         <Work><a href=''>How it Works</a></Work>
       </ul>
       <AliceImage src='https://s3.eu-west-2.amazonaws.com/alice-res/Logotype_right.png' />
     </Wrapper>
-  </Header>
-)
+  )
+}
 
 export default Header

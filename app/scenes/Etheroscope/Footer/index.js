@@ -2,10 +2,12 @@ import React from 'react'
 
 import Footer from './template.js'
 
-const FooterContainer = ({...props}) => (
-  <Footer
-    {...props}
-  />
-)
+const FooterContainer = ({...props}) => {
+  return (
+    <Footer
+      {...props}
+    />
+  )
+}
 
 export default FooterContainer

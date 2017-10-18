@@ -12,12 +12,12 @@ const PageText = styled.p`
   align-self: center;
 `
 
-const Etheroscope = ({...props}) => (
-  <Etheroscope>
+const Etheroscope = ({...props}) => {
+  return (
     <Wrapper>
       <PageText>Some page text</PageText>
     </Wrapper>
-  </Etheroscope>
-)
+  )
+}
 
 export default Etheroscope
