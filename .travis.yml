@@ -5,8 +5,8 @@ python:
 sudo: enabled
 
 install:
-  - travis-install.sh
+  - ./travis-install.sh
 
 test:
-  - travis-test.sh
+  - ./travis-test.sh
 
