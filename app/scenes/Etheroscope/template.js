@@ -4,19 +4,26 @@ import styled from 'styled-components'
 import AddressFormContainer from './AddressForm'
 import ContractViewer from './ContractViewer.js'
 import Favourites from './Favourites.js'
+import VariableSelection from './VariableSelection.js'
 
 const Wrapper = styled.div`
   background-color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
-`;
+`
 
 const Banner = styled.div`
   width: 100%;
   background-color: rgb(25, 152, 162);
   padding-top: 50px;
-`;
+`
+
+const Page = styled.div`
+  display: flex;
+  align-self: center;
+  width: 90%;
+`
 
 class Etheroscope extends React.Component {
   constructor(props) {
@@ -38,7 +45,10 @@ class Etheroscope extends React.Component {
             <Favourites favourites={this.props.favourites}/>
           </div>
         </Banner>
-        <ContractViewer/>
+        <Page>
+          <VariableSelection variables={[{name: 'hello'}, {name: 'yo'}]}/>
+          <ContractViewer/>
+        </Page>
       </Wrapper>
     )
   }
