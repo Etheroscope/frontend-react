@@ -11,7 +11,10 @@ script:
   - ./travis-test.sh
 
 deploy:
-  - ./travis-deploy.sh
+  - provider: script
+    script: ./travis-deploy.sh
+    on:
+      all_branches: true
 
 notifications:
   email: false
