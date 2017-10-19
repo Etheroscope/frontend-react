@@ -10,38 +10,36 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-`;
+`
 
 const Banner = styled.div`
   width: 100%;
   background-color: rgb(25, 152, 162);
   padding-top: 50px;
-`;
+  font=size: 20px;
+  color: white;
+`
 
-class Etheroscope extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { contract: {} };
-  }
+const SelectionWrapper = styled.div`
+  width: '90%';
+  margin: '0 auto';
+  display: 'flex';
+  flexDirection: 'column';
+`
 
-  render() {
-    return (
-      <Wrapper>
-        <Banner style={{ fontSize: '20px', color: 'white' }}>
-          <div style={{
-            width: '90%',
-            margin: '0 auto',
-            display: 'flex',
-            flexDirection: 'column'
-          }}>
-            <AddressFormContainer address={this.state.contract.address}/>
-            <Favourites favourites={this.props.favourites}/>
-          </div>
-        </Banner>
-        <ContractViewer/>
-      </Wrapper>
-    )
-  }
+const Etheroscope = ({...props}) => {
+  const { address, favourites } = props
+  return (
+    <Wrapper>
+      <Banner>
+        <SelectionWrapper>
+          <AddressFormContainer address={address}/>
+          <Favourites favourites={favourites}/>
+        </SelectionWrapper>
+      </Banner>
+      <ContractViewer/>
+    </Wrapper>
+  )
 }
 
 export default Etheroscope

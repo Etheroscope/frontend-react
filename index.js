@@ -1,10 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import configureStore from './app/store/configureStore'
 
 import 'normalize.css'
 import './index.css'
 
 import EtheroscopeContainer from './app/scenes/Etheroscope'
+
+const store = configureStore()
 
 const favourites = [
   { name: 'Alice', address: '0xbd897c8885b40d014fb7941b3043b21adcc9ca1c' },
@@ -12,6 +16,8 @@ const favourites = [
 ];
 
 ReactDOM.render(
-  <EtheroscopeContainer favourites={favourites}/>,
+  <Provider store={store}>
+    <EtheroscopeContainer favourites={favourites}/>
+  </Provider>,
   document.getElementById('app')
-);
+)

@@ -12,12 +12,21 @@ export default class Favourites extends React.Component {
       borderBottom: 'white 1px solid',
       textDecoration: 'none',
       cursor: 'pointer'
-    };
+    }
+
+    const getData = function (address) {
+      var xmlHttp = new XMLHttpRequest()
+      const url = 'http://etheroscope.alice.si/api/explore/' + address
+      xmlHttp.open( "GET", url, false ) // false for synchronous request
+      xmlHttp.send( null )
+      return xmlHttp.responseText
+    }
+
     return (
         <section style={{ marginBottom: '15px' }}>
           <span>Favourites: </span>
           {this.props.favourites.map(fav =>
-              <a key={fav.address} style={linkStyle}>{fav.name}</a>
+              <a key={fav.address} style={linkStyle} onClick={() => getData(fav.address)}>{fav.name}</a>
           )}
         </section>
     )
