@@ -1,4 +1,5 @@
 import React from 'react'
+import VariableSelection from './VariableSelection';
 
 // const ReactHighcharts = require('react-highcharts'); // Expects that Highcharts was loaded in the code.
 const ReactHighstock = require('react-highcharts/ReactHighstock')
@@ -10,12 +11,18 @@ const ReactHighstock = require('react-highcharts/ReactHighstock')
 class ContractViewer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { currentVariable: 'total' };
+    this.state = { currentVariable: null };
+    this.variableClicked = this.variableClicked.bind(this);
+  }
+
+  variableClicked(varName) {
+    this.setState({ currentVariable: varName });
   }
 
   render() {
     return (
       <div>
+        <VariableSelection variables={this.props.contract.variables} variableClicked={this.variableClicked}/>
         <ReactHighstock
           config={{
 
@@ -48,7 +55,6 @@ class ContractViewer extends React.Component {
             ]
         }}
         />
-        <p>Contract viewer</p>
       </div>
     )
   }

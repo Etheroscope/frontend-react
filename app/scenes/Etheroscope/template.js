@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import AddressFormContainer from './AddressForm'
 import ContractViewer from './ContractViewer.js'
 import Favourites from './Favourites.js'
+import VariableSelection from './VariableSelection.js'
 
 const Wrapper = styled.div`
   background-color: white;
@@ -16,7 +17,12 @@ const Banner = styled.div`
   width: 100%;
   background-color: rgb(25, 152, 162);
   padding-top: 50px;
-`;
+`
+
+const Page = styled.div`
+  width: 90%;
+  margin: auto;
+`
 
 class Etheroscope extends React.Component {
   constructor(props) {
@@ -38,19 +44,19 @@ class Etheroscope extends React.Component {
     return (
       <Wrapper>
         <Banner style={{ fontSize: '20px', color: 'white' }}>
-          <div
-            style={{
+          <div style={{
             width: '90%',
             margin: '0 auto',
             display: 'flex',
             flexDirection: 'column'
-          }}
-          >
-            <AddressFormContainer address={this.state.contract.address} />
-            <Favourites favourites={this.props.favourites} favouriteClicked={this.favouriteClicked} />
+          }}>
+            <AddressFormContainer address={this.state.contract.address}/>
+            <Favourites favourites={this.props.favourites} favouriteClicked={this.favouriteClicked}/>
           </div>
         </Banner>
-        <ContractViewer contract={this.state.contract} />
+	    <Page>
+          <ContractViewer  contract={this.state.contract}/>
+        </Page>
       </Wrapper>
     )
   }
