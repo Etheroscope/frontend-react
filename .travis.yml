@@ -10,5 +10,8 @@ install:
 script:
   - ./travis-test.sh
 
+deploy:
+  - ./travis-deploy.sh
+
 notifications:
   email: false
