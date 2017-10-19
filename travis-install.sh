@@ -1,3 +1,3 @@
 #!/bin/sh
 
-pip install ansible
+pip install git+https://github.com/ansible/ansible.git@devel
