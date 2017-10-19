@@ -18,9 +18,22 @@ class ContractViewer extends React.Component {
       <div>
         <ReactHighstock
           config={{
-            xAxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+            rangeSelector: {
+                selected: 1
             },
+
+            title: {
+                text: 'Smart Contract Explorer'
+            },
+
+            // series: [{
+            //     name: 'AAPL',
+            //     data: this.props.contract.variables.find(variable => variable.name === this.state.currentVariable),
+            //     tooltip: {
+            //         valueDecimals: 2
+            //     }
+            // }]
             series: [this.props.contract.variables.find(variable => variable.name === this.state.currentVariable)]
         }}
         />
