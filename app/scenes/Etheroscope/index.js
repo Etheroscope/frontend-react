@@ -1,22 +1,32 @@
 import React from 'react'
-import styled from 'styled-components'
 
-import Etheroscope from './template.js'
+import './style.scss'
+
 import HeaderContainer from './Header'
 import FooterContainer from './Footer'
+import AddressFormContainer from './AddressForm'
+import Favourites from './Favourites'
+import ContractViewer from './ContractViewer.js'
 
-const Wrapper = styled.div`
-  background-color: white;
-`;
+export default class Etheroscope extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { contract: {} };
+  }
 
-const EtheroscopeContainer = ({...props}) => {
-  return (
-    <Wrapper>
-      <HeaderContainer />
-        <Etheroscope {...props} />
-      <FooterContainer />
-    </Wrapper>
-  )
+  render() {
+    return (
+      <div>
+        <HeaderContainer />
+        <main>
+          <nav className="banner">
+            <AddressFormContainer address={this.state.contract.address}/>
+            <Favourites favourites={this.props.favourites}/>
+          </nav>
+          <ContractViewer/>
+        </main>
+        <FooterContainer />
+      </div>
+    );
+  }
 };
-
-export default EtheroscopeContainer

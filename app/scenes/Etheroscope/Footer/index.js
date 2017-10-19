@@ -1,13 +1,13 @@
 import React from 'react'
 
-import Footer from './template.js'
+import './style.scss'
 
-const FooterContainer = ({...props}) => {
+const Footer = () => {
   return (
-    <Footer
-      {...props}
-    />
+    <footer>
+        <p>© 2017 ALICE SI Ltd.</p>
+    </footer>
   )
 }
 
-export default FooterContainer
+export default Footer

@@ -1,13 +1,13 @@
 import React from 'react'
 
-import Header from './template.js'
+import './style.scss'
 
-const HeaderContainer = ({...props}) => {
+const Header = () => {
   return (
-    <Header
-      {...props}
-    />
-  )
+    <header>
+      <img className="logo" src='https://s3.eu-west-2.amazonaws.com/alice-res/Logotype_right.png' />
+    </header>
+  );
 }
 
-export default HeaderContainer
+export default Header;

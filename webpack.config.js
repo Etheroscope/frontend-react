@@ -1,12 +1,10 @@
 const {resolve} = require('path');
 const webpack = require('webpack');
-const validate = require('webpack-validator');
 const {getIfUtils, removeEmpty} = require('webpack-config-utils');
 
 module.exports = env => {
   const {ifProd, ifNotProd} = getIfUtils(env)
-
-  return validate({
+  return {
     entry: './index.js',
     context: __dirname,
     output: {
@@ -21,8 +19,18 @@ module.exports = env => {
       historyApiFallback: true
     },
     module: {
-      loaders: [
+      rules: [
         {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
+        {
+            test: /\.scss$/,
+            use: [{
+                loader: "style-loader" // creates style nodes from JS strings
+            }, {
+                loader: "css-loader" // translates CSS into CommonJS
+            }, {
+                loader: "sass-loader" // compiles Sass to CSS
+            }]
+        },
         {test: /\.css$/, loader: 'style-loader!css-loader'},
         {test: /(\.eot|\.woff2|\.woff|\.ttf|\.svg)/, loader: 'file-loader'},
       ],
@@ -47,5 +55,5 @@ module.exports = env => {
         },
       })),
     ])
-  });
+  };
 };

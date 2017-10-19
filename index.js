@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import 'normalize.css'
-import './index.css'
+import './index.scss'
 
 import EtheroscopeContainer from './app/scenes/Etheroscope'
 
