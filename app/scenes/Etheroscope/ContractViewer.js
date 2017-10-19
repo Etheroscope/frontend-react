@@ -34,7 +34,18 @@ class ContractViewer extends React.Component {
             //         valueDecimals: 2
             //     }
             // }]
-            series: [this.props.contract.variables.find(variable => variable.name === this.state.currentVariable)]
+
+            //  not sure this actually works
+            //  need to get data in correct format so dates work correctly
+            series: [
+                this.props.contract.variables.find(variable => variable.name === this.state.currentVariable),
+                {
+                    name: "Explorer",
+                    tooltip: {
+                        valueDecimals: 2
+                    }
+                }
+            ]
         }}
         />
         <p>Contract viewer</p>
