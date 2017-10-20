@@ -1,20 +1,29 @@
 language: python
 python:
-  - "3.5"
-
+- '3.5'
 sudo: enabled
 
+addons:
+  ssh_known_hosts:
+
 install:
-  - ./travis-install.sh
+- ./travis-install.sh
 
 script:
-  - ./travis-test.sh
+- ./travis-test.sh
+
+before_deploy:
+- openssl aes-256-cbc -K $encrypted_<...>_key -iv $encrypted_<...>_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/deploy_rsa
+- ssh-add /tmp/deploy_rsa
 
 deploy:
-  - provider: script
-    script: ./travis-deploy.sh
-    on:
-      all_branches: true
+- provider: script
+  script: ./travis-deploy.sh
+  on:
+    all_branches: true
 
 notifications:
   email: false
+
