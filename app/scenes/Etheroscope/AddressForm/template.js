@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Form = styled.form`
+const Form = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
@@ -28,13 +28,14 @@ const ExploreButton = styled.button`
   padding: 5px 50px;
   letter-spacing: 2px;
   line-height: 1.42;
+  cursor: pointer;
 `;
 
-const AddressForm = ({ handleChange, handleSubmit, address }) => {
+const AddressForm = ({ handleChange, handleClick, address }) => {
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form>
       <AddressInput type="text" value={address} onChange={handleChange}/>
-      <ExploreButton type="submit">Explore</ExploreButton>
+      <ExploreButton onClick={handleClick}>Explore</ExploreButton>
     </Form>
   )
 };

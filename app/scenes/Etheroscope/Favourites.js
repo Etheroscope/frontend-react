@@ -18,7 +18,7 @@ export default class Favourites extends React.Component {
       <section style={{ marginBottom: '15px' }}>
         <span>Favourites: </span>
         {this.props.favourites.map(fav =>
-          <a key={fav.address} style={linkStyle} onClick={() => this.props.favouriteClicked(fav.address)}>{fav.name}</a>
+          <a key={fav.address} style={linkStyle} onClick={() => this.props.handleClick(fav.address)}>{fav.name}</a>
           )}
       </section>
     )

@@ -2,30 +2,11 @@ import React from 'react'
 
 import AddressForm from './template.js'
 
-class AddressFormContainer extends React.Component {
-    constructor(props) {
-      super(props);
-      this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
-    }
-  
-    handleChange(event) {
-      // Propagate up
-    }
-  
-    handleSubmit(event) {
-      alert('An address was submitted: ' + this.state.value);
-      event.preventDefault();
-    }
-  
-    render() {
-      return (
-        <AddressForm 
-        address={this.props.address || 'contract address'}
-        handleChange={this.handleChange}
-        handleSubmit={this.handleSubmit} />
-      )
-    }
-  }
+const AddressFormContainer = ({ address, handleChange, handleClick }) => (
+  <AddressForm
+    address={address}
+    handleChange={(e) => handleChange(e.target.value)}
+    handleClick={handleClick} />
+);
 
-  export default AddressFormContainer
+export default AddressFormContainer
