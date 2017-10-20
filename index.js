@@ -13,7 +13,6 @@ const favourites = [
 
 const contracts = {
   '0xbd897c8885b40d014fb7941b3043b21adcc9ca1c': {
-    address: '0xbd897c8885b40d014fb7941b3043b21adcc9ca1c',
     variables: [
       {
         name: 'total',
@@ -22,7 +21,6 @@ const contracts = {
     ]
   },
   '0xbb9bc244d798123fde783fcc1c72d3bb8c189413': {
-    address: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413',
     variables: [
       {
         name: 'minTokensToCreate',

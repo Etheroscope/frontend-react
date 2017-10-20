@@ -27,17 +27,34 @@ const Page = styled.div`
 class Etheroscope extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { contract: {variables: []} };
+    this.state = {
+      contract: { variables: [] },
+      contractAddress: 'contract address'
+    };
+    this.downloadContract = this.downloadContract.bind(this);
     this.favouriteClicked = this.favouriteClicked.bind(this);
+    this.addressChanged = this.addressChanged.bind(this);
+    this.exploreClicked = this.exploreClicked.bind(this);
   }
 
-  getContract(address) {
-    return Promise.resolve(this.props.mockContracts[address]);
+  downloadContract(address) {
+    console.log(address);
+    return Promise.resolve(this.props.mockContracts[address])
+      .then(x => { console.log(x); return x; })
+      .then(contract => this.setState({ contract }));
   }
 
   favouriteClicked(address) {
-    this.getContract(address)
-        .then(contract => this.setState({contract}));
+    this.downloadContract(address)
+        .then(this.setState({ contractAddress: address }));
+  }
+
+  exploreClicked(newAddress) {
+    this.downloadContract(this.state.contractAddress);
+  }
+
+  addressChanged(newAddress) {
+    this.setState({contractAddress: newAddress});
   }
 
   render() {
@@ -50,8 +67,8 @@ class Etheroscope extends React.Component {
             display: 'flex',
             flexDirection: 'column'
           }}>
-            <AddressFormContainer address={this.state.contract.address}/>
-            <Favourites favourites={this.props.favourites} favouriteClicked={this.favouriteClicked}/>
+            <AddressFormContainer address={this.state.contractAddress} handleChange={this.addressChanged} handleClick={this.exploreClicked}/>
+            <Favourites favourites={this.props.favourites} handleClick={this.favouriteClicked}/>
           </div>
         </Banner>
 	    <Page>
