@@ -9,7 +9,7 @@ install:
 script:
 - ./travis-test.sh
 before_deploy:
-- openssl aes-256-cbc -K $super_secret_password -iv $super_secret_password -in deploy_rsa.enc
+- openssl aes-256-cbc -K $super_secret_password -iv $super_secret_password_iv -in deploy_rsa.enc
   -out /tmp/deploy_rsa -d
 - eval "$(ssh-agent -s)"
 - chmod 600 /tmp/deploy_rsa
