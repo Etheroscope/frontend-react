@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import AddressFormContainer from './AddressForm'
 import ContractViewer from './ContractViewer.js'
 import Favourites from './Favourites.js'
+import VariableSelection from './VariableSelection.js'
 
 const Wrapper = styled.div`
   background-color: white;
@@ -16,12 +17,44 @@ const Banner = styled.div`
   width: 100%;
   background-color: rgb(25, 152, 162);
   padding-top: 50px;
-`;
+`
+
+const Page = styled.div`
+  width: 90%;
+  margin: auto;
+`
 
 class Etheroscope extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { contract: {} };
+    this.state = {
+      contract: { variables: [] },
+      contractAddress: 'contract address'
+    };
+    this.downloadContract = this.downloadContract.bind(this);
+    this.favouriteClicked = this.favouriteClicked.bind(this);
+    this.addressChanged = this.addressChanged.bind(this);
+    this.exploreClicked = this.exploreClicked.bind(this);
+  }
+
+  downloadContract(address) {
+    console.log(address);
+    return Promise.resolve(this.props.mockContracts[address])
+      .then(x => { console.log(x); return x; })
+      .then(contract => this.setState({ contract }));
+  }
+
+  favouriteClicked(address) {
+    this.downloadContract(address)
+        .then(this.setState({ contractAddress: address }));
+  }
+
+  exploreClicked(newAddress) {
+    this.downloadContract(this.state.contractAddress);
+  }
+
+  addressChanged(newAddress) {
+    this.setState({contractAddress: newAddress});
   }
 
   render() {
@@ -34,11 +67,13 @@ class Etheroscope extends React.Component {
             display: 'flex',
             flexDirection: 'column'
           }}>
-            <AddressFormContainer address={this.state.contract.address}/>
-            <Favourites favourites={this.props.favourites}/>
+            <AddressFormContainer address={this.state.contractAddress} handleChange={this.addressChanged} handleClick={this.exploreClicked}/>
+            <Favourites favourites={this.props.favourites} handleClick={this.favouriteClicked}/>
           </div>
         </Banner>
-        <ContractViewer/>
+	    <Page>
+          <ContractViewer  contract={this.state.contract}/>
+        </Page>
       </Wrapper>
     )
   }

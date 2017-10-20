@@ -4,11 +4,13 @@
   "description": "React implementation of the http://etheroscope.alice.si",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --inline --content-base ./ --env.dev",
+    "dev": "webpack-dev-server --host 0.0.0.0 --port 8080 --inline --content-base ./ --env.dev",
     "build": "webpack --env.prod",
     "test": "cross-env NODE_ENV=test nyc mocha",
     "watch:test": "mocha --watch --compilers js:babel-register",
     "start": "http-server",
+    "vm-start": "forever start",
+    "clean": "npm prune && npm dedupe",
     "setup": "npm install"
   },
   "repository": {
@@ -24,15 +26,18 @@
   "dependencies": {
     "axios": "0.13.1",
     "bootstrap": "^3.3.5",
+    "forever": "^0.15.3",
     "history": "^3.0.0",
     "moment": "^2.10.6",
     "normalize.css": "^7.0.0",
     "react": "15.3.0",
     "react-dom": "15.3.0",
+    "react-highcharts": "^13.0.0",
     "react-router": "2.6.1",
     "react-router-dom": "^4.2.2",
     "react-tooltip": "3.1.5",
-    "styled-components": "^2.2.1"
+    "styled-components": "^2.2.1",
+    "webpacker": "0.0.3"
   },
   "devDependencies": {
     "babel-core": "6.13.2",
