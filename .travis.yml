@@ -1,14 +1,26 @@
 language: python
 python:
-  - "2.7"
-
+- '3.5'
 sudo: enabled
-
+addons:
+  ssh_known_hosts: etheroscope.info
 install:
-  - ./travis-install.sh
-
+- ./travis-install.sh
 script:
-  - ./travis-test.sh
-
+- ./travis-test.sh
+before_deploy:
+- openssl aes-256-cbc -K $encrypted_da743b78d4e1_key -iv $encrypted_da743b78d4e1_iv
+  -in deploy_rsa.enc -out /tmp/deploy_rsa -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/deploy_rsa
+- sudo ssh-add /tmp/deploy_rsa
+deploy:
+- provider: script
+  script: ./travis-deploy.sh
+  on:
+    all_branches: true
 notifications:
   email: false
+env:
+  global:
+    secure: Q4Hkb3pVa//rwum8k/aOV2pHY58kvPvdcB1j8RwNoE+Xwwh1spfA6TXXRXCk0a6FL8qZQGy5pojpPb4wVSkwnuhw3h/Q3xk/ZhQpiddpwssww2SGOAt059GDW3ZBQZVxklr8tQLM3Cg/OHpHqVwBwD5N5XNoCMbYv3z/LLmuXwp/SJP7XDHRGXcOZ6HY8BuFv6w7W0oj17WV9v0SRF9e58ssBqkM2XcOdN7q7kfRwcoxSoSYi9xZMj0QweGq6w7AL0alHdl4SUJiRzA7xA9DIyB35ELHbgTf6pS0duDI8pXhfpEBo0m/pDjnpRlB1OMzPNNfKbzqr5Op7Ld341HSxzSYt459GXedCTS6uLePB/1DZhPIpy0oelAfi15WS+V6UutIyswnsKDTusyRsFKjEZ6+XTNrj8S593od/FIZcqNACQRihBFLjcLUWR0J2Ml0WEtmWMDijmHqpEiaeKuE8h6pIooVkdyt3ASAZO4y21eEfOLCC7tDmsFnGg3KV0gD+NXhXikM/ArkKbr6MLI0FcFrrCgkGT+bj8rLAOT8/fKAyHlTXCV+P3foK5E8l2ZDfIH9m2KOwpWCEttsLrxNKVoUIsGbX+aE4Qn59/8M4JMJUr05LJyw20gK2QIFxLpKLljgjRaiiUPBUscdIsOo7jv4EKrzTC562yxdHJ3pWww=

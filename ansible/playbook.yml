@@ -1,0 +1,75 @@
+---
+- name: Deploy application
+  hosts: all
+  vars_files:
+    - ["vars/default.yml"]
+  roles:
+    - role: common
+      sudoer: True
+      sudo: yes
+    - role: nodejs
+      sudoer: True
+      sudo: yes
+    - role: nginx
+      sudoer: True
+      sudo: yes
+      
+  tasks:
+    - name: Install global npm packages
+      npm: name={{ item }} global=yes
+      sudo: yes
+      become: True
+      with_items:
+      - n
+      - forever
+      
+    - name: Make app dir
+      sudo: no
+      shell: mkdir -p {{ deploy_app_dir }}
+      changed_when: False
+      become: True
+      
+    - name: Pull sources from the repository.
+      sudo: no
+      git: repo={{ repo_url }}
+           ssh_opts="-o StrictHostKeyChecking=no"
+           dest={{ deploy_app_dir }}
+           version={{ repo_version }}
+           force=True
+      become: True
+      force: True
+      
+    - name: install npm packages for root
+      sudo: no
+      shell: chdir={{ deploy_app_dir }} npm run setup
+      become: True
+      
+    - name: build app
+      sudo: no
+      shell: chdir={{ deploy_app_dir }} npm run build
+      become: True
+      
+    - name: Start node 
+      shell: chdir={{deploy_app_dir}} forever start node_modules/http-server/bin/http-server 
+      sudo: yes
+      become: True
+      
+    - name: copy nginx virtual host file
+      sudo: yes
+      template: src="{{ inventory_dir }}/templates/nginx.j2"
+                dest="/etc/nginx/sites-available/{{app_name}}"
+                owner=root
+                group=root
+      become: True
+      
+    - name: link nginx virtual host file
+      sudo: yes
+      file: src="/etc/nginx/sites-available/{{app_name}}"
+            dest="/etc/nginx/sites-enabled/{{app_name}}"
+            state=link
+      become: True
+      
+    - name: restart nginx
+      sudo: yes
+      service: name=nginx state=restarted
+      become: True

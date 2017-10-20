@@ -3,5 +3,5 @@ node_modules/
 build/
 coverage/
 .nyc_output/
+*.DS_Store
 *.iml
-
