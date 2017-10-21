@@ -14,7 +14,7 @@ const AliceInfo = styled.p`
 const Footer = ({...props}) => {
   return (
     <Wrapper>
-      <AliceInfo>© 2017 ALICE SI Ltd.</AliceInfo>
+      <AliceInfo>© 2017 Etheroscope.</AliceInfo>
     </Wrapper>
   )
 }
