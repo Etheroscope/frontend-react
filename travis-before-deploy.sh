@@ -15,11 +15,3 @@ ls platform
 ls
 cp -R ansible-additions/. ansible
 ls ansible
-
-# Set up SSH private key
-echo "Decrypting uploaded private key"
-openssl aes-256-cbc -K $encrypted_da743b78d4e1_key -iv $encrypted_da743b78d4e1_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
-echo "Adding SSH private key"
-eval "$(ssh-agent -s)"
-chmod 600 /tmp/deploy_rsa
-sudo ssh-add /tmp/deploy_rsa
