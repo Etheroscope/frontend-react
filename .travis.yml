@@ -4,7 +4,6 @@ python:
 sudo: enabled
 addons:
   ssh_known_hosts: etheroscope.info
-deploy.skip_cleanup: true
 
 install:
 - ./travis-install.sh
@@ -13,6 +12,7 @@ script:
 before_deploy:
 - ./travis-before-deploy.sh
 deploy:
+  skip_cleanup: true
 - provider: script
   script: ./travis-deploy.sh
   on:
