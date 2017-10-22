@@ -1,18 +1,13 @@
 ---
 - name: Deploy application
   hosts: all
+  sudo: yes
   vars_files:
     - ["vars/default.yml"]
   roles:
     - role: common
-      sudoer: True
-      sudo: yes
     - role: nodejs
-      sudoer: True
-      sudo: yes
     - role: nginx
-      sudoer: True
-      sudo: yes
       
   tasks:
     - name: Install global npm packages
