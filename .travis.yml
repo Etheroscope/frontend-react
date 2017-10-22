@@ -13,10 +13,11 @@ before_deploy:
 - ./travis-before-deploy.sh
 deploy:
   skip_cleanup: true
-- provider: script
+  provider: script
   script: ./travis-deploy.sh
   on:
     all_branches: true
+
 notifications:
   email: false
 env:
