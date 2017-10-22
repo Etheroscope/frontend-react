@@ -1,8 +1,0 @@
-repo_url: git@github.com:Etheroscope/frontend-react.git
-repo_version: master
-app_name: frontend-react
-server_name: etheroscope.info
-nginx_servers: ["localhost:8080"]
-deploy_dir: "~/{{ app_name }}"
-deploy_app_dir: "~/{{ app_name }}/{{ app_name }}-app"
-

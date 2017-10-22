@@ -1,4 +1,0 @@
-hostname: etheroscope-production
-domains:
-  # first domain is the main domain
-  - 40.76.2.108

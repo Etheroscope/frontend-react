@@ -9,7 +9,7 @@
     "test": "cross-env NODE_ENV=test nyc mocha",
     "watch:test": "mocha --watch --compilers js:babel-register",
     "start": "http-server",
-    "vm-start": "forever start",
+    "vm-start": "forever start node_modules/http-server/bin/http-server",
     "clean": "npm prune && npm dedupe",
     "setup": "npm install"
   },
