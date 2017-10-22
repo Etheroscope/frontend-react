@@ -4,6 +4,8 @@ python:
 sudo: enabled
 addons:
   ssh_known_hosts: etheroscope.info
+deploy.skip_cleanup: true
+
 install:
 - ./travis-install.sh
 script:
