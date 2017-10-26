@@ -1,3 +1,3 @@
 #!/bin/sh
 cd ansible
-ansible-playbook playbook.yml -i inventory -vvv
+python3 ansible-deploy.py
