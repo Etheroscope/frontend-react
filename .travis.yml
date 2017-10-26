@@ -3,7 +3,10 @@ python:
 - '3.5'
 sudo: enabled
 addons:
-  ssh_known_hosts: etheroscope.info
+  ssh_known_hosts:
+  - production-frontend.etheroscope.info
+  - staging-frontend.etheroscope.info
+  - test-frontend.etheroscope.info
 
 install:
 - ./travis-install.sh
