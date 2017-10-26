@@ -1,0 +1,3 @@
+hostname: etheroscope-staging
+domains:
+  - staging-frontend.etheroscope.info
