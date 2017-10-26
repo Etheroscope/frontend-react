@@ -1,0 +1,3 @@
+hostname: etheroscope-test
+domains:
+  - test-frontend.etheroscope.info

@@ -1,0 +1,1 @@
+test-frontend.etheroscope.info ansible_connection=ssh ansible_ssh_user=etheroscope-user
