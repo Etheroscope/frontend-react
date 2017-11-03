@@ -115,14 +115,29 @@ const contracts = {
   }
 }
 
-// function getData(fav) {
-//   return api.fetchVariables(fav.address).then((result) => result.variables.map(variable => api.getHistory(result.address, variable)))
-// }
-
-// favourites.map(fav => console.log(getData(fav)))
+function getData(favs) {
+  console.log('getting data')
+  const contracts = {}
+  console.log(favs)
+  favs.map(function(fav) {
+    api.fetchVariables(fav.address).then(function(result) {
+      const abi = result.abi
+      const variables = []
+      for (var i = 0; i < abi.length; i++) {
+        const variableName = abi[i].name
+        console.log(variableName)
+        if (variableName) {
+          api.fetchHistory(result.address, variableName).then(data => variables.push({name: variableName, data}))
+        }
+      }
+      return ({address: result.address, variables})
+    })
+  })
+  return contracts
+}
 
 ReactDOM.render(
-  <EtheroscopeContainer favourites={favourites} mockContracts={contracts}/>,
+  <EtheroscopeContainer favourites={favourites} mockContracts={getData(favourites)}/>,
   document.getElementById('app')
 )
 
