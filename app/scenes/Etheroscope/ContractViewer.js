@@ -1,5 +1,6 @@
 import React from 'react'
 import VariableSelection from './VariableSelection';
+import fetchJson from './xhr'
 
 // const ReactHighcharts = require('react-highcharts'); // Expects that Highcharts was loaded in the code.
 const ReactHighstock = require('react-highcharts/ReactHighstock')
@@ -16,11 +17,8 @@ class ContractViewer extends React.Component {
   }
 
   fetchVariableHistory(varName) {
-    // Data from GET {API_BASE_URL}/contracts/{address}/history?variable={variable}
-    return new Promise((resolve, reject) => {
-      doXHR("params", resolve); // resolve where callback should be
-      // If error, reject
-    });
+    var url = '/contracts/' + address + '/history?variable=' + varName;
+    return fetchJson(url);
   }
 
   variableClicked(varName) {
