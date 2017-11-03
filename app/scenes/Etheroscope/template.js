@@ -38,10 +38,11 @@ class Etheroscope extends React.Component {
   }
 
   downloadContract(address) {
-    console.log(address);
-    return Promise.resolve(this.props.mockContracts[address])
-      .then(x => { console.log(x); return x; })
-      .then(contract => this.setState({ contract }));
+    // Data from GET {API_BASE_URL}/contracts/{address}
+    return new Promise((resolve, reject) => {
+      doXHR("params", resolve); // resolve where callback should be
+      // If error, reject
+    });
   }
 
   favouriteClicked(address) {

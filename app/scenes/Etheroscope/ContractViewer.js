@@ -11,12 +11,26 @@ const ReactHighstock = require('react-highcharts/ReactHighstock')
 class ContractViewer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { currentVariable: null };
+    this.state = { currentVariable: null, variableData: [] };
     this.variableClicked = this.variableClicked.bind(this);
   }
 
+  fetchVariableHistory(varName) {
+    // Data from GET {API_BASE_URL}/contracts/{address}/history?variable={variable}
+    return new Promise((resolve, reject) => {
+      doXHR("params", resolve); // resolve where callback should be
+      // If error, reject
+    });
+  }
+
   variableClicked(varName) {
-    this.setState({ currentVariable: varName });
+    fetchVariableHistory(varName)
+      .then(history => {
+        this.setState({
+          currentVariable: varName,
+          variableData: history
+        });
+      })
   }
 
   render() {
@@ -34,18 +48,9 @@ class ContractViewer extends React.Component {
                 text: 'Smart Contract Explorer'
             },
 
-            // series: [{
-            //     name: 'AAPL',
-            //     data: this.props.contract.variables.find(variable => variable.name === this.state.currentVariable),
-            //     tooltip: {
-            //         valueDecimals: 2
-            //     }
-            // }]
 
-            //  not sure this actually works
-            //  need to get data in correct format so dates work correctly
             series: [
-                this.props.contract.variables.find(variable => variable.name === this.state.currentVariable),
+                this.state.variableData,
                 {
                     name: "Explorer",
                     tooltip: {
