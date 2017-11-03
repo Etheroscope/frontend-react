@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import fetchJson from './xhr'
 
 import AddressFormContainer from './AddressForm'
 import ContractViewer from './ContractViewer.js'
@@ -38,10 +39,8 @@ class Etheroscope extends React.Component {
   }
 
   downloadContract(address) {
-    console.log(address);
-    return Promise.resolve(this.props.mockContracts[address])
-      .then(x => { console.log(x); return x; })
-      .then(contract => this.setState({ contract }));
+    var url = '/contracts/' + address;
+    return fetchJson(url);
   }
 
   favouriteClicked(address) {
