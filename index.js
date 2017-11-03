@@ -15,4 +15,3 @@ ReactDOM.render(
     <EtheroscopeContainer favourites={favourites} />,
     document.getElementById('app')
 );
-

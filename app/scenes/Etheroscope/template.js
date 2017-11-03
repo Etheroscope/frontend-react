@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import fetchJson from './xhr'
 
 import AddressFormContainer from './AddressForm'
 import ContractViewer from './ContractViewer.js'
@@ -38,11 +39,8 @@ class Etheroscope extends React.Component {
   }
 
   downloadContract(address) {
-    // Data from GET {API_BASE_URL}/contracts/{address}
-    return new Promise((resolve, reject) => {
-      doXHR("params", resolve); // resolve where callback should be
-      // If error, reject
-    });
+    var url = '/contracts/' + address;
+    return fetchJson(url);
   }
 
   favouriteClicked(address) {
