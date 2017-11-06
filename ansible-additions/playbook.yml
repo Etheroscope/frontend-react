@@ -45,7 +45,7 @@
       become: True
       
     - name: Start node 
-      shell: chdir={{deploy_app_dir}} npm run vm-start 
+      shell: chdir={{deploy_app_dir}} forever stopall; npm run vm-start 
       sudo: yes
       become: True
       
