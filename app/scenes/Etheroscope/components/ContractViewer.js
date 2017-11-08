@@ -17,7 +17,7 @@ class ContractViewer extends React.Component {
   }
 
   fetchVariableHistory(varName) {
-    var url = '/contracts/' + address + '/history?variable=' + varName;
+    const url = '/contracts/' + address + '/history?variable=' + varName;
     return fetchJson(url);
   }
 

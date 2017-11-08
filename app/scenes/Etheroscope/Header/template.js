@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDom from 'react-dom'
+// don't remove above import! needed for FA icons
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
