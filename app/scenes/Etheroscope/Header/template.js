@@ -20,11 +20,12 @@ const AliceImage = styled.img`
 `
 
 const SearchBar = styled.div`
-  width: 30%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  width: 60%;
+  position: sticky;
+  right: 0%
+  // top: 50%;
+  // left: 50%;
+  // transform: translate(-50%, -50%);
 `
 
 const SearchButton = styled.button `
@@ -41,9 +42,6 @@ const SearchButton = styled.button `
   font-size: 20px;
 `
 
-const SearchItems = styled.h3`
-  color: black;
-`
 
 const Search = styled.div`
   width: 100%;
@@ -58,14 +56,11 @@ const SearchTerm = styled.input `
   height: 20px;
   border-radius: 5px;
   outline: none;
-  color: #9DBFAF;
+  color: black;
 `
 
+// const SearchHeaders = styled.button
 
-
-// .searchTerm:focus{
-//     color: #00B4CC;
-// }
 
 
 const Header = ({...props}) => {
