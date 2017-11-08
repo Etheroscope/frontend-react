@@ -1,6 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
+import {Router, Route, browserHistory} from "react-router"
 import fetchJson from './xhr'
+
+import Home from "./components/Home"
+import Explorer from "./components/Explorer"
+
 
 import AddressFormContainer from './AddressForm'
 import ContractViewer from './ContractViewer.js'
@@ -58,22 +63,10 @@ class Etheroscope extends React.Component {
 
   render() {
     return (
-      <Wrapper>
-        <Banner style={{ fontSize: '20px', color: 'white' }}>
-          <div style={{
-            width: '90%',
-            margin: '0 auto',
-            display: 'flex',
-            flexDirection: 'column'
-          }}>
-            <AddressFormContainer address={this.state.contractAddress} handleChange={this.addressChanged} handleClick={this.exploreClicked}/>
-            <Favourites favourites={this.props.favourites} handleClick={this.favouriteClicked}/>
-          </div>
-        </Banner>
-	    <Page>
-          <ContractViewer  contract={this.state.contract}/>
-        </Page>
-      </Wrapper>
+      <Router history={browserHistory}>
+        <Route path={"home"} component={Home}/>
+        <Route path={"explorer"} component={Explorer}/>
+      </Router>
     )
   }
 }
