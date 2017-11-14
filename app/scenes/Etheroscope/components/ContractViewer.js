@@ -1,6 +1,6 @@
 import React from 'react'
 import VariableSelection from './VariableSelection';
-import fetchJson from './xhr'
+import fetchJson from '../xhr'
 
 // const ReactHighcharts = require('react-highcharts'); // Expects that Highcharts was loaded in the code.
 const ReactHighstock = require('react-highcharts/ReactHighstock')
@@ -17,7 +17,7 @@ class ContractViewer extends React.Component {
   }
 
   fetchVariableHistory(varName) {
-    var url = '/contracts/' + address + '/history?variable=' + varName;
+    const url = '/contracts/' + address + '/history?variable=' + varName;
     return fetchJson(url);
   }
 
