@@ -34,7 +34,7 @@ const ExploreButton = styled.button`
 const AddressForm = ({ handleChange, handleClick, address }) => {
   return (
     <Form>
-      <AddressInput type="text" value={address} onChange={handleChange}/>
+      <AddressInput type="text" value={address} onChange={handleChange} />
       <ExploreButton onClick={handleClick}>Explore</ExploreButton>
     </Form>
   )
