@@ -45,7 +45,7 @@ class Etheroscope extends React.Component {
 
   favouriteClicked(address) {
     this.downloadContract(address)
-        .then(this.setState({ contractAddress: address }));
+        .then(contract => this.setState({ contract, contractAddress: address }));
   }
 
   exploreClicked(newAddress) {
@@ -71,7 +71,7 @@ class Etheroscope extends React.Component {
           </div>
         </Banner>
 	    <Page>
-          <ContractViewer  contract={this.state.contract}/>
+          <ContractViewer contract={this.state.contract}/>
         </Page>
       </Wrapper>
     )

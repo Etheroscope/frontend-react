@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import VariableSelection from './VariableSelection';
 import fetchJson from './xhr'
 
@@ -17,18 +18,26 @@ class ContractViewer extends React.Component {
   }
 
   fetchVariableHistory(varName) {
-    var url = '/contracts/' + address + '/history?variable=' + varName;
+    var url = '/contracts/' + this.props.contract.address + '/history?variable=' + varName;
     return fetchJson(url);
   }
 
   variableClicked(varName) {
-    fetchVariableHistory(varName)
+    console.log(varName);
+    this.fetchVariableHistory(varName)
       .then(history => {
+        const processedHistory = history.map(item => {
+          item.value = parseFloat(item.value);
+          return [item.time * 1000, item.value]
+        });
         this.setState({
           currentVariable: varName,
-          variableData: history
+          variableData: processedHistory.sort()
+
         });
+        console.log(this.state.variableData);
       })
+
   }
 
   render() {
@@ -48,9 +57,9 @@ class ContractViewer extends React.Component {
 
 
             series: [
-                this.state.variableData,
                 {
                     name: "Explorer",
+                    data: this.state.variableData,
                     tooltip: {
                         valueDecimals: 2
                     }
