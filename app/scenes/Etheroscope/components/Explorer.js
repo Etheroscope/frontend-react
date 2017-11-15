@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import styled from 'styled-components'
 import fetchJson from './../xhr'
 
@@ -16,14 +16,13 @@ const Wrapper = styled.div`
 const Banner = styled.div`
   width: 100%;
   background-color: rgb(25, 152, 162);
-  padding-top: 50px;
-  fontSize: '20px';
-  color: 'white';
-
-  width: '90%';
-  margin: '0 auto';
-  display: 'flex';
-  flexDirection: 'column';
+  padding-top: 10px;
+  fontSize: 20px;
+  color: white;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 `
 
 const Page = styled.div`
@@ -34,33 +33,33 @@ const Page = styled.div`
 
 export default class Explorer extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             contract: { variables: [] },
             contractAddress: 'contract address'
         };
-        this.downloadContract = this.downloadContract.bind(this);
-        this.favouriteClicked = this.favouriteClicked.bind(this);
-        this.addressChanged = this.addressChanged.bind(this);
-        this.exploreClicked = this.exploreClicked.bind(this);
+        this.downloadContract = this.downloadContract.bind(this)
+        this.favouriteClicked = this.favouriteClicked.bind(this)
+        this.addressChanged = this.addressChanged.bind(this)
+        this.exploreClicked = this.exploreClicked.bind(this)
     }
 
     downloadContract(address) {
         const url = `/contracts/${address}`;
-        return fetchJson(url);
+        return fetchJson(url)
     }
 
     favouriteClicked(address) {
         this.downloadContract(address)
-            .then(this.setState({ contractAddress: address }));
+            .then(this.setState({ contractAddress: address }))
     }
 
     exploreClicked() {
-        this.downloadContract(this.state.contractAddress);
+        this.downloadContract(this.state.contractAddress)
     }
 
     addressChanged(newAddress) {
-        this.setState({contractAddress: newAddress});
+        this.setState({contractAddress: newAddress})
     }
 
     render() {

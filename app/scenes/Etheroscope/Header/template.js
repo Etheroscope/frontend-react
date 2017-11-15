@@ -7,7 +7,7 @@ import {Icon} from 'react-fa'
 
 const Wrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   flex-direction: row;
   width: 100%;
 `
@@ -19,27 +19,30 @@ const RightWrapper = styled.div`
 `
 
 const EtheroscopeImage = styled.img`
-  height: 100px;
+  height: 80px;
 `
 
 const AliceImage = styled.img`
-  height: 100px;
-  margin: 0 auto -10px 100px;
+  height: 80px;
 `
   
 const Search = styled.div`
-  width:100%;
-  height:40%;
-  position:relative;
+  width: 100%;
+  height: 40%;
+  position: relative;
 `
 
 const SearchBar = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
   position: absolute;
-  top: 0px;
+  top: 5px;
   right: 0px;
+  width: 100%;
 `
 const SearchTerm = styled.input `
-  width:400px;
+  width: 100%;
   border: 3px solid #00B4CC;
   padding: 5px;
   height: 20px;
@@ -64,7 +67,7 @@ const Navbar = styled.div`
   display: flex;
   flex-direction: row;
   border:1px solid white;
-  height: 35%;
+  height: 40%;
 `
 const Box = styled.div`
   border:1px solid white;
@@ -77,33 +80,30 @@ const Box = styled.div`
 const Header = () => {
   return (
     <Wrapper>
-      <AliceImage src='https://s3.eu-west-2.amazonaws.com/alice-res/Logotype_right.png' />
-      
+      <a href="/explorer"><EtheroscopeImage src="https://avatars3.githubusercontent.com/u/32574990?s=200&v=4" /></a>
       <RightWrapper>
        
-       <Search>
-        <SearchBar>
+        <Search>
+          <SearchBar>
             <SearchTerm
-                placeholder="Search"
-                innerRef={x => { this.input = x }}
-                onMouseEnter={() => this.input.focus()}
+              placeholder="Search"
+              innerRef={x => { this.input = x }}
+              onMouseEnter={() => this.input.focus()}
             />
-             <SearchButton>
-                <Icon search name="search" />
-              </SearchButton>
+            <SearchButton>
+              <Icon name="search" />
+            </SearchButton>
           </SearchBar>
         </Search>
 
-       <Navbar>
-          <Box> Popular </Box>
-          <Box> Recent  </Box>
-          <Box> Favourites </Box>
+        <Navbar>
+          <Box>Popular</Box>
+          <Box>Recent</Box>
+          <Box>Favourites</Box>
         </Navbar>
 
       </RightWrapper>
-
-      <EtheroscopeImage src="https://avatars3.githubusercontent.com/u/32574990?s=200&v=4" />
-      <AliceImage src="https://s3.eu-west-2.amazonaws.com/alice-res/Logotype_right.png" />
+      <a href="/"><AliceImage src="https://s3.eu-west-2.amazonaws.com/alice-res/Logotype_right.png" /></a>
     </Wrapper>
   )
 }
