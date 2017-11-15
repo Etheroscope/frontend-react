@@ -1,26 +1,28 @@
 import React from 'react'
+import styled from 'styled-components'
 
 export default class Favourites extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
-    const linkStyle = {
-      color: 'white',
-      marginRight: '10px',
-      borderBottom: 'white 1px solid',
-      textDecoration: 'none',
-      cursor: 'pointer'
-    };
+    const Section = styled.section`
+      margin-bottom: '15px';
+    `
+
+    const Link = styled.a`
+    color: 'white';
+    marginRight: '10px';
+    borderBottom: 'white 1px solid';
+    textDecoration: 'none';
+    cursor: 'pointer';
+    `
 
     return (
-      <section style={{ marginBottom: '15px' }}>
+      <Section>
         <span>Favourites: </span>
         {this.props.favourites.map(fav =>
-          <a key={fav.address} style={linkStyle} onClick={() => this.props.handleClick(fav.address)}>{fav.name}</a>
+          <Link key={fav.address} onClick={() => this.props.handleClick(fav.address)}>{fav.name}</Link>
           )}
-      </section>
+      </Section>
     )
   }
 

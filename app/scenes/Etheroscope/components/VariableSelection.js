@@ -15,23 +15,20 @@ const Wrapper = styled.div`
 `
 
 class VariableSelection extends React.Component {
-  constructor(props) {
-    super(props)
-  }
 
   render() {
     return (
-        <Wrapper>
-            <Separator/>
-            <span>Choose a variable:</span>
-            {this.props.variables.map((variable, index) => (
-                <VarButton key={index} onClick={()=> {this.props.variableClicked(variable.name)}}>
-                    {variable.name}
-                </VarButton>
-                ))
-            }
-            <Separator/>
-        </Wrapper>
+      <Wrapper>
+        <Separator />
+        <span>Choose a variable:</span>
+        {this.props.variables.map((variable, index) => (
+          <VarButton key={index} onClick={()=> {this.props.variableClicked(variable.name)}}>
+            {variable.name}
+          </VarButton>
+        ))
+        }
+        <Separator />
+      </Wrapper>
     )
   }
 }

@@ -5,7 +5,6 @@ import fetchJson from './../xhr'
 import AddressFormContainer from './../AddressForm'
 import ContractViewer from './ContractViewer.js'
 import Favourites from './Favourites.js'
-import VariableSelection from './VariableSelection.js'
 
 const Wrapper = styled.div`
   background-color: white;
@@ -18,6 +17,13 @@ const Banner = styled.div`
   width: 100%;
   background-color: rgb(25, 152, 162);
   padding-top: 50px;
+  fontSize: '20px';
+  color: 'white';
+
+  width: '90%';
+  margin: '0 auto';
+  display: 'flex';
+  flexDirection: 'column';
 `
 
 const Page = styled.div`
@@ -40,7 +46,7 @@ export default class Explorer extends React.Component {
     }
 
     downloadContract(address) {
-        var url = '/contracts/' + address;
+        const url = `/contracts/${address}`;
         return fetchJson(url);
     }
 
@@ -49,7 +55,7 @@ export default class Explorer extends React.Component {
             .then(this.setState({ contractAddress: address }));
     }
 
-    exploreClicked(newAddress) {
+    exploreClicked() {
         this.downloadContract(this.state.contractAddress);
     }
 
@@ -58,23 +64,19 @@ export default class Explorer extends React.Component {
     }
 
     render() {
+      const { favourites } = this.props
       return (
         <Wrapper>
-          <Banner style={{ fontSize: '20px', color: 'white' }}>
-            <div
-              style={{
-                width: '90%',
-                margin: '0 auto',
-                display: 'flex',
-                flexDirection: 'column'
-              }}
-            >
-              <AddressFormContainer address={this.state.contractAddress} handleChange={this.addressChanged} handleClick={this.exploreClicked} />
-              {/*<Favourites favourites={this.props.favourites} handleClick={this.favouriteClicked} />*/}
-            </div>
+          <Banner>
+            <AddressFormContainer 
+              address={this.state.contractAddress} 
+              handleChange={this.addressChanged} 
+              handleClick={this.exploreClicked}
+            />
+            {favourites && <Favourites favourites={favourites} handleClick={this.favouriteClicked} />}
           </Banner>
           <Page>
-            <ContractViewer contract={this.state.contract} />
+            <ContractViewer contract={this.state.contract} contractAddress={this.state.contractAddress} />
           </Page>
         </Wrapper>
         );

@@ -6,21 +6,26 @@ import styled from 'styled-components'
 const Wrapper = styled.div`
   background-color: white;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   flex-direction: row;
   align-items: center;
   width: 100%;
 `
 
-const AliceImage = styled.img`
+const EtheroscopeImage = styled.img`
   height: 100px;
-  margin: 0 auto -10px auto; /* The -10px is because the image needs cropping */
 `
 
-const Header = ({...props}) => {
+const AliceImage = styled.img`
+  height: 100px;
+  margin-bottom: -10px;
+`
+
+const Header = () => {
   return (
     <Wrapper>
-      <AliceImage src='https://s3.eu-west-2.amazonaws.com/alice-res/Logotype_right.png' />
+      <EtheroscopeImage src="https://avatars3.githubusercontent.com/u/32574990?s=200&v=4" />
+      <AliceImage src="https://s3.eu-west-2.amazonaws.com/alice-res/Logotype_right.png" />
     </Wrapper>
   )
 }

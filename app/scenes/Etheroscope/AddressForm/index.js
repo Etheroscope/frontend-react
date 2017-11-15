@@ -6,7 +6,8 @@ const AddressFormContainer = ({ address, handleChange, handleClick }) => (
   <AddressForm
     address={address}
     handleChange={(e) => handleChange(e.target.value)}
-    handleClick={handleClick} />
+    handleClick={handleClick}
+  />
 );
 
 export default AddressFormContainer
