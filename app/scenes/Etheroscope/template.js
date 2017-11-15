@@ -1,11 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
-import fetchJson from './xhr'
+import {Router, Route, browserHistory} from 'react-router'
 
-import AddressFormContainer from './AddressForm'
-import ContractViewer from './ContractViewer.js'
-import Favourites from './Favourites.js'
-import VariableSelection from './VariableSelection.js'
+import HomePage from './components/HomePage'
+import Explorer from './components/Explorer'
 
 const Wrapper = styled.div`
   background-color: white;

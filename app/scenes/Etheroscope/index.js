@@ -13,7 +13,7 @@ const EtheroscopeContainer = ({...props}) => {
   return (
     <Wrapper>
       <HeaderContainer />
-        <Etheroscope {...props} />
+      <Etheroscope {...props} />
       <FooterContainer />
     </Wrapper>
   )

@@ -12,9 +12,9 @@ const ReactHighstock = require('react-highcharts/ReactHighstock')
 
 class ContractViewer extends React.Component {
   constructor(props) {
-    super(props);
-    this.state = { currentVariable: null, variableData: [] };
-    this.variableClicked = this.variableClicked.bind(this);
+    super(props)
+    this.state = { currentVariable: null, variableData: [] }
+    this.variableClicked = this.variableClicked.bind(this)
   }
 
   fetchVariableHistory(varName) {
@@ -23,7 +23,6 @@ class ContractViewer extends React.Component {
   }
 
   variableClicked(varName) {
-    console.log(varName);
     this.fetchVariableHistory(varName)
       .then(history => {
         const processedHistory = history.map(item => {
@@ -33,17 +32,19 @@ class ContractViewer extends React.Component {
         this.setState({
           currentVariable: varName,
           variableData: processedHistory.sort()
-
         });
-        console.log(this.state.variableData);
-      })
-
+    })
   }
 
   render() {
+    const { variables } = this.props.contract
+
     return (
       <div>
-        <VariableSelection variables={this.props.contract.variables} variableClicked={this.variableClicked}/>
+        {variables.length > 0
+          ? <VariableSelection variables={variables} variableClicked={this.variableClicked} />
+          : <p style={{ textAlign: 'center' }}>No variables in this contract</p> 
+        }
         <ReactHighstock
           config={{
 
@@ -64,7 +65,10 @@ class ContractViewer extends React.Component {
                         valueDecimals: 2
                     }
                 }
-            ]
+            ],
+            credits: {
+              enabled: false
+            }
         }}
         />
       </div>
