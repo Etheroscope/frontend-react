@@ -11,7 +11,7 @@ const AliceInfo = styled.p`
   align-self: center;
 `
 
-const Footer = ({...props}) => {
+const Footer = () => {
   return (
     <Wrapper>
       <AliceInfo>© 2017 Etheroscope.</AliceInfo>
