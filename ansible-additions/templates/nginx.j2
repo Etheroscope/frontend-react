@@ -9,6 +9,7 @@ server {
   server_name {{server_name}};
 
    location / {
+      rewrite ^.*$ /index.html last;
       proxy_set_header Upgrade $http_upgrade;
       proxy_set_header Connection "upgrade";
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -17,3 +18,4 @@ server {
       proxy_pass http://main_nodes;
     }
 }
+
