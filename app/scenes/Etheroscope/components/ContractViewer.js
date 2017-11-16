@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import VariableSelection from './VariableSelection';
-import fetchJson from './xhr'
+import fetchJson from './../xhr'
 
 // const ReactHighcharts = require('react-highcharts'); // Expects that Highcharts was loaded in the code.
 const ReactHighstock = require('react-highcharts/ReactHighstock')
