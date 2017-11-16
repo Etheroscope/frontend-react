@@ -1,4 +1,6 @@
-const API_BASE_URL = 'production-api.etheroscope.info';
+import config from '../config'
+
+const API_BASE_URL = config.API_BASE_URL
 
 export default function fetchJson(url) {
   return new Promise((resolve, reject) => {
@@ -13,6 +15,6 @@ export default function fetchJson(url) {
         reject(new Error("Invalid server response"))        
       }
     }
-    xmlHttp.send();
+    xmlHttp.send()
   });
 }
