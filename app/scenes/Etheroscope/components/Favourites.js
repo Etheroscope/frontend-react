@@ -19,7 +19,6 @@ export default class Favourites extends React.Component {
             cursor: 'pointer'
         };
 
-        console.log(this.props);
         return (
           <section style={{ marginBottom: '15px' }}>
             <span>Favourites: </span>
