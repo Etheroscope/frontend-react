@@ -37,7 +37,7 @@ class ContractViewer extends React.Component {
   }
 
   render() {
-    const { variables } = this.props.contract;
+    const variables = this.props.contract.variables;
     return (
       <div>
         {variables.length > 0

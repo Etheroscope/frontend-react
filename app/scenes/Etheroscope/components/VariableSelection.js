@@ -22,8 +22,8 @@ class VariableSelection extends React.Component {
         <Separator />
         <span>Choose a variable:</span>
         {this.props.variables.map((variable, index) => (
-          <VarButton key={index} onClick={()=> {this.props.variableClicked(variable.name)}}>
-            {variable.name}
+          <VarButton key={index} onClick={()=> {this.props.variableClicked(variable)}}>
+            {variable}
           </VarButton>
         ))
         }

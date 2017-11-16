@@ -39,7 +39,7 @@ export default class Explorer extends React.Component {
             contractAddress: 'contract address'
         };
         this.downloadContract = this.downloadContract.bind(this);
-        this.favouriteClicked = this.favouriteClicked.bind(this);
+        this.changeContract = this.changeContract.bind(this);
         this.addressChanged = this.addressChanged.bind(this);
         this.exploreClicked = this.exploreClicked.bind(this)
     }
@@ -49,13 +49,13 @@ export default class Explorer extends React.Component {
         return fetchJson(url)
     }
 
-    favouriteClicked(address) {
+    changeContract(address) {
         return this.downloadContract(address)
-            .then(this.setState({ contractAddress: address }))
+            .then(contract => this.setState({ contract, contractAddress: address }))
     }
 
     exploreClicked() {
-        this.downloadContract(this.state.contractAddress)
+        this.changeContract(this.state.contractAddress)
     }
 
     addressChanged(newAddress) {
@@ -64,8 +64,6 @@ export default class Explorer extends React.Component {
 
     render() {
       const favourites = this.props;
-      console.log(this.props);
-      console.log(this.state);
       return (
         <Wrapper>
           <Banner style={{ fontSize: '20px', color: 'white' }}>
@@ -82,7 +80,7 @@ export default class Explorer extends React.Component {
                 handleChange={this.addressChanged}
                 handleClick={this.exploreClicked}
               />
-              <Favourites favourites={favourites} handleClick={this.favouriteClicked} />
+              <Favourites favourites={favourites} handleClick={this.changeContract} />
             </div>
           </Banner>
           <Page>

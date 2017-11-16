@@ -1,4 +1,4 @@
-const API_BASE_URL = 'production-api.etheroscope.info';
+const API_BASE_URL = 'http://localhost:3000';
 
 export default function fetchJson(url) {
   return new Promise((resolve, reject) => {
