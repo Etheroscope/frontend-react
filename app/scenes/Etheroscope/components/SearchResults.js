@@ -28,46 +28,42 @@ export default class SearchResults extends React.Component {
     }
 
     displayResult = (result) => {
-        switch (result.category) {
+        const { category, name, address, description, contracts, variables, url } = result
+        switch (category) {
             case 'contract':
                 return (
                   <li>
-                    <p>Result: {result.name}</p>
-                    <p>Address: {result.address} </p>
-                    <p>Variables:</p>
-                    <ul>
-                      {result.variables.map((variable, key) => <li key={key}>{variable}</li>)}
-                    </ul>
+                    {name && <p>Result: {name}</p>}
+                    <p>Address: {address} </p>
+                    {description && <p>Description: {description}</p>}
+                    {variables && 
+                    <div>
+                      <p>Variables:</p>
+                      <ul>
+                        {variables.map((variable, key) => <li key={key}>{variable}</li>)}
+                      </ul>
+                    </div>
+                    }
                   </li>
-                )
-            case 'address':
-                return (
-                  <div>
-                    <p>Result: {result.address} </p>
-                    <p>Variables:</p>
-                    <ul>
-                      {result.variables.map((variable, key) => <li key={key}>{variable}</li>)}
-                    </ul>
-                  </div>
                 )
             case 'organisation':
                 return (
                   <div>
-                    <p>Organisation: {result.name} </p>
-                    <p>Contracts:</p>
-                    <ul>
-                      {result.contracts.map((contract, contractKey) => (
-                        <li key={contractKey}>
-                          {contract.name && <p>Result: {contract.name}</p>}
-                          <p>Address: {contract.address} </p>
-                          <p>Variables:</p>
-                          <ul>
-                            {contract.variables.map((variable, varKey) => <li key={varKey}>{variable}</li>)}
-                          </ul>
-                        </li>
-                            ))
-                      }
-                    </ul>
+                    <p>Organisation: {name} </p>
+                    {url && <p>Website: <a href={url}>{result.url}</a></p>}
+                    {description && <p>Description: {description}</p>}
+                    {contracts && 
+                    <div>
+                      <p>Contracts:</p>
+                      <ul>
+                        {contracts.map((contract, contractKey) => (
+                          <li key={contractKey}>
+                            <p>{contract}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    }
                   </div>
                 )
             default: return(<p>No results found</p>)
