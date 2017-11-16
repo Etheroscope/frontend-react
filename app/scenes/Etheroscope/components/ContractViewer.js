@@ -12,6 +12,7 @@ class ContractViewer extends React.Component {
     super(props);
     this.state = {
         variableNames: [],
+        currentVar: null,
         variableData: [[]] };
     this.variableClicked = this.variableClicked.bind(this)
   }
@@ -21,21 +22,30 @@ class ContractViewer extends React.Component {
       return fetchJson(url);
   }
 
+  // only fetch history if variable not already in variableNames
   variableClicked(varName) {
-    this.fetchVariableHistory(varName)
-      .then(history => {
-        const processedHistory = history.map(item => {
-          item.value = parseFloat(item.value);
-          return [item.time * 1000, item.value]
-        });
-        this.setState({
-          variableNames: [...this.state.variableNames, varName],
-          variableData: [...this.state.variableData, processedHistory.sort()]
-        });
-    })
+      if (!(this.state.variableNames.includes(varName))) {
+          this.fetchVariableHistory(varName)
+          .then(history => {
+            const processedHistory = history.map(item => {
+              item.value = parseFloat(item.value);
+              return [item.time * 1000, item.value]
+            });
+
+            this.setState({
+              variableNames: [...this.state.variableNames, varName],
+              currentVar: varName,
+              variableData: [...this.state.variableData, processedHistory.sort()]
+            });
+        })
+      }
   }
 
   render() {
+
+      console.log(this.state.currentVar);
+      console.log(this.state.variableNames);
+
     const variables = this.props.contract.variables;
 
     // test data
@@ -173,8 +183,11 @@ class ContractViewer extends React.Component {
         {variables.length > 0
           ? <VariableSelection variables={variables} variableClicked={this.variableClicked} />
           : <p style={{ textAlign: 'center' }}>No variables in this contract</p> 
-        },
-        {createChart}
+        }
+        {this.state.variableNames.length > 0
+          ? createChart
+          : "No chart data"
+        }
       </div>
     )
   }
