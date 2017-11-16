@@ -7,7 +7,6 @@ export default class Favourites extends React.Component {
     const Section = styled.section`
       margin-bottom: '15px';
     `
-
     const Link = styled.a`
     color: 'white';
     marginRight: '10px';

@@ -4,14 +4,12 @@ import fetchJson from './../xhr'
 
 import ContractCard from './ContractCard.js'
 
-
 const Wrapper = styled.div`
   background-color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
 `
-
 const ContractGrid = styled.div`
   display: flex;
   flex-direction: row;
@@ -22,7 +20,6 @@ const ContractGrid = styled.div`
   width: 95%;
   margin: auto;
 `
-
 
 export default class HomePage extends React.Component {
     

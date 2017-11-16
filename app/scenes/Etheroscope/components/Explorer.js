@@ -11,8 +11,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-`;
-
+`
 const Banner = styled.div`
   width: 100%;
   background-color: rgb(25, 152, 162);
@@ -24,12 +23,10 @@ const Banner = styled.div`
   display: flex;
   flex-direction: column;
 `
-
 const Page = styled.div`
   width: 90%;
   margin: auto;
 `
-
 
 export default class Explorer extends React.Component {
     constructor(props) {
