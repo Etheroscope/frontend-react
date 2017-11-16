@@ -130,12 +130,24 @@ class ContractViewer extends React.Component {
     //     ];
 
     console.log("Series Options");
-    const seriesOptions = this.state.variableNames.map((name, i) => ({name, data: this.state.variableData[i]}));
+    const seriesOptions = this.state.variableNames.map((name, i) =>
+        ({name, data: this.state.variableData[i],
+            tooltip: {
+                valueDecimals: 2,
+                split: true
+            }}));
     console.log(seriesOptions);
 
     const createChart = (
       <ReactHighstock
         config={{
+
+          chart: {
+                backgroundColor: 'white',
+                polar: true,
+                type: 'line'
+          },
+
           rangeSelector: {
             selected: 1
           },
