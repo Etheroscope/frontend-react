@@ -1,4 +1,7 @@
 {
+  "globals": {
+    "BACKEND_BASE_URL": false
+  },
   "extends": [
     "kentcdodds/best-practices",
     "kentcdodds/possible-errors",
@@ -14,6 +17,6 @@
   "rules": {
     "mocha/no-hooks": 0,
     "react/prefer-stateless-function": 0,
-    "no-invalid-this": 0,
-  },
+    "no-invalid-this": 0
+  }
 }
