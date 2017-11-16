@@ -13,7 +13,7 @@ class ContractViewer extends React.Component {
     this.state = {
         variableNames: [],
         currentVar: null,
-        variableData: [[]] };
+        variableData: [] };
     this.variableClicked = this.variableClicked.bind(this)
   }
 
@@ -22,27 +22,46 @@ class ContractViewer extends React.Component {
       return fetchJson(url);
   }
 
+  //TODO: Fix bug where first variable is not being fetched
+  //  TODO: propogate variable names up; if they are clicked they need to change colour; and remove by clicking again
   // only fetch history if variable not already in variableNames
   variableClicked(varName) {
       if (!(this.state.variableNames.includes(varName))) {
+          console.log("new variable");
           this.fetchVariableHistory(varName)
-          .then(history => {
-            const processedHistory = history.map(item => {
-              item.value = parseFloat(item.value);
-              return [item.time * 1000, item.value]
-            });
+              .then(history => {
+                  const processedHistory = history.map(item => {
+                      item.value = parseFloat(item.value);
+                      return [item.time * 1000, item.value]
+                  });
 
-            this.setState({
-              variableNames: [...this.state.variableNames, varName],
-              currentVar: varName,
-              variableData: [...this.state.variableData, processedHistory.sort()]
-            });
-        })
+                  this.setState({
+                      variableNames: [...this.state.variableNames, varName],
+                      currentVar: varName,
+                      variableData: [...this.state.variableData, processedHistory.sort()]
+                  });
+              })
+      } else {
+          // remove from graph
+          console.log("already present");
+          this.fetchVariableHistory(varName)
+              .then(history => {
+                  const processedHistory = history.map(item => {
+                      item.value = parseFloat(item.value);
+                      return [item.time * 1000, item.value]
+                  });
+
+                  let clickedIndex = this.state.variableNames.indexOf(varName);
+                  this.setState({
+                      variableNames: [...this.state.variableNames.slice(0, clickedIndex), ...this.state.variableNames.slice(clickedIndex + 1, this.state.variableNames.length)],
+                      currentVar: this.state.variableNames[this.state.variableNames.length - 1],
+                      variableData: [...this.state.variableData.slice(0, clickedIndex), ...this.state.variableData.slice(clickedIndex + 1, this.state.variableData.length)]
+                  });
+              })
       }
   }
 
   render() {
-
       console.log(this.state.currentVar);
       console.log(this.state.variableNames);
 
@@ -132,6 +151,8 @@ class ContractViewer extends React.Component {
                 split: true
             }}));
 
+    console.log(seriesOptions);
+
     const createChart = (
       <ReactHighstock
         config={{
@@ -181,7 +202,7 @@ class ContractViewer extends React.Component {
     return (
       <div>
         {variables.length > 0
-          ? <VariableSelection variables={variables} variableClicked={this.variableClicked} />
+          ? <VariableSelection variables={variables} selectedVariables={this.state.variableNames} variableClicked={this.variableClicked} />
           : <p style={{ textAlign: 'center' }}>No variables in this contract</p> 
         }
         {this.state.variableNames.length > 0
