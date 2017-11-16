@@ -1,3 +1,3 @@
 export default {
-    API_BASE_URL: 'production-api.etheroscope.info'
+  API_BASE_URL: 'http://production-api.etheroscope.info'
 }
