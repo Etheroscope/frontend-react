@@ -13,7 +13,9 @@ const ReactHighstock = require('react-highcharts/ReactHighstock')
 class ContractViewer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { currentVariable: null, variableData: [] };
+    this.state = {
+        variableNames: [],
+        variableData: [[]] };
     this.variableClicked = this.variableClicked.bind(this)
   }
 
@@ -30,16 +32,16 @@ class ContractViewer extends React.Component {
           return [item.time * 1000, item.value]
         });
         this.setState({
-          currentVariable: varName,
-          variableData: processedHistory.sort()
+          variableNames: [...this.state.variableNames, varName],
+          variableData: [...this.state.variableData, processedHistory.sort()]
         });
     })
   }
 
   render() {
     const variables = this.props.contract.variables;
-    const name = "test";
-    const data = [
+
+    const aaplData = [
         [1290038400000,44.06],
         [1290124800000,43.82],
         [1290384000000,44.77],
@@ -68,32 +70,10 @@ class ContractViewer extends React.Component {
         [1293408000000,46.38],
         [1293494400000,46.50],
         [1293580800000,46.47],
-        [1293667200000,46.24],
-        [1293753600000,46.08],
-        [1294012800000,47.08],
-        [1294099200000,47.33],
-        [1294185600000,47.71],
-        [1294272000000,47.68],
-        [1294358400000,48.02],
-        [1294617600000,48.92],
-        [1294704000000,48.81],
-        [1294790400000,49.20],
-        [1294876800000,49.38],
-        [1294963200000,49.78],
-        [1295308800000,48.66],
-        [1295395200000,48.41],
-        [1295481600000,47.53],
-        [1295568000000,46.67],
-        [1295827200000,48.21],
-        [1295913600000,48.77],
-        [1296000000000,49.12],
-        [1296086400000,49.03],
-        [1296172800000,48.01],
         [1296432000000,48.47]];
-
     const aapl = {
         name: "aapl",
-        data: data
+        data: aaplData
     };
 
     const msftData = [
@@ -128,71 +108,70 @@ class ContractViewer extends React.Component {
         [1293667200000,27.85],
         [1293753600000,27.91]
     ];
-
     const msft = {
         name: "msft",
         data: msftData
-    }
+    };
 
-    const seriesOptions =
-        [
-            // {
-            //     name: "Explorer",
-            //     data: this.state.variableData,
-            //     tooltip: {
-            //         valueDecimals: 2,
-            //         split: true
-            //     }
-            // },
-            msft,
-            aapl
-        ];
+    const stocks = [msft, aapl];
 
+    // const seriesOptions =
+    //     [
+    //         {
+    //             name: "Explorer",
+    //             data: this.state.variableData[this.state.variableData.length - 1],
+    //             tooltip: {
+    //                 valueDecimals: 2,
+    //                 split: true
+    //             }
+    //         },
+    //         // msft,
+    //         // aapl
+    //     ];
 
+    console.log("Series Options");
+    const seriesOptions = this.state.variableNames.map((name, i) => ({name, data: this.state.variableData[i]}));
     console.log(seriesOptions);
 
-    function createChart(options) {
-      return (
-        <ReactHighstock
-          config={{
+    const createChart = (
+      <ReactHighstock
+        config={{
+          rangeSelector: {
+            selected: 1
+          },
 
-              rangeSelector: {
-                  selected: 1
-              },
+          title: {
+              text: 'Smart Contract Explorer'
+          },
 
-              title: {
-                  text: 'Smart Contract Explorer'
-              },
+          yAxis: {
+              // labels: {
+              //     formatter: function () {
+              //         return (this.value > 0 ? ' + ' : '') + this.value + '%';
+              //     }
+              // },
+              plotLines: [{
+                  value: 0,
+                  width: 1000,
+                  color: 'silver'
+              }]
+          },
 
-              yAxis: {
-                  labels: {
-                      formatter: function () {
-                          return (this.value > 0 ? ' + ' : '') + this.value + '%';
-                      }
-                  },
-                  plotLines: [{
-                      value: 0,
-                      width: 2,
-                      color: 'silver'
-                  }]
-              },
-
-              plotOptions: {
-                  series: {
-                      compare: 'percent',
-                      showInNavigator: true
-                  }
-              },
-
-              series: options,
-
-              credits: {
-                  enabled: false
+          plotOptions: {
+              series: {
+                  // compare: 'percent',
+                  showInNavigator: true
               }
-          }}
-        />
-      )
-    }
+          },
+
+          series: seriesOptions,
+
+          credits: {
+              enabled: false
+          }
+        }}
+      />
+    );
 
     return (
       <div>
@@ -200,7 +179,10 @@ class ContractViewer extends React.Component {
           ? <VariableSelection variables={variables} variableClicked={this.variableClicked} />
           : <p style={{ textAlign: 'center' }}>No variables in this contract</p> 
         },
-        {createChart(seriesOptions)}
+          {createChart},
+        {/*{createChart(seriesOptions)}*/}
+        {/*{emptyChart}*/}
+        {/*{emptyChart.addSeries(msft)}*/}
       </div>
     )
   }
