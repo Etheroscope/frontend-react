@@ -33,14 +33,14 @@ const Page = styled.div`
 
 export default class Explorer extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             contract: { variables: [] },
             contractAddress: 'contract address'
         };
-        this.downloadContract = this.downloadContract.bind(this)
-        this.favouriteClicked = this.favouriteClicked.bind(this)
-        this.addressChanged = this.addressChanged.bind(this)
+        this.downloadContract = this.downloadContract.bind(this);
+        this.favouriteClicked = this.favouriteClicked.bind(this);
+        this.addressChanged = this.addressChanged.bind(this);
         this.exploreClicked = this.exploreClicked.bind(this)
     }
 
@@ -50,7 +50,7 @@ export default class Explorer extends React.Component {
     }
 
     favouriteClicked(address) {
-        this.downloadContract(address)
+        return this.downloadContract(address)
             .then(this.setState({ contractAddress: address }))
     }
 
@@ -63,21 +63,34 @@ export default class Explorer extends React.Component {
     }
 
     render() {
-      const { favourites } = this.props
+      const favourites = this.props;
+      console.log(this.props);
+      console.log(this.state);
       return (
         <Wrapper>
-          <Banner>
-            <AddressFormContainer 
-              address={this.state.contractAddress} 
-              handleChange={this.addressChanged} 
-              handleClick={this.exploreClicked}
-            />
-            {favourites && <Favourites favourites={favourites} handleClick={this.favouriteClicked} />}
+          <Banner style={{ fontSize: '20px', color: 'white' }}>
+            <div
+              style={{
+                width: '90%',
+                margin: '0 auto',
+                display: 'flex',
+                flexDirection: 'column'
+              }}
+            >
+              <AddressFormContainer
+                address={this.state.contractAddress}
+                handleChange={this.addressChanged}
+                handleClick={this.exploreClicked}
+              />
+              <Favourites favourites={favourites} handleClick={this.favouriteClicked} />
+            </div>
           </Banner>
           <Page>
-            <ContractViewer contract={this.state.contract} contractAddress={this.state.contractAddress} />
+            <ContractViewer contract={this.state.contract} />
           </Page>
         </Wrapper>
         );
     }
 }
+
+

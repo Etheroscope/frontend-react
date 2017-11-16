@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import VariableSelection from './VariableSelection';
+import VariableSelection from './VariableSelection'
 import fetchJson from './../xhr'
 
 // const ReactHighcharts = require('react-highcharts'); // Expects that Highcharts was loaded in the code.
@@ -12,14 +12,14 @@ const ReactHighstock = require('react-highcharts/ReactHighstock')
 
 class ContractViewer extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = { currentVariable: null, variableData: [] }
+    super(props);
+    this.state = { currentVariable: null, variableData: [] };
     this.variableClicked = this.variableClicked.bind(this)
   }
 
   fetchVariableHistory(varName) {
-    var url = '/contracts/' + this.props.contract.address + '/history?variable=' + varName;
-    return fetchJson(url);
+      const url = `/contracts/${this.props.contract.address}/history?variable=${varName}`;
+      return fetchJson(url);
   }
 
   variableClicked(varName) {
@@ -37,8 +37,7 @@ class ContractViewer extends React.Component {
   }
 
   render() {
-    const { variables } = this.props.contract
-
+    const { variables } = this.props.contract;
     return (
       <div>
         {variables.length > 0
