@@ -9,7 +9,6 @@
     "kentcdodds/es6/possible-errors",
     "kentcdodds/import/best-practices",
     "kentcdodds/import/possible-errors",
-    "kentcdodds/mocha",
     "kentcdodds/react",
     "kentcdodds/webpack",
     "kentcdodds/jsx-a11y"
