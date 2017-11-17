@@ -77,7 +77,7 @@ class ContractViewer extends React.Component {
 
     return (
       <div>
-        <VariableSelection variables={variables} variableClicked={this.variableClicked}/>
+        <VariableSelection variables={variables} selectedVariables="this.state.variableNames" variableClicked={this.variableClicked}/>
 
         <ReactHighstock
           config={{
