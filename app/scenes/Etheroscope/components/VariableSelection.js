@@ -27,8 +27,13 @@ class VariableSelection extends React.Component {
 
 
   render() {
-
       const selectedVars = this.props.selectedVariables;
+
+      const Vars = this.props.variables.map((variable) => (
+          {variable, selected: selectedVars.includes(variable)}
+      ));
+
+      console.log(Vars);
 
       const notSelectedVars =
           (selectedVars.length === 0) ? this.props.variables :
@@ -36,22 +41,30 @@ class VariableSelection extends React.Component {
                   return (!(selectedVars.includes(el)))
               });
 
+
+      let displayVariables = null;
+
     return (
       <Wrapper>
         <Separator />
         <span>Choose a variable:</span>
 
-        {selectedVars.map((variable, index) => (
-          <VarSelectedButton key={index} onClick={()=> {this.props.variableClicked(variable)}}>
-            {variable}
-          </VarSelectedButton>
-        ))}
+        {Vars.map(({variable, selected}, index) =>
+            (selected ?
+                (<VarSelectedButton key={index} onClick={() => { this.props.variableClicked(variable) }}>
+                    {variable}
+                </VarSelectedButton>)
+            :
+                (<VarButton key={index} onClick={() => { this.props.variableClicked(variable) }}>
+                    {variable}
+                  </VarButton>)
+                )
+        )}
 
-        {notSelectedVars.map((variable, index) => (
-          <VarButton key={index} onClick={()=> {this.props.variableClicked(variable)}}>
-            {variable}
-          </VarButton>
-        ))}
+        {displayVariables}
+
+        {/*{notSelectedVars.map((variable, index) => (*/}
+        {/*))}*/}
 
         <Separator />
       </Wrapper>
