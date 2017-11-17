@@ -90,5 +90,3 @@ export default class Explorer extends React.Component {
     )
   }
 }
-
-
