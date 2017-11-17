@@ -61,73 +61,46 @@ class ContractViewer extends React.Component {
   }
 
   render() {
-    const variables = this.props.contract.variables;
+    const variables = this.props.contract.variables
+    const abi = this.props.contract.abi;
+    const nullContract = this.props.contract.nullContract;
 
-    const seriesOptions = this.state.variableNames.map((name, i) =>
-        ({name, data: this.state.variableData[i],
-            tooltip: {
-                valueDecimals: 2,
-                split: true
-            }}));
+    const CenteredH = styled.h1` text-align: center `;
 
-    console.log(seriesOptions);
+    if ((!abi || abi.length === 0) && !nullContract) {
+        return <CenteredH> No ABI for this variable </CenteredH>
+    }
 
-    const createChart = (
-      <ReactHighstock
-        config={{
-          chart: {
-                backgroundColor: 'white',
-                polar: true,
-                type: 'line'
-          },
-
-          rangeSelector: {
-            selected: 1
-          },
-
-          title: {
-              text: 'Smart Contract Explorer'
-          },
-
-          yAxis: {
-              // labels: {
-              //     formatter: function () {
-              //         return (this.value > 0 ? ' + ' : '') + this.value + '%';
-              //     }
-              // },
-              plotLines: [{
-                  value: 0,
-                  width: 1000
-                  // color: 'silver'
-              }]
-          },
-
-          plotOptions: {
-              series: {
-                  // compare: 'percent',
-                  showInNavigator: true
-              }
-          },
-
-          series: seriesOptions,
-
-          credits: {
-              enabled: false
-          }
-        }}
-      />
-    );
+    if ((!variables || variables.length === 0) && !nullContract) {
+        return <CenteredH> No variables in this contract </CenteredH>
+    }
 
     return (
       <div>
-        {variables.length > 0
-          ? <VariableSelection variables={variables} selectedVariables={this.state.variableNames} variableClicked={this.variableClicked} />
-          : <p style={{ textAlign: 'center' }}>No variables in this contract</p> 
-        }
-        {this.state.variableNames.length > 0
-          ? createChart
-          : ""
-        }
+        <VariableSelection variables={variables} variableClicked={this.variableClicked}/>
+
+        <ReactHighstock
+          config={{
+            rangeSelector: {
+              selected: 1
+            },
+            title: {
+              text: 'Smart Contract Explorer'
+            },
+            series: [
+              {
+                name: 'Explorer',
+                data: this.state.variableData,
+                tooltip: {
+                  valueDecimals: 2
+                }
+              }
+            ],
+            credits: {
+              enabled: false
+            }
+          }}
+        />
       </div>
     )
   }
