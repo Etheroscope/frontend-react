@@ -71,7 +71,7 @@ class ContractViewer extends React.Component {
     }
 
     // makes title only appear when variables loaded
-    const title = (variables.length > 1) ? 'Smart Contract Explorer' : ''
+    const title = (variables.length > 0) ? 'Smart Contract Explorer' : ''
 
     const seriesOptions = this.state.variableNames.map((name, i) =>
       ({name, data: this.state.variableData[i],
