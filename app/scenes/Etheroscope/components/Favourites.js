@@ -10,22 +10,23 @@ export default class Favourites extends React.Component {
 
   render() {
     const Section = styled.section`
-      margin-bottom: '15px';
+      margin-bottom: 15px;
     `
-    const Link = styled.a`
-      color: 'white';
-      marginRight: '10px';
-      borderBottom: 'white 1px solid';
-      textDecoration: 'none';
-      cursor: 'pointer';
+    const FavouriteLink = styled.a`
+      color: white;
+      margin-right: 10px;
+      border-bottom: white 1px solid;
+      text-decoration: none;
+      cursor: pointer;
     `
 
     return (
       <Section>
         <span>Favourites: </span>
         {favourites.map(fav =>
-          <Link key={fav.address}
-                onClick={() => this.props.handleClick(fav.address)}>{fav.name}</Link>
+          <FavouriteLink key={fav.address}
+                         onClick={() => this.props.handleClick(fav.address)}>{fav.name}
+          </FavouriteLink>
         )}
       </Section>
     )

@@ -26,10 +26,10 @@ const BannerContainer = styled.div`
 `
 
 const Banner = styled.div`
-  width: '90%';
-  margin: '0 auto';
-  display: 'flex';
-  flex-direction: 'column';
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 `
 
 const Page = styled.div`
@@ -73,7 +73,7 @@ export default class Explorer extends React.Component {
   render() {
     return (
       <Wrapper>
-        <BannerContainer style={{ fontSize: '20px', color: 'white' }}>
+        <BannerContainer>
           <Banner>
             <AddressFormContainer
               address={this.state.contractAddress}
