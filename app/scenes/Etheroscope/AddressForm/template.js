@@ -6,8 +6,7 @@ const Form = styled.div`
   justify-content: center;
   width: 100%;
   margin-bottom: 15px;
-`;
-
+`
 const AddressInput = styled.input`
   background-color: transparent;
   flex: 1 500px;
@@ -19,8 +18,7 @@ const AddressInput = styled.input`
   max-width: 500px;
   margin: 0 32px;
   padding: 0 12px;
-`;
-
+`
 const ExploreButton = styled.button`
   background-color: #1998a2;
   border: 1px solid white;
@@ -29,7 +27,7 @@ const ExploreButton = styled.button`
   letter-spacing: 2px;
   line-height: 1.42;
   cursor: pointer;
-`;
+`
 
 const AddressForm = ({ handleChange, handleClick, address }) => {
   return (
@@ -38,6 +36,6 @@ const AddressForm = ({ handleChange, handleClick, address }) => {
       <ExploreButton onClick={handleClick}>Explore</ExploreButton>
     </Form>
   )
-};
+}
 
 export default AddressForm

@@ -7,27 +7,25 @@ const VarButton = styled.button`
     color: white;
     padding: 5px 50px;
 `
-
-const Separator = styled.hr`
-`
-
 const Wrapper = styled.div`
 `
 
 class VariableSelection extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
   render() {
     return (
       <Wrapper>
-        <Separator />
         <span>Choose a variable:</span>
         {this.props.variables.map((variable, index) => (
-          <VarButton key={index} onClick={()=> {this.props.variableClicked(variable.name)}}>
-            {variable.name}
+          <VarButton key={index} onClick={()=> {this.props.variableClicked(variable)}}>
+            {variable}
           </VarButton>
         ))
         }
-        <Separator />
+        <hr />
       </Wrapper>
     )
   }
