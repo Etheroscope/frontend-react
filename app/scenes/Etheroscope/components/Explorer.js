@@ -41,7 +41,7 @@ export default class Explorer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      contract: { variables: [] },
+      contract: { variables: [], abi: [] },
       contractAddress: 'contract address'
     }
     this.changeContract = this.changeContract.bind(this)
@@ -56,14 +56,21 @@ export default class Explorer extends React.Component {
 
   changeContract(address) {
     return Explorer.downloadContract(address)
-      .then(contract => this.setState({
-        contract,
-        contractAddress: address
-      }))
+        .then(contract => this.setState({
+            contract,
+            contractAddress: address
+        }))
+        .catch(err => {
+            console.log(err);
+            this.setState({
+                contract: {}
+                // contractAddress: ""
+            });
+        })
   }
 
   exploreClicked() {
-    this.changeContract(this.state.address)
+    this.changeContract(this.state.contractAddress)
   }
 
   addressChanged(newAddress) {
@@ -80,11 +87,11 @@ export default class Explorer extends React.Component {
               handleChange={this.addressChanged}
               handleClick={this.exploreClicked}
             />
-            <Favourites handleClick={this.changeContract}/>
+            <Favourites handleClick={this.changeContract} />
           </Banner>
         </BannerContainer>
         <Page>
-          <ContractViewer contract={this.state.contract}/>
+          <ContractViewer contract={this.state.contract} />
         </Page>
       </Wrapper>
     )
