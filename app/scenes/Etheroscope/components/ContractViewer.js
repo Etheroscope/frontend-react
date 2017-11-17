@@ -54,71 +54,80 @@ class ContractViewer extends React.Component {
   }
 
   render() {
-    const variables = this.props.contract.variables;
+    const variables = this.props.contract.variables
+    const abi = this.props.contract.abi;
+    let nullContract = this.props.contract.nullContract;
+
+    console.log("variables", variables)
+    console.log("abi", abi)
+    console.log("nullcontract", nullContract)
+
+    const CenteredH = styled.h1` text-align: center `;
+
+    nullContract = (typeof nullContract === "undefined") ? false : nullContract
+
+    if ((!abi || abi.length === 0) && !nullContract) {
+        return <CenteredH> No ABI for this variable </CenteredH>
+    }
+
+    if ((!variables || variables.length === 0) && !nullContract) {
+        return <CenteredH> No variables in this contract </CenteredH>
+    }
 
     const seriesOptions = this.state.variableNames.map((name, i) =>
-        ({name, data: this.state.variableData[i],
-            tooltip: {
-                valueDecimals: 2,
-                split: true
-            }}));
+      ({name, data: this.state.variableData[i],
+        tooltip: {
+          valueDecimals: 2,
+          split: true
+        }}));
 
-    const createChart = (
-      <ReactHighstock
-        config={{
-          chart: {
-                backgroundColor: 'white',
-                polar: true,
-                type: 'line'
-          },
+    return (
+      <div>
+        <VariableSelection variables={variables} selectedVariables={this.state.variableNames} variableClicked={this.variableClicked} />
 
-          rangeSelector: {
-            selected: 1
-          },
+        <ReactHighstock
+          config={{
+            chart: {
+              backgroundColor: 'white',
+              polar: true,
+              type: 'line'
+            },
 
-          title: {
+            rangeSelector: {
+              selected: 1
+            },
+
+            title: {
               text: 'Smart Contract Explorer'
-          },
+            },
 
-          yAxis: {
+            yAxis: {
               // labels: {
               //     formatter: function () {
               //         return (this.value > 0 ? ' + ' : '') + this.value + '%';
               //     }
               // },
               plotLines: [{
-                  value: 0,
-                  width: 1000
-                  // color: 'silver'
+                value: 0,
+                width: 1000
+                // color: 'silver'
               }]
-          },
+            },
 
-          plotOptions: {
+            plotOptions: {
               series: {
-                  // compare: 'percent',
-                  showInNavigator: true
+                // compare: 'percent',
+                showInNavigator: true
               }
-          },
+            },
 
-          series: seriesOptions,
+            series: seriesOptions,
 
-          credits: {
+            credits: {
               enabled: false
-          }
-        }}
-      />
-    );
-
-    return (
-      <div>
-        {variables.length > 0
-          ? <VariableSelection variables={variables} selectedVariables={this.state.variableNames} variableClicked={this.variableClicked} />
-          : <p style={{ textAlign: 'center' }}>No variables in this contract</p> 
-        }
-        {this.state.variableNames.length > 0
-          ? createChart
-          : ""
-        }
+            }
+          }}
+        />
       </div>
     )
   }

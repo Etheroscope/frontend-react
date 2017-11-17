@@ -30,9 +30,10 @@ const ExploreButton = styled.button`
 `
 
 const AddressForm = ({ handleChange, handleClick, address }) => {
+  const addr = (address === "contract address") ? "" : address
   return (
     <Form>
-      <AddressInput type="text" value={address} onChange={handleChange} />
+      <AddressInput type="text" value={addr} onChange={handleChange} placeholder="Contract Address" />
       <ExploreButton onClick={handleClick}>Explore</ExploreButton>
     </Form>
   )
