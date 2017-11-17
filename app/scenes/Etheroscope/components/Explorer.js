@@ -40,10 +40,12 @@ const Page = styled.div`
 export default class Explorer extends React.Component {
   constructor(props) {
     super(props)
+    const address = document.location.hash.slice(1);
     this.state = {
       contract: { nullContract: true, variables: [], abi: [] },
       contractAddress: 'contract address'
     }
+    if (address) this.changeContract(address);
     this.changeContract = this.changeContract.bind(this)
     this.addressChanged = this.addressChanged.bind(this)
     this.exploreClicked = this.exploreClicked.bind(this)

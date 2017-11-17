@@ -132,7 +132,7 @@ function renderContract(contract) {
   return (
     <Result>
       {contract.name && <p>Result: {contract.name}</p>}
-      <p>Address: {contract.address} </p>
+      <p>Address: <a href={`/explorer#${contract.address}`}>{contract.address}</a> </p>
       {contract.description && <p>Description: {contract.description}</p>}
     </Result>
   )
