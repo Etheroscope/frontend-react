@@ -63,7 +63,7 @@ export default class Explorer extends React.Component {
   }
 
   exploreClicked() {
-    this.changeContract(this.state.address)
+    this.changeContract(this.state.contractAddress)
   }
 
   addressChanged(newAddress) {

@@ -26,7 +26,6 @@ class ContractViewer extends React.Component {
   // only fetch history if variable not already in variableNames
   variableClicked(varName) {
       if (!(this.state.variableNames.includes(varName))) {
-          console.log("new variable");
           this.fetchVariableHistory(varName)
               .then(history => {
                   const processedHistory = history.map(item => {
@@ -42,15 +41,9 @@ class ContractViewer extends React.Component {
               })
       } else {
           // remove from graph
-          console.log("already present");
           this.fetchVariableHistory(varName)
-              .then(history => {
-                  const processedHistory = history.map(item => {
-                      item.value = parseFloat(item.value);
-                      return [item.time * 1000, item.value]
-                  });
-
-                  let clickedIndex = this.state.variableNames.indexOf(varName);
+              .then(() => {
+                  const clickedIndex = this.state.variableNames.indexOf(varName);
                   this.setState({
                       variableNames: [...this.state.variableNames.slice(0, clickedIndex), ...this.state.variableNames.slice(clickedIndex + 1, this.state.variableNames.length)],
                       currentVar: this.state.variableNames[this.state.variableNames.length - 1],
@@ -69,8 +62,6 @@ class ContractViewer extends React.Component {
                 valueDecimals: 2,
                 split: true
             }}));
-
-    console.log(seriesOptions);
 
     const createChart = (
       <ReactHighstock
