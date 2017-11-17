@@ -22,8 +22,6 @@ class ContractViewer extends React.Component {
       return fetchJson(url);
   }
 
-  //TODO: Fix bug where first variable is not being fetched
-  //  TODO: propogate variable names up; if they are clicked they need to change colour; and remove by clicking again
   // only fetch history if variable not already in variableNames
   variableClicked(varName) {
       if (!(this.state.variableNames.includes(varName))) {
@@ -207,7 +205,7 @@ class ContractViewer extends React.Component {
         }
         {this.state.variableNames.length > 0
           ? createChart
-          : "No chart data"
+          : ""
         }
       </div>
     )
