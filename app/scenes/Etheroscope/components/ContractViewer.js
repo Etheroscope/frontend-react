@@ -37,16 +37,16 @@ class ContractViewer extends React.Component {
         const abi = this.props.contract.abi;
         const nullContract = this.props.contract.nullContract;
 
-        const centeredH = styled.h1`
+        const CenteredH = styled.h1`
           text-align: center
         `;
 
         if ((!abi || abi.length === 0) && !nullContract) {
-            return <centeredH> No ABI for this variable </centeredH>
+            return <CenteredH> No ABI for this variable </CenteredH>
         }
 
         if ((!variables || variables.length === 0) && !nullContract) {
-            return <centeredH> No variables in this contract </centeredH>
+            return <CenteredH> No variables in this contract </CenteredH>
         }
 
         return (
