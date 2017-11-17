@@ -28,7 +28,7 @@
     "bootstrap": "^3.3.5",
     "forever": "^0.15.3",
     "history": "^3.0.0",
-    "moment": "^2.10.6",
+    "moment": "^2.19.2",
     "normalize.css": "^7.0.0",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
@@ -37,7 +37,7 @@
     "react-router": "2.6.1",
     "react-router-dom": "^4.2.2",
     "react-tooltip": "3.1.5",
-    "styled-components": "^2.2.1",
+    "styled-components": "^2.2.3",
     "webpacker": "0.0.3"
   },
   "devDependencies": {
