@@ -41,7 +41,7 @@ export default class Explorer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      contract: { variables: [], abi: [] },
+      contract: { nullContract: true, variables: [], abi: [] },
       contractAddress: 'contract address'
     }
     this.changeContract = this.changeContract.bind(this)
