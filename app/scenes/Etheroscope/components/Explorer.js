@@ -11,9 +11,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-`;
+`
 
-const Banner = styled.div`
+const BannerContainer = styled.div`
   width: 100%;
   background-color: rgb(25, 152, 162);
   padding-top: 10px;
@@ -25,70 +25,68 @@ const Banner = styled.div`
   flex-direction: column;
 `
 
+const Banner = styled.div`
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+`
+
 const Page = styled.div`
   width: 90%;
   margin: auto;
 `
 
-
 export default class Explorer extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            contract: { variables: [] },
-            contractAddress: 'contract address'
-        };
-        this.downloadContract = this.downloadContract.bind(this);
-        this.changeContract = this.changeContract.bind(this);
-        this.addressChanged = this.addressChanged.bind(this);
-        this.exploreClicked = this.exploreClicked.bind(this)
+  constructor(props) {
+    super(props)
+    this.state = {
+      contract: { variables: [] },
+      contractAddress: 'contract address'
     }
+    this.changeContract = this.changeContract.bind(this)
+    this.addressChanged = this.addressChanged.bind(this)
+    this.exploreClicked = this.exploreClicked.bind(this)
+  }
 
-    downloadContract(address) {
-        const url = `/contracts/${address}`;
-        return fetchJson(url)
-    }
+  static downloadContract(address) {
+    const url = `/contracts/${address}`
+    return fetchJson(url)
+  }
 
-    changeContract(address) {
-        return this.downloadContract(address)
-            .then(contract => this.setState({ contract, contractAddress: address }))
-    }
+  changeContract(address) {
+    return Explorer.downloadContract(address)
+      .then(contract => this.setState({
+        contract,
+        contractAddress: address
+      }))
+  }
 
-    exploreClicked() {
-        this.changeContract(this.state.contractAddress)
-    }
+  exploreClicked() {
+    this.changeContract(this.state.address)
+  }
 
-    addressChanged(newAddress) {
-        this.setState({contractAddress: newAddress})
-    }
+  addressChanged(newAddress) {
+    this.setState({ contractAddress: newAddress })
+  }
 
-    render() {
-      const favourites = this.props;
-      return (
-        <Wrapper>
-          <Banner style={{ fontSize: '20px', color: 'white' }}>
-            <div
-              style={{
-                width: '90%',
-                margin: '0 auto',
-                display: 'flex',
-                flexDirection: 'column'
-              }}
-            >
-              <AddressFormContainer
-                address={this.state.contractAddress}
-                handleChange={this.addressChanged}
-                handleClick={this.exploreClicked}
-              />
-              <Favourites favourites={favourites} handleClick={this.changeContract} />
-            </div>
+  render() {
+    return (
+      <Wrapper>
+        <BannerContainer>
+          <Banner>
+            <AddressFormContainer
+              address={this.state.contractAddress}
+              handleChange={this.addressChanged}
+              handleClick={this.exploreClicked}
+            />
+            <Favourites handleClick={this.changeContract}/>
           </Banner>
-          <Page>
-            <ContractViewer contract={this.state.contract} />
-          </Page>
-        </Wrapper>
-        );
-    }
+        </BannerContainer>
+        <Page>
+          <ContractViewer contract={this.state.contract}/>
+        </Page>
+      </Wrapper>
+    )
+  }
 }
-
-

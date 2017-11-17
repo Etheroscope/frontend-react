@@ -9,7 +9,6 @@ const Card = styled.div`
   margin-top: 20px;
   margin-bottom: 20px;
 `
-
 const Container = styled.div`
   padding-left: 10px;
   padding-right: 10px;

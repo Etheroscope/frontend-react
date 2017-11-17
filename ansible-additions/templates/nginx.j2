@@ -9,7 +9,7 @@ server {
   server_name {{server_name}};
 
    location / {
-      rewrite ^/[a-zA-Z0-9]+*$ /index.html last;
+      rewrite ^/[a-zA-Z0-9]+$ /index.html last;
       proxy_set_header Upgrade $http_upgrade;
       proxy_set_header Connection "upgrade";
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
