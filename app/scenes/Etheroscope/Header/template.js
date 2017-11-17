@@ -87,7 +87,7 @@ const Header = () => {
           <SearchBar>
             <SearchTerm 
               id="search"
-              placeholder="Search"
+              placeholder={window.location.search.slice(1) || 'Search'}
               innerRef={x => { this.input = x }}
               onMouseEnter={() => this.input.focus()}
             />
