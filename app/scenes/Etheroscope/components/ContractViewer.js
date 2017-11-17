@@ -40,11 +40,11 @@ class ContractViewer extends React.Component {
         const centeredP = styled.p `font-size: 130pt`
 
         if ((!abi || abi.length === 0) && !nullContract) {
-            return <centeredP> No ABI for this variable </centeredP>
+            return <h1 style="text-align: center"> No ABI for this variable </h1>
         }
 
         if ((!variables || variables.length === 0) && !nullContract) {
-            return <centeredP> No variables in this contract </centeredP>
+            return <h1 style="text-align: center"> No variables in this contract </h1>
         }
 
         return (
