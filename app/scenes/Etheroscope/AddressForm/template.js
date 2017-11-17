@@ -18,6 +18,7 @@ const AddressInput = styled.input`
   max-width: 500px;
   margin: 0 32px;
   padding: 0 12px;
+
 `
 const ExploreButton = styled.button`
   background-color: #1998a2;

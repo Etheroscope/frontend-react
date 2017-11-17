@@ -22,9 +22,28 @@ const ContractGrid = styled.div`
 `
 
 export default class HomePage extends React.Component {
-    
     constructor(props) {
         super(props)
+
+        const organisations = [{
+            name: "Alice",
+            description:
+            "Alice is a platform that brings transparency to social funding through blockchain technology.",
+            url: "http://alice.si",
+            contracts: [
+                "0x972a2dA1f9d1dc0B01D313e52fFe916bB5E9a2c1",
+                "0xBd897c8885b40d014Fb7941B3043B21adcC9ca1C"
+            ]
+        },
+        {
+            name: "The DAO",
+            description:
+            "The DAO was a digital decentralized autonomous organization and a form of investor-directed venture capital fund.",
+            url: "https://daohub.org/",
+            contracts: [
+                "0xbb9bc244d798123fde783fcc1c72d3bb8c189413"
+            ]
+        }]
 
         if (props.category) {
             switch (props.category) {
@@ -40,18 +59,18 @@ export default class HomePage extends React.Component {
                     break
             }
         } else {
-            this.state = { contracts: [1, 2, 3, 4, 5, 6] }
+            this.state = { organisations: organisations }
         }
         
     }
 
     render() {
-        const { contracts } = this.state
+        const { organisations } = this.state
         return (
           <Wrapper>
             <ContractGrid>
-              {contracts &&
-                contracts.map((contract, key) => <ContractCard contract={contract} key={key} />)
+              {organisations &&
+                organisations.map((organisation, key) => <ContractCard organisation={organisation} key={key} />)
               }
             </ContractGrid>
           </Wrapper>
