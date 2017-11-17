@@ -31,5 +31,4 @@ export default class Favourites extends React.Component {
       </Section>
     )
   }
-
 }
