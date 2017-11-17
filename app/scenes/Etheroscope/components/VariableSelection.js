@@ -33,9 +33,12 @@ class VariableSelection extends React.Component {
           {variable, selected: selectedVars.includes(variable)}
       ));
 
+      const varMsg = (Vars.length > 0) ? <span>Choose a variable:</span> : null
+
     return (
       <Wrapper>
-        <span>Choose a variable:</span>
+        {/*<span>Choose a variable:</span>*/}
+        {varMsg}
         {Vars.map(({variable, selected}, index) =>
             (selected ?
                 (<VarSelectedButton key={index} onClick={() => { this.props.variableClicked(variable) }}>

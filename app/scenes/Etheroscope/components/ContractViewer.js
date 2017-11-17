@@ -58,21 +58,20 @@ class ContractViewer extends React.Component {
     const abi = this.props.contract.abi;
     let nullContract = this.props.contract.nullContract;
 
-    console.log("variables", variables)
-    console.log("abi", abi)
-    console.log("nullcontract", nullContract)
-
     const CenteredH = styled.h1` text-align: center `;
 
     nullContract = (typeof nullContract === "undefined") ? false : nullContract
 
     if ((!abi || abi.length === 0) && !nullContract) {
-        return <CenteredH> No ABI for this variable </CenteredH>
+        return <CenteredH> No ABI for this contract </CenteredH>
     }
 
     if ((!variables || variables.length === 0) && !nullContract) {
-        return <CenteredH> No variables in this contract </CenteredH>
+        return <CenteredH> No variables in this ABI </CenteredH>
     }
+
+    // makes title only appear when variables loaded
+    const title = (variables.length > 1) ? 'Smart Contract Explorer' : ''
 
     const seriesOptions = this.state.variableNames.map((name, i) =>
       ({name, data: this.state.variableData[i],
@@ -98,7 +97,7 @@ class ContractViewer extends React.Component {
             },
 
             title: {
-              text: 'Smart Contract Explorer'
+              text: title
             },
 
             yAxis: {
