@@ -176,8 +176,8 @@ class ContractViewer extends React.Component {
               // },
               plotLines: [{
                   value: 0,
-                  width: 1000,
-                  color: 'silver'
+                  width: 1000
+                  // color: 'silver'
               }]
           },
 
