@@ -4,9 +4,9 @@
   "description": "React implementation of the http://etheroscope.alice.si",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --env.NODE_ENV=development",
+    "dev": "webpack-dev-server",
     "build": "webpack",
-    "test": "cross-env NODE_ENV=testing nyc mocha",
+    "test": "cross-env nyc mocha",
     "watch:test": "mocha --watch --compilers js:babel-register",
     "start": "npm run dev",
     "vm-start": "forever start node_modules/http-server/bin/http-server",
