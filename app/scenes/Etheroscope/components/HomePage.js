@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import fetchJson from './../xhr'
+import { prop } from 'ramda'
 
 import ContractCard from './ContractCard.js'
 
@@ -11,7 +12,6 @@ const Wrapper = styled.div`
   justify-content: center;
 `
 const Navbar = styled.div`
-  background-color:#1998a2;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -21,12 +21,17 @@ const Navbar = styled.div`
   width: 95%;
 `
 const Box = styled.div`
+  background-color:#1998a2;
   cursor: pointer;
   border:1px solid white;
   padding:5px;
   width:33%;
   text-align:center;
   color:white;
+  &:hover {
+      opacity: 0.7;
+      background-color: darkblue;
+  }
 `
 const ContractGrid = styled.div`
   display: flex;
@@ -37,6 +42,9 @@ const ContractGrid = styled.div`
   padding-top: 10px;
   width: 95%;
   margin: auto;
+`
+const NoContractText = styled.p`
+    text-align: center;
 `
 
 export default class HomePage extends React.Component {
@@ -151,11 +159,12 @@ export default class HomePage extends React.Component {
               <Box onClick={()=>this.setCategory('recent')}>Recent</Box>
               <Box onClick={()=>this.setCategory('favourites')}>Favourites</Box>
             </Navbar>
-            <ContractGrid>
-              {organisations &&
-                organisations.map((organisation, key) => <ContractCard organisation={organisation} key={key} />)
-              }
-            </ContractGrid>
+            {prop('length', organisations) > 0 ?
+              <ContractGrid>
+                {organisations.map((organisation, key) => <ContractCard organisation={organisation} key={key} />)}
+              </ContractGrid>
+            : <NoContractText>No contract to display</NoContractText>
+            }
           </Wrapper>
         )
     }

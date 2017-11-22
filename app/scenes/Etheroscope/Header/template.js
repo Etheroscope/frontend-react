@@ -37,7 +37,7 @@ const SearchBar = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   position: absolute;
-  top: 5px;
+  top: 20px;
   right: 0px;
   width: 100%;
 `
@@ -61,6 +61,10 @@ const SearchButton = styled.button `
   border-radius: 5px;
   cursor: pointer;
   font-size: 20px;
+  &:hover {
+      opacity: 0.7;
+      background-color: darkblue;
+  }
 `
 
 const Header = () => {
