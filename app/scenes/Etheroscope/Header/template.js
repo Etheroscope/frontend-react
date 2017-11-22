@@ -62,20 +62,6 @@ const SearchButton = styled.button `
   cursor: pointer;
   font-size: 20px;
 `
-const Navbar = styled.div`
-  background-color:#1998a2;
-  display: flex;
-  flex-direction: row;
-  border:1px solid white;
-  height: 40%;
-`
-const Box = styled.div`
-  border:1px solid white;
-  padding:5px;
-  width:33%;
-  text-align:center;
-  color:white;
-`
 
 const Header = () => {
   return (
@@ -96,13 +82,6 @@ const Header = () => {
             </SearchButton>
           </SearchBar>
         </Search>
-
-        <Navbar>
-          <Box>Popular</Box>
-          <Box>Recent</Box>
-          <Box>Favourites</Box>
-        </Navbar>
-
       </RightWrapper>
       <a href="/"><AliceImage src="https://s3.eu-west-2.amazonaws.com/alice-res/Logotype_right.png" /></a>
     </Wrapper>

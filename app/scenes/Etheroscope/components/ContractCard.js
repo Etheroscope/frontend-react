@@ -4,10 +4,10 @@ import styled from 'styled-components'
 const Card = styled.div`
   background-color: #1998a2;
   border-radius: 4px;
-  width: 49%;
+  width: 49.5%;
   height: auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   color: white;
 `
 const Container = styled.div`
