@@ -39,7 +39,7 @@ const organisations = [{
   name: 'The DAO',
   description:
     'The DAO was a digital decentralized autonomous organization and a form of investor-directed venture capital fund.',
-  url: 'https://daohub.org/',
+  url: 'https://blog.daohub.org/',
   contracts: [
     '0xbb9bc244d798123fde783fcc1c72d3bb8c189413'
   ]
