@@ -62,8 +62,8 @@ const SearchButton = styled.button `
   cursor: pointer;
   font-size: 20px;
   &:hover {
-      opacity: 0.7;
-      background-color: darkblue;
+    opacity: 0.7;
+    background-color: darkblue;
   }
 `
 
@@ -72,7 +72,6 @@ const Header = () => {
     <Wrapper>
       <a href="/explorer"><EtheroscopeImage src="https://avatars3.githubusercontent.com/u/32574990?s=200&v=4" /></a>
       <RightWrapper>
-       
         <Search>
           <SearchBar>
             <SearchTerm 

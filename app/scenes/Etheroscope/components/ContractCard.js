@@ -6,11 +6,12 @@ const Card = styled.div`
   border-radius: 4px;
   width: 49.5%;
   height: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 8px;
+  margin-bottom: 8px;
   color: white;
 `
 const Container = styled.div`
+  position: relative;
   padding-left: 10px;
   padding-right: 10px;
 `
@@ -21,16 +22,84 @@ const Link = styled.a`
   color: white;
 `
 const ContractList = styled.ul`
-  list-style:none;
+  list-style: none;
+`
+const FavImage = styled.img`
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  &:focus {
+    background-color: yellow;
+  }
 `
 
 class ContractCard extends React.Component {
 
+  constructor(props) {
+    super(props)
+
+    const favourites = localStorage.favourites && JSON.parse(localStorage.favourites) || []
+
+    var favourite = false
+    for (var i = 0; i < favourites.length; i++) {
+      if (favourites[i].name === this.props.organisation.name) {
+        favourite = true
+        break
+      }
+    }
+
+    this.state = { favourite }
+
+    this.alterStorage = this.alterStorage.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const favourites = localStorage.favourites && JSON.parse(localStorage.favourites) || []
+
+    var favourite = false
+    for (var i = 0; i < favourites.length; i++) {
+      if (favourites[i].name === nextProps.organisation.name) {
+        favourite = true
+        break
+      }
+    }
+
+    this.state = { favourite }
+  }
+
+  alterStorage(organisation) {
+    if (!localStorage.favourites) {
+      localStorage.favourites = JSON.stringify([])
+    } else {
+      const storage = JSON.parse(localStorage.favourites)
+      if (!this.state.favourite) {
+        this.setState({ favourite: true })
+        storage.push(organisation)
+      } else {
+        this.setState({ favourite: false })
+        for (var j = 0; j < storage.length; j++) {
+          if (storage[j].name === organisation.name) {
+            storage.splice(j, 1)
+          }
+        }
+      }
+      localStorage.favourites = JSON.stringify(storage)
+    }
+  }
+
   render() {
-    const { name, description, url, contracts } = this.props.organisation
+    const { organisation } = this.props
+    const { name, description, url, contracts } = organisation
     return (
       <Card>
         <Container>
+          <FavImage
+            style={{ backgroundColor: this.state.favourite && 'yellow'}}
+            alt="" src="https://cdn.onlinewebfonts.com/svg/img_330749.png" 
+            onClick={() => this.alterStorage(organisation)}
+          />
           <Title>{name}</Title>
           <p>Description: {description}</p>
           <p>Website: <Link href={url}>{url}</Link></p>

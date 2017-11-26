@@ -29,8 +29,8 @@ const Box = styled.div`
   text-align:center;
   color:white;
   &:hover {
-      opacity: 0.7;
-      background-color: darkblue;
+    opacity: 0.7;
+    background-color: darkblue;
   }
 `
 const ContractGrid = styled.div`
@@ -44,7 +44,7 @@ const ContractGrid = styled.div`
   margin: auto;
 `
 const NoContractText = styled.p`
-    text-align: center;
+  text-align: center;
 `
 
 export default class HomePage extends React.Component {
@@ -133,12 +133,12 @@ export default class HomePage extends React.Component {
         }
         ]
 
-        const favourite = []
+        const favourites = localStorage.favourites && JSON.parse(localStorage.favourites) || []
         const recent = []
 
         switch (category) {
             case 'favourites':
-                this.setState({ organisations: favourite })
+                this.setState({ organisations: favourites })
                 break
             case 'recent':
                 this.setState({ organisations: recent })
