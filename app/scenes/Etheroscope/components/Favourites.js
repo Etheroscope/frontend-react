@@ -23,10 +23,10 @@ export default class Favourites extends React.Component {
     return (
       <Section>
         <span>Favourites: </span>
-        {favourites.map(fav =>
-          <FavouriteLink key={fav.address}
-                         onClick={() => this.props.handleClick(fav.address)}>{fav.name}
-          </FavouriteLink>
+        {localStorage.map(fav =>
+          (<FavouriteLink key={fav.address} onClick={() => this.props.handleClick(fav.address)}>
+            {fav.name}
+          </FavouriteLink>)
         )}
       </Section>
     )
