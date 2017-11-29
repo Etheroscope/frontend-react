@@ -30,11 +30,11 @@ const ExploreButton = styled.button`
   cursor: pointer;
 `
 
-const AddressForm = ({ handleChange, handleClick, address }) => {
+const AddressForm = ({ handleChange, handleClick, address, handleKeyPress }) => {
   const addr = (address === "contract address") ? "" : address
   return (
     <Form>
-      <AddressInput type="text" value={addr} onChange={handleChange} placeholder="Contract Address" />
+      <AddressInput type="text" value={addr} onChange={handleChange} placeholder="Contract Address" onKeyPress={handleKeyPress} />
       <ExploreButton onClick={handleClick}>Explore</ExploreButton>
     </Form>
   )

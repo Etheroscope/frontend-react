@@ -49,6 +49,7 @@ export default class Explorer extends React.Component {
     this.changeContract = this.changeContract.bind(this)
     this.addressChanged = this.addressChanged.bind(this)
     this.exploreClicked = this.exploreClicked.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
   static downloadContract(address) {
@@ -79,6 +80,12 @@ export default class Explorer extends React.Component {
     this.setState({ contractAddress: newAddress })
   }
 
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.changeContract(this.state.contractAddress)
+    }
+  }
+
   render() {
     return (
       <Wrapper>
@@ -88,6 +95,7 @@ export default class Explorer extends React.Component {
               address={this.state.contractAddress}
               handleChange={this.addressChanged}
               handleClick={this.exploreClicked}
+              handleKeyPress={this.handleKeyPress}
             />
             <Favourites handleClick={this.changeContract} />
           </Banner>
