@@ -18,32 +18,15 @@ const Page = styled.div`
   width: 95%;
   margin: auto;
 `
-
 const Result = styled.div`
   background: lightgrey;
   border-radius 5px;
   padding: 16px;
   margin-bottom: 8px;
 `
-
-const organisations = [{
-  name: 'Alice',
-  description:
-    'Alice is a platform that brings transparency to social funding through blockchain technology.',
-  url: 'http://alice.si',
-  contracts: [
-    '0x972a2dA1f9d1dc0B01D313e52fFe916bB5E9a2c1',
-    '0xBd897c8885b40d014Fb7941B3043B21adcC9ca1C'
-  ]
-}, {
-  name: 'The DAO',
-  description:
-    'The DAO was a digital decentralized autonomous organization and a form of investor-directed venture capital fund.',
-  url: 'https://blog.daohub.org/',
-  contracts: [
-    '0xbb9bc244d798123fde783fcc1c72d3bb8c189413'
-  ]
-}]
+const CenteredP = styled.p`
+  text-align: center;
+`
 
 const contracts = [
   {
@@ -74,7 +57,7 @@ export default class SearchResults extends React.Component {
     super(props)
     const query = window.location.search.slice(1).toLowerCase()
     console.log(query)
-    this.matchingOrgs = organisations.filter(org => org.name.toLowerCase().indexOf(query) !== -1)
+    this.matchingOrgs = this.props.route.organisations.filter(org => org.name.toLowerCase().indexOf(query) !== -1)
     this.matchingContracts = contracts.filter(contract =>
       contract.address.toLowerCase().indexOf(query) !== -1
       || contract.organisation.toLowerCase().indexOf(query) !== -1)
@@ -82,7 +65,7 @@ export default class SearchResults extends React.Component {
 
   render() {
     if (this.matchingOrgs.length === 0 && this.matchingContracts.length === 0) {
-      return (<p>No results found</p>)
+      return (<CenteredP>No results found</CenteredP>)
     }
     return (
       <Wrapper>
