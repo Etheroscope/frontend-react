@@ -25,5 +25,10 @@ module.exports = merge(envConfig, {
       { test: /\.css$/, loader: 'style-loader!css-loader' },
       { test: /(\.eot|\.woff2|\.woff|\.ttf|\.svg)/, loader: 'file-loader' }
     ]
+  },
+  resolveLoader: {
+      modules: [
+          'node_modules'
+      ]
   }
 })
