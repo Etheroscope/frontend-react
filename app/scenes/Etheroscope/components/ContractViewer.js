@@ -75,34 +75,29 @@ class ContractViewer extends React.Component {
       return <CenteredH> No variables in this contract </CenteredH>
     }
 
-    return (
-      <div>
-        <VariableSelection variables={variables} selectedVariables="this.state.variableNames" variableClicked={this.variableClicked}/>
+    const graph = (this.state.variableData.length === 0) ? null
+      : (<ReactHighstock
+        config={{
+          rangeSelector: { selected: 1 },
+          title: { text: 'Smart Contract Explorer' },
+          series: [{
+            name: 'Explorer',
+            data: this.state.variableData,
+            tooltip: { valueDecimals: 2 }
+          }],
+          credits: { enabled: false }
+        }}
+       />)
 
-        <ReactHighstock
-          config={{
-            rangeSelector: {
-              selected: 1
-            },
-            title: {
-              text: 'Smart Contract Explorer'
-            },
-            series: [
-              {
-                name: 'Explorer',
-                data: this.state.variableData,
-                tooltip: {
-                  valueDecimals: 2
-                }
-              }
-            ],
-            credits: {
-              enabled: false
-            }
-          }}
-        />
-      </div>
-    )
+      return (
+        <div>
+          <VariableSelection variables={variables} selectedVariables={this.state.variableNames}
+                             variableClicked={this.variableClicked}/>
+
+          {graph}
+        </div>
+      )
+
   }
 }
 
