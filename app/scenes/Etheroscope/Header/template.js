@@ -71,13 +71,14 @@ const Header = () => {
        
         <Search>
           <SearchBar>
-            <SearchTerm 
+            <SearchTerm
+              // onKeyPress={this.handleKeyPress}
               id="search"
               placeholder={window.location.search.slice(1) || 'Search'}
               innerRef={x => { this.input = x }}
               onMouseEnter={() => this.input.focus()}
             />
-            <SearchButton onClick={() => {window.location = `../searchresults?${document.getElementById('search').value}`}}>
+            <SearchButton onClick={() => {window.location = `../searchresults?${document.getElementById('search').value}`}} >
               <Icon name="search" />
             </SearchButton>
           </SearchBar>
