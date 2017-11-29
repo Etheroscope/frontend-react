@@ -18,6 +18,7 @@ const Container = styled.div`
 `
 const Title = styled.h3`
   text-align: center;
+  cursor: pointer;
 `
 const Link = styled.a`
   color: white;
@@ -104,7 +105,7 @@ class ContractCard extends React.Component {
             alt="" src="https://cdn.onlinewebfonts.com/svg/img_330749.png" 
             onClick={() => this.alterStorage(organisation)}
           />
-          <Title>{name}</Title>
+          <Title onClick={() => { window.location = `../searchresults?${name}`}}>{name}</Title>
           <p>Description: {description}</p>
           <p>Website: <Link href={url}>{url}</Link></p>
           <p>Contracts:</p>
