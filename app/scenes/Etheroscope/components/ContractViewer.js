@@ -6,6 +6,31 @@ import VariableSelection from './VariableSelection'
 import styled from 'styled-components'
 import fetchJson from './../xhr'
 
+const GraphOption = styled.button`
+    background-color: #1998a2;
+    border: 1px solid white;
+    color: white;
+    padding: 5px 50px;
+`
+
+const SelectedGraphOption = styled.button`
+    background-color: white;
+    border: 1px solid #1998a2;
+    color: #1998a2;
+    padding: 5px 50px;
+`
+
+const Separator = styled.hr`
+`
+
+const Wrapper = styled.div`
+  display: inline-block;
+`
+
+const CenteredWrapper = styled.div`
+  text-align: center;
+`
+
 const ReactHighstock = require('react-highcharts/ReactHighstock')
 
 class ContractViewer extends React.Component {
@@ -14,9 +39,21 @@ class ContractViewer extends React.Component {
     this.state = {
       variableNames: [],
       currentVar: null,
-      variableData: []
+      variableData: [],
+      graphOptions: {
+        'Crosshair': false,
+        'Logarithmic_Scale': false,
+        'Navigator': false
+      }
     }
     this.variableClicked = this.variableClicked.bind(this)
+    this.handleOptionClicked = this.handleOptionClicked.bind(this)
+  }
+
+  handleOptionClicked(option) {
+    const tempOptions = this.state.graphOptions
+    tempOptions[option] = !tempOptions[option]
+    this.setState({graphOptions: tempOptions})
   }
 
   fetchVariableHistory(varName) {
@@ -76,16 +113,28 @@ class ContractViewer extends React.Component {
           split: true
         }}));
 
+    let y_axis = {
+      crosshair: this.state.graphOptions.Crosshair,
+      type: (this.state.graphOptions.Logarithmic_Scale) ? 'logarithmic' : 'linear'
+    }
 
-    const graph = (this.state.variableData.length === 0) ? null
-      : (<ReactHighstock
+    const nav = { enabled: this.state.graphOptions.Navigator }
+
+    // Object.entries(this.state.graphOptions).forEach(([option, selected], index) => (selected)
+    //   ? console.log(option, " selected")
+    //   : console.log(option, " not selected")
+    // )
+
+    const graph =
+        (<ReactHighstock
         config={{
           rangeSelector: { selected: 1 },
           title: { text: 'Smart Contract Explorer' },
-          yAxis: {
-            crosshair: true,
-            type: 'logarithmic',
-            minorTickInterval: 0.1
+          yAxis: y_axis,
+          navigator: nav,
+            // {
+            // type: 'logarithmic',
+            // minorTickInterval: 0.1
             // labels: {
             //   //     formatter: function () {
             //   //         return (this.value > 0 ? ' + ' : '') + this.value + '%';
@@ -96,7 +145,8 @@ class ContractViewer extends React.Component {
             //     width: 1000
             //     // color: 'silver'
             //   }]
-          },
+          // },
+
           // plotOptions: {
           //   series: {
           //     compare: 'percent',
@@ -113,7 +163,19 @@ class ContractViewer extends React.Component {
           <VariableSelection variables={variables} selectedVariables={this.state.variableNames}
                              variableClicked={this.variableClicked}/>
 
-          {graph}
+          {(this.state.variableData.length === 0) ? null :
+            <CenteredWrapper>
+              {graph}
+              <Wrapper>
+                <Separator/>
+                {Object.entries(this.state.graphOptions).map(([option, selected], index) => (selected)
+                  ? (<SelectedGraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option} </SelectedGraphOption>)
+                  : (<GraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option} </GraphOption>)
+                )}
+              </Wrapper>
+            </CenteredWrapper>
+          }
+
         </div>
       )
 
