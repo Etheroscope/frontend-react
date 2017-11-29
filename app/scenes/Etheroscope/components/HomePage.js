@@ -80,7 +80,6 @@ export default class HomePage extends React.Component {
     if(target.charCode==13){
       console.log('Enter clicked!!!')
     }
-
   }
 
   setCategory(category) {
@@ -157,7 +156,6 @@ export default class HomePage extends React.Component {
     switch (category) {
       case 'favourites':
         this.setState({organisations: favourites, category: 'favourites'})
-        // this.setState({ categorySelected: 'favourite'})
         break
       case 'recent':
         this.setState({organisations: recent, category: 'recent'})
