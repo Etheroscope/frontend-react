@@ -65,7 +65,6 @@ export default class HomePage extends React.Component {
   constructor(props) {
     super(props)
     this.setCategory = this.setCategory.bind(this)
-    // this.handleKeyPress = this.handleKeyPress.bind(this)
     this.state = {
       category: 'popular'
     };

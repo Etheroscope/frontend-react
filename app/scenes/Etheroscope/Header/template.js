@@ -77,7 +77,6 @@ export default class Header extends React.Component {
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       window.location = `../searchresults?${document.getElementById('search').value}`
-      console.log('Enter pressed')
     }
   }
 
