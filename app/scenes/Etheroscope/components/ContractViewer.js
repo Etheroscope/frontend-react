@@ -43,7 +43,8 @@ class ContractViewer extends React.Component {
       graphOptions: {
         'Crosshair': false,
         'Logarithmic_Scale': false,
-        'Navigator': false
+        'Navigator': false,
+        'Percent_Change': false
       }
     }
     this.variableClicked = this.variableClicked.bind(this)
@@ -120,6 +121,13 @@ class ContractViewer extends React.Component {
 
     const nav = { enabled: this.state.graphOptions.Navigator }
 
+    const plotOptions = {
+      series: {
+        compare: (this.state.graphOptions.Percent_Change) ? 'percent' : 'value',
+        showInNavigator: true
+      }
+    }
+
     // Object.entries(this.state.graphOptions).forEach(([option, selected], index) => (selected)
     //   ? console.log(option, " selected")
     //   : console.log(option, " not selected")
@@ -147,12 +155,15 @@ class ContractViewer extends React.Component {
             //   }]
           // },
 
-          // plotOptions: {
-          //   series: {
-          //     compare: 'percent',
-          //     showInNavigator: true
-          //   }
-          // },
+          tooltip: {
+            // pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+            // above is to represent percent change
+            shared: true,
+            valueDecimals: 2,
+            split: true
+          },
+
+          plotOptions: plotOptions,
           series: seriesOptions,
           credits: { enabled: false }
         }}
@@ -169,8 +180,8 @@ class ContractViewer extends React.Component {
               <Wrapper>
                 <Separator/>
                 {Object.entries(this.state.graphOptions).map(([option, selected], index) => (selected)
-                  ? (<SelectedGraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option} </SelectedGraphOption>)
-                  : (<GraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option} </GraphOption>)
+                  ? (<SelectedGraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g,' ')} </SelectedGraphOption>)
+                  : (<GraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g,' ')} </GraphOption>)
                 )}
               </Wrapper>
             </CenteredWrapper>
