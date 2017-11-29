@@ -67,29 +67,46 @@ const SearchButton = styled.button `
   }
 `
 
-const Header = () => {
-  return (
-    <Wrapper>
-      <a href="/explorer"><EtheroscopeImage src="https://avatars3.githubusercontent.com/u/32574990?s=200&v=4" /></a>
-      <RightWrapper>
-        <Search>
-          <SearchBar>
-            <SearchTerm
-              // onKeyPress={this.handleKeyPress}
-              id="search"
-              placeholder={window.location.search.slice(1) || 'Search'}
-              innerRef={x => { this.input = x }}
-              onMouseEnter={() => this.input.focus()}
-            />
-            <SearchButton onClick={() => {window.location = `../searchresults?${document.getElementById('search').value}`}} >
-              <Icon name="search" />
-            </SearchButton>
-          </SearchBar>
-        </Search>
-      </RightWrapper>
-      <a href="/"><AliceImage src="https://s3.eu-west-2.amazonaws.com/alice-res/Logotype_right.png" /></a>
-    </Wrapper>
-  )
-}
+export default class Header extends React.Component {
 
-export default Header
+  constructor(props) {
+    super(props)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
+  }
+
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      window.location = `../searchresults?${document.getElementById('search').value}`
+      console.log('Enter pressed')
+    }
+  }
+
+  render() {
+    return (
+      <Wrapper>
+        <a href="/explorer"><EtheroscopeImage src="https://avatars3.githubusercontent.com/u/32574990?s=200&v=4"/></a>
+        <RightWrapper>
+          <Search>
+            <SearchBar>
+              <SearchTerm
+                onKeyPress={this.handleKeyPress}
+                id="search"
+                placeholder={window.location.search.slice(1) || 'Search'}
+                innerRef={x => {
+                  this.input = x
+                }}
+                onMouseEnter={() => this.input.focus()}
+              />
+              <SearchButton onClick={() => {
+                window.location = `../searchresults?${document.getElementById('search').value}`
+              }}>
+                <Icon name="search"/>
+              </SearchButton>
+            </SearchBar>
+          </Search>
+        </RightWrapper>
+        <a href="/"><AliceImage src="https://s3.eu-west-2.amazonaws.com/alice-res/Logotype_right.png"/></a>
+      </Wrapper>
+    )
+  }
+}

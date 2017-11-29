@@ -22,7 +22,7 @@ const Navbar = styled.div`
 `
 
 // button?
-const Box = styled.div`
+const Box = styled.button`
   background-color:#1998a2;
   cursor: pointer;
   border:1px solid white;
@@ -65,7 +65,7 @@ export default class HomePage extends React.Component {
   constructor(props) {
     super(props)
     this.setCategory = this.setCategory.bind(this)
-    this.handleKeyPress = this.handleKeyPress.bind(this)
+    // this.handleKeyPress = this.handleKeyPress.bind(this)
     this.state = {
       category: 'popular'
     };
@@ -73,13 +73,6 @@ export default class HomePage extends React.Component {
 
   componentWillMount() {
     this.setCategory('popular')
-  }
-
-  handleKeyPress(target) {
-    console.log(target)
-    if(target.charCode==13){
-      console.log('Enter clicked!!!')
-    }
   }
 
   setCategory(category) {
@@ -178,32 +171,32 @@ export default class HomePage extends React.Component {
           (<Navbar>
             <SelectedBox onClick={() => this.setCategory('popular')} >Popular</SelectedBox>
             <Box onClick={() => this.setCategory('recent')} >Recent</Box>
-            <Box onClick={() => this.setCategory('favourites')} onSumbit={() => this.setCategory('favourites')} >Favourites</Box>
+            <Box onClick={() => this.setCategory('favourites')} >Favourites</Box>
           </Navbar>)
         break
       case 'favourites':
         displayButtons =
           (<Navbar>
-            <Box onClick={() => this.setCategory('popular')} onSumbit={() => this.setCategory('popular')}>Popular</Box>
-            <Box onClick={() => this.setCategory('recent')} onSumbit={() => this.setCategory('recent')}>Recent</Box>
-            <SelectedBox onClick={() => this.setCategory('favourites')} onSumbit={() => this.setCategory('favourites')}>Favourites</SelectedBox>
+            <Box onClick={() => this.setCategory('popular')}>Popular</Box>
+            <Box onClick={() => this.setCategory('recent')}>Recent</Box>
+            <SelectedBox onClick={() => this.setCategory('favourites')} >Favourites</SelectedBox>
           </Navbar>)
         break
       case 'recent':
         displayButtons =
           (<Navbar>
-            <Box type="submit" onClick={() => this.setCategory('popular')} onSumbit={() => this.setCategory('popular')}>Popular</Box>
-            <SelectedBox type="submit" onClick={() => this.setCategory('recent')} onSumbit={() => this.setCategory('recent')} >Recent</SelectedBox>
-            <Box type="submit" onClick={() => this.setCategory('favourites')} onSumbit={() => this.setCategory('favourites')}>
+            <Box type="submit" onClick={() => this.setCategory('popular')}>Popular</Box>
+            <SelectedBox type="submit" onClick={() => this.setCategory('recent')} >Recent</SelectedBox>
+            <Box type="submit" onClick={() => this.setCategory('favourites')}>
               Favourites</Box>
           </Navbar>)
         break
       default:
         displayButtons =
           (<Navbar>
-            <Box type="submit" onClick={() => this.setCategory('popular')} onSumbit={() => this.setCategory('popular')}>Popular</Box>
-            <Box type="submit" onClick={() => this.setCategory('recent')} onSumbit={() => this.setCategory('recent')}>Recent</Box>
-            <Box type="submit" onClick={() => this.setCategory('favourites')} onSumbit={() => this.setCategory('favourites')}>Favourites</Box>
+            <Box type="submit" onClick={() => this.setCategory('popular')}>Popular</Box>
+            <Box type="submit" onClick={() => this.setCategory('recent')}>Recent</Box>
+            <Box type="submit" onClick={() => this.setCategory('favourites')}>Favourites</Box>
           </Navbar>)
     }
 
