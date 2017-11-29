@@ -12,9 +12,9 @@ class ContractViewer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-        variableNames: [],
-        currentVar: null,
-        variableData: [] }
+      variableNames: [],
+      currentVar: null,
+      variableData: [] }
     this.variableClicked = this.variableClicked.bind(this)
   }
 
@@ -25,39 +25,39 @@ class ContractViewer extends React.Component {
 
   // only fetch history if variable not already in variableNames
   variableClicked(varName) {
-      if (!(this.state.variableNames.includes(varName))) {
-          console.log("new variable")
-          this.fetchVariableHistory(varName)
-              .then(history => {
-                  const processedHistory = history.map(item => {
-                      item.value = parseFloat(item.value);
-                      return [item.time * 1000, item.value]
-                  });
+    if (!(this.state.variableNames.includes(varName))) {
+      console.log("new variable")
+      this.fetchVariableHistory(varName)
+        .then(history => {
+          const processedHistory = history.map(item => {
+            item.value = parseFloat(item.value);
+            return [item.time * 1000, item.value]
+          });
 
-                  this.setState({
-                      variableNames: [...this.state.variableNames, varName],
-                      currentVar: varName,
-                      variableData: [...this.state.variableData, processedHistory.sort()]
-                  });
-              })
-      } else {
-          // remove from graph
-          console.log("already present")
-          this.fetchVariableHistory(varName)
-              .then(history => {
-                  const processedHistory = history.map(item => {
-                      item.value = parseFloat(item.value);
-                      return [item.time * 1000, item.value]
-                  });
+          this.setState({
+            variableNames: [...this.state.variableNames, varName],
+            currentVar: varName,
+            variableData: [...this.state.variableData, processedHistory.sort()]
+          });
+        })
+    } else {
+      // remove from graph
+      console.log("already present")
+      this.fetchVariableHistory(varName)
+        .then(history => {
+          const processedHistory = history.map(item => {
+            item.value = parseFloat(item.value);
+            return [item.time * 1000, item.value]
+          });
 
-                  let clickedIndex = this.state.variableNames.indexOf(varName)
-                  this.setState({
-                      variableNames: [...this.state.variableNames.slice(0, clickedIndex), ...this.state.variableNames.slice(clickedIndex + 1, this.state.variableNames.length)],
-                      currentVar: this.state.variableNames[this.state.variableNames.length - 1],
-                      variableData: [...this.state.variableData.slice(0, clickedIndex), ...this.state.variableData.slice(clickedIndex + 1, this.state.variableData.length)]
-                  });
-              })
-      }
+          let clickedIndex = this.state.variableNames.indexOf(varName)
+          this.setState({
+            variableNames: [...this.state.variableNames.slice(0, clickedIndex), ...this.state.variableNames.slice(clickedIndex + 1, this.state.variableNames.length)],
+            currentVar: this.state.variableNames[this.state.variableNames.length - 1],
+            variableData: [...this.state.variableData.slice(0, clickedIndex), ...this.state.variableData.slice(clickedIndex + 1, this.state.variableData.length)]
+          });
+        })
+    }
   }
 
   render() {
@@ -68,11 +68,11 @@ class ContractViewer extends React.Component {
     const CenteredH = styled.h1` text-align: center `;
 
     if ((!abi || abi.length === 0) && !nullContract) {
-        return <CenteredH> No ABI for this variable </CenteredH>
+      return <CenteredH> No ABI for this variable </CenteredH>
     }
 
     if ((!variables || variables.length === 0) && !nullContract) {
-        return <CenteredH> No variables in this contract </CenteredH>
+      return <CenteredH> No variables in this contract </CenteredH>
     }
 
     return (

@@ -26,7 +26,6 @@ class VariableSelection extends React.Component {
     super(props);
   }
 
-
   render() {
       const selectedVars = this.props.selectedVariables;
 
@@ -34,20 +33,12 @@ class VariableSelection extends React.Component {
           {variable, selected: selectedVars.includes(variable)}
       ));
 
-      console.log(Vars);
-
-      const notSelectedVars =
-          (selectedVars.length === 0) ? this.props.variables :
-              this.props.variables.filter( function(el) {
-                  return (!(selectedVars.includes(el)))
-              });
-
-
-      let displayVariables = null;
+      const varMsg = (Vars.length > 0) ? <span>Choose a variable:</span> : null
 
     return (
       <Wrapper>
-        <span>Choose a variable:</span>
+        {/*<span>Choose a variable:</span>*/}
+        {varMsg}
         {Vars.map(({variable, selected}, index) =>
             (selected ?
                 (<VarSelectedButton key={index} onClick={() => { this.props.variableClicked(variable) }}>
@@ -59,8 +50,6 @@ class VariableSelection extends React.Component {
                   </VarButton>)
                 )
         )}
-
-        {displayVariables}
         <Separator />
       </Wrapper>
     )

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 const Card = styled.div`
   background-color: #1998a2;
@@ -30,8 +31,18 @@ const FavImage = styled.img`
   right: 10px;
   width: 20px;
   height: 20px;
-  &:focus {
-    background-color: yellow;
+`
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+`
+const Copy = styled.span`
+  cursor: pointer;
+  &:hover {
+    opacity: 0.7;
+    color: darkblue;
   }
 `
 
@@ -39,28 +50,21 @@ class ContractCard extends React.Component {
 
   constructor(props) {
     super(props)
-
-    const favourites = localStorage.favourites && JSON.parse(localStorage.favourites) || []
-
-    var favourite = false
-    for (var i = 0; i < favourites.length; i++) {
-      if (favourites[i].name === this.props.organisation.name) {
-        favourite = true
-        break
-      }
-    }
-
-    this.state = { favourite }
-
     this.alterStorage = this.alterStorage.bind(this)
+    this.retrieveFavourites = this.retrieveFavourites.bind(this)
+    this.retrieveFavourites(this.props)
   }
 
   componentWillReceiveProps(nextProps) {
+    this.retrieveFavourites(nextProps)
+  }
+
+  retrieveFavourites (properties) {
     const favourites = localStorage.favourites && JSON.parse(localStorage.favourites) || []
 
     var favourite = false
     for (var i = 0; i < favourites.length; i++) {
-      if (favourites[i].name === nextProps.organisation.name) {
+      if (favourites[i].name === properties.organisation.name) {
         favourite = true
         break
       }
@@ -69,7 +73,7 @@ class ContractCard extends React.Component {
     this.state = { favourite }
   }
 
-  alterStorage(organisation) {
+  alterStorage (organisation) {
     if (!localStorage.favourites) {
       localStorage.favourites = JSON.stringify([])
     } else {
@@ -106,7 +110,12 @@ class ContractCard extends React.Component {
           <p>Contracts:</p>
           <ContractList>
             {contracts.map((contract, contractKey) => (
-              <Link key={contractKey} href={`/searchresults?${contract}`}><li>{contract}</li></Link>
+              <Row key={contractKey}>
+                <Link href={`/searchresults?${contract}`}><li>{contract}</li></Link>
+                <CopyToClipboard text={contract}>
+                  <Copy>Copy</Copy>
+                </CopyToClipboard>
+              </Row>
             ))}
           </ContractList>
         </Container>
