@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import fetchJson from './../xhr'
+import { prop } from 'ramda'
 
 import ContractCard from './ContractCard.js'
 
@@ -11,7 +12,6 @@ const Wrapper = styled.div`
   justify-content: center;
 `
 const Navbar = styled.div`
-  // background-color:#1998a2;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -20,7 +20,10 @@ const Navbar = styled.div`
   height: 40%;
   width: 95%;
 `
-const Box = styled.button`
+
+// button?
+const Box = styled.div`
+  background-color:#1998a2;
   cursor: pointer;
   border:1px solid white;
   padding:5px;
@@ -28,6 +31,10 @@ const Box = styled.button`
   text-align:center;
   background-color: #1998a2;
   color:white;
+  &:hover {
+    opacity: 0.7;
+    background-color: darkblue;
+  }
 `
 
 const SelectedBox = styled.button`
@@ -49,6 +56,9 @@ const ContractGrid = styled.div`
   padding-top: 10px;
   width: 95%;
   margin: auto;
+`
+const NoContractText = styled.p`
+  text-align: center;
 `
 
 export default class HomePage extends React.Component {
@@ -141,7 +151,7 @@ export default class HomePage extends React.Component {
       }
     ]
 
-    const favourites = []
+    const favourites = localStorage.favourites && JSON.parse(localStorage.favourites) || []
     const recent = []
 
     switch (category) {
