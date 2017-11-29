@@ -1,7 +1,6 @@
-import React from 'react';
+import React from 'react'
 import styled from 'styled-components'
 import fetchJson from './../xhr'
-import { prop } from 'ramda'
 
 import ContractCard from './ContractCard.js'
 
@@ -56,9 +55,6 @@ const ContractGrid = styled.div`
   padding-top: 10px;
   width: 95%;
   margin: auto;
-`
-const NoContractText = styled.p`
-  text-align: center;
 `
 
 export default class HomePage extends React.Component {
@@ -191,18 +187,36 @@ export default class HomePage extends React.Component {
       case 'recent':
         displayButtons =
           (<Navbar>
-            <Box type="submit" onClick={() => this.setCategory('popular')} onSumbit={() => this.setCategory('popular')}>Popular</Box>
-            <SelectedBox type="submit" onClick={() => this.setCategory('recent')} onSumbit={() => this.setCategory('recent')} >Recent</SelectedBox>
-            <Box type="submit" onClick={() => this.setCategory('favourites')} onSumbit={() => this.setCategory('favourites')}>
+            <Box
+              type="submit" onClick={() => this.setCategory('popular')}
+              onSumbit={() => this.setCategory('popular')}
+            >Popular</Box>
+            <SelectedBox
+              type="submit" onClick={() => this.setCategory('recent')}
+              onSumbit={() => this.setCategory('recent')}
+            >Recent</SelectedBox>
+            <Box
+              type="submit" onClick={() => this.setCategory('favourites')}
+              onSumbit={() => this.setCategory('favourites')}
+            >
               Favourites</Box>
           </Navbar>)
         break
       default:
         displayButtons =
           (<Navbar>
-            <Box type="submit" onClick={() => this.setCategory('popular')} onSumbit={() => this.setCategory('popular')}>Popular</Box>
-            <Box type="submit" onClick={() => this.setCategory('recent')} onSumbit={() => this.setCategory('recent')}>Recent</Box>
-            <Box type="submit" onClick={() => this.setCategory('favourites')} onSumbit={() => this.setCategory('favourites')}>Favourites</Box>
+            <Box
+              type="submit" onClick={() => this.setCategory('popular')}
+              onSumbit={() => this.setCategory('popular')}
+            >Popular</Box>
+            <Box
+              type="submit" onClick={() => this.setCategory('recent')}
+              onSumbit={() => this.setCategory('recent')}
+            >Recent</Box>
+            <Box
+              type="submit" onClick={() => this.setCategory('favourites')}
+              onSumbit={() => this.setCategory('favourites')}
+            >Favourites</Box>
           </Navbar>)
     }
 
@@ -211,7 +225,7 @@ export default class HomePage extends React.Component {
         {displayButtons}
         <ContractGrid>
           {organisations &&
-          organisations.map((organisation, key) => <ContractCard organisation={organisation} key={key}/>)
+          organisations.map((organisation, key) => <ContractCard organisation={organisation} key={key} />)
           }
         </ContractGrid>
       </Wrapper>

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 const Card = styled.div`
   background-color: #1998a2;
@@ -30,6 +31,19 @@ const FavImage = styled.img`
   right: 10px;
   width: 20px;
   height: 20px;
+`
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+`
+const Copy = styled.span`
+  cursor: pointer;
+  &:hover {
+    opacity: 0.7;
+    color: darkblue;
+  }
 `
 
 class ContractCard extends React.Component {
@@ -96,7 +110,12 @@ class ContractCard extends React.Component {
           <p>Contracts:</p>
           <ContractList>
             {contracts.map((contract, contractKey) => (
-              <Link key={contractKey} href={`/searchresults?${contract}`}><li>{contract}</li></Link>
+              <Row key={contractKey}>
+                <Link href={`/searchresults?${contract}`}><li>{contract}</li></Link>
+                <CopyToClipboard text={contract}>
+                  <Copy>Copy</Copy>
+                </CopyToClipboard>
+              </Row>
             ))}
           </ContractList>
         </Container>
