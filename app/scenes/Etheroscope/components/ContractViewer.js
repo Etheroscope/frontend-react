@@ -43,12 +43,7 @@ class ContractViewer extends React.Component {
     } else {
       // remove from graph
       this.fetchVariableHistory(varName)
-        .then(history => {
-          const processedHistory = history.map(item => {
-            item.value = parseFloat(item.value);
-            return [item.time * 1000, item.value]
-          });
-
+        .then(() => {
           let clickedIndex = this.state.variableNames.indexOf(varName)
           this.setState({
             variableNames: [...this.state.variableNames.slice(0, clickedIndex), ...this.state.variableNames.slice(clickedIndex + 1, this.state.variableNames.length)],
@@ -87,6 +82,27 @@ class ContractViewer extends React.Component {
         config={{
           rangeSelector: { selected: 1 },
           title: { text: 'Smart Contract Explorer' },
+          yAxis: {
+            crosshair: true,
+            type: 'logarithmic',
+            minorTickInterval: 0.1
+            // labels: {
+            //   //     formatter: function () {
+            //   //         return (this.value > 0 ? ' + ' : '') + this.value + '%';
+            //   //     }
+            //   // },
+            //   plotLines: [{
+            //     value: 0,
+            //     width: 1000
+            //     // color: 'silver'
+            //   }]
+          },
+          // plotOptions: {
+          //   series: {
+          //     compare: 'percent',
+          //     showInNavigator: true
+          //   }
+          // },
           series: seriesOptions,
           credits: { enabled: false }
         }}
