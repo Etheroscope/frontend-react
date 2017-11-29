@@ -30,37 +30,27 @@ const FavImage = styled.img`
   right: 10px;
   width: 20px;
   height: 20px;
-  &:focus {
-    background-color: yellow;
-  }
 `
 
 class ContractCard extends React.Component {
 
   constructor(props) {
     super(props)
-
-    const favourites = localStorage.favourites && JSON.parse(localStorage.favourites) || []
-
-    var favourite = false
-    for (var i = 0; i < favourites.length; i++) {
-      if (favourites[i].name === this.props.organisation.name) {
-        favourite = true
-        break
-      }
-    }
-
-    this.state = { favourite }
-
     this.alterStorage = this.alterStorage.bind(this)
+    this.retrieveFavourites = this.retrieveFavourites.bind(this)
+    this.retrieveFavourites(this.props)
   }
 
   componentWillReceiveProps(nextProps) {
+    this.retrieveFavourites(nextProps)
+  }
+
+  retrieveFavourites (properties) {
     const favourites = localStorage.favourites && JSON.parse(localStorage.favourites) || []
 
     var favourite = false
     for (var i = 0; i < favourites.length; i++) {
-      if (favourites[i].name === nextProps.organisation.name) {
+      if (favourites[i].name === properties.organisation.name) {
         favourite = true
         break
       }
@@ -69,7 +59,7 @@ class ContractCard extends React.Component {
     this.state = { favourite }
   }
 
-  alterStorage(organisation) {
+  alterStorage (organisation) {
     if (!localStorage.favourites) {
       localStorage.favourites = JSON.stringify([])
     } else {
