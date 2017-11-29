@@ -77,21 +77,20 @@ class ContractCard extends React.Component {
   alterStorage (organisation) {
     if (!localStorage.favourites) {
       localStorage.favourites = JSON.stringify([])
+    }
+    const storage = JSON.parse(localStorage.favourites)
+    if (!this.state.favourite) {
+      this.setState({ favourite: true })
+      storage.push(organisation)
     } else {
-      const storage = JSON.parse(localStorage.favourites)
-      if (!this.state.favourite) {
-        this.setState({ favourite: true })
-        storage.push(organisation)
-      } else {
-        this.setState({ favourite: false })
-        for (var j = 0; j < storage.length; j++) {
-          if (storage[j].name === organisation.name) {
-            storage.splice(j, 1)
-          }
+      this.setState({ favourite: false })
+      for (var j = 0; j < storage.length; j++) {
+        if (storage[j].name === organisation.name) {
+          storage.splice(j, 1)
         }
       }
-      localStorage.favourites = JSON.stringify(storage)
     }
+    localStorage.favourites = JSON.stringify(storage)
   }
 
   render() {

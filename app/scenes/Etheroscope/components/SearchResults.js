@@ -53,11 +53,26 @@ const contracts = [
 
 export default class SearchResults extends React.Component {
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     const query = window.location.search.slice(1).toLowerCase()
-    console.log(query)
     this.matchingOrgs = this.props.route.organisations.filter(org => org.name.toLowerCase().indexOf(query) !== -1)
+    
+    // Add matching orgs to recent
+    if (this.matchingOrgs && this.matchingOrgs.length > 0) {
+      const recent = localStorage.recent && JSON.parse(localStorage.recent) || []
+      for(var j=0; j < this.matchingOrgs.length; j++) {
+        for(var i = 0; i < recent.length; i++) {
+          if (recent[i].name === this.matchingOrgs[j].name) {
+            recent.splice(i, 1)
+            break
+          }
+        }
+        recent.unshift(this.matchingOrgs[j])
+      }
+      localStorage.recent = JSON.stringify(recent)
+    }
+    
     this.matchingContracts = contracts.filter(contract =>
       contract.address.toLowerCase().indexOf(query) !== -1
       || contract.organisation.toLowerCase().indexOf(query) !== -1)

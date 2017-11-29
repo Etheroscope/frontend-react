@@ -80,7 +80,7 @@ export default class HomePage extends React.Component {
 
   setCategory(category) {
     const favourites = localStorage.favourites && JSON.parse(localStorage.favourites) || []
-    const recent = []
+    const recent = localStorage.recent && JSON.parse(localStorage.recent) || []
 
     switch (category) {
       case 'favourites':
