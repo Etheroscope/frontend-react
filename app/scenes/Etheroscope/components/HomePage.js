@@ -81,7 +81,6 @@ export default class HomePage extends React.Component {
       description: "Alice is a platform that brings transparency to social funding through blockchain technology.",
       url: "http://alice.si",
       contracts: [
-        "0x972a2dA1f9d1dc0B01D313e52fFe916bB5E9a2c1",
         "0xBd897c8885b40d014Fb7941B3043B21adcC9ca1C"
       ]
     },
