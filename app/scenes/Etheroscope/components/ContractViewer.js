@@ -14,7 +14,8 @@ class ContractViewer extends React.Component {
     this.state = {
       variableNames: [],
       currentVar: null,
-      variableData: [] }
+      variableData: []
+    }
     this.variableClicked = this.variableClicked.bind(this)
   }
 
@@ -26,7 +27,6 @@ class ContractViewer extends React.Component {
   // only fetch history if variable not already in variableNames
   variableClicked(varName) {
     if (!(this.state.variableNames.includes(varName))) {
-      console.log("new variable")
       this.fetchVariableHistory(varName)
         .then(history => {
           const processedHistory = history.map(item => {
@@ -42,7 +42,6 @@ class ContractViewer extends React.Component {
         })
     } else {
       // remove from graph
-      console.log("already present")
       this.fetchVariableHistory(varName)
         .then(history => {
           const processedHistory = history.map(item => {
@@ -75,16 +74,20 @@ class ContractViewer extends React.Component {
       return <CenteredH> No variables in this contract </CenteredH>
     }
 
+    const seriesOptions = this.state.variableNames.map((name, i) =>
+      ({name, data: this.state.variableData[i],
+        tooltip: {
+          valueDecimals: 2,
+          split: true
+        }}));
+
+
     const graph = (this.state.variableData.length === 0) ? null
       : (<ReactHighstock
         config={{
           rangeSelector: { selected: 1 },
           title: { text: 'Smart Contract Explorer' },
-          series: [{
-            name: 'Explorer',
-            data: this.state.variableData,
-            tooltip: { valueDecimals: 2 }
-          }],
+          series: seriesOptions,
           credits: { enabled: false }
         }}
        />)
