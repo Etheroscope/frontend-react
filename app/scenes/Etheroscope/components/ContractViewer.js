@@ -4,11 +4,18 @@ import ReactDOM from 'react-dom'
 // Don't remove ReactDOM; needed for highstocks
 import VariableSelection from './VariableSelection'
 import styled from 'styled-components'
+import { equals, prop } from 'ramda'
 import fetchJson from './../xhr'
+import fetchEtherscan from './../etherscan'
 
 const ReactHighstock = require('react-highcharts/ReactHighstock')
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+`
+const Container = styled.div`
   display: flex;
   justify-content: space-around;
   width: 100%;
@@ -34,6 +41,13 @@ class ContractViewer extends React.Component {
       currentVar: null,
       variableData: [] }
     this.variableClicked = this.variableClicked.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (prop('address', nextProps.contract) && !equals(this.props.contract, nextProps.contract)) {
+      const url = `/api?module=account&action=balance&address=${this.props.contract.address}&tag=latest&apikey=AJAF8TPSIH2TBUGQJTI2VU98NV3A3YFNCI`
+      fetchEtherscan(url).then(response => this.setState({ balance: response.status == 1 ? `${response.result} WEI` : `0 WEI` }))
+    }
   }
 
   fetchVariableHistory(varName) {
@@ -93,10 +107,16 @@ class ContractViewer extends React.Component {
 
       return (
         <Wrapper>
-          {this.state.variableData.length > 0 ?
-            <div>
-              <ReactHighstock
-                config={{
+          {this.state.balance &&
+            <p>
+              Balance: {this.state.balance}
+            </p>
+          }
+          <Container>
+            {this.state.variableData.length > 0 ?
+              <div>
+                <ReactHighstock
+                  config={{
                 rangeSelector: { selected: 1 },
                 title: { text: 'Smart Contract Explorer' },
                 series: [{
@@ -106,15 +126,16 @@ class ContractViewer extends React.Component {
                 }],
                 credits: { enabled: false }
               }}
-              />
-              <Variables
-                variables={variables}
-                selectedVariables={this.state.variableNames}
-                variableClicked={this.variableClicked}
-              />
-            </div>
+                />
+                <Variables
+                  variables={variables}
+                  selectedVariables={this.state.variableNames}
+                  variableClicked={this.variableClicked}
+                />
+              </div>
           : <CenteredH>Welcome to the explorer. Choose a contract and we will display the state of its variables here.</CenteredH>
           }
+          </Container>
         </Wrapper>
       )
 
