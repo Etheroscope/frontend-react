@@ -21,7 +21,7 @@ export default class Favourites extends React.Component {
       <Section>
         <span>Favourites: </span>
         {favourites.map(fav => fav.contracts.map(contract =>
-          (<FavouriteLink key={contract} onClick={() => this.props.handleClick(contract)}>
+          (<FavouriteLink key={contract} onClick={() => window.location.assign(`../explorer#${fav.name}`)}>
             {fav.name}
           </FavouriteLink>)
         )

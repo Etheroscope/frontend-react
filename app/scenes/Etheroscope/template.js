@@ -25,7 +25,10 @@ const Etheroscope = () => {
         path={"/"} component={HomePage}
         organisations={popular}
       />
-      <Route path={"explorer"} component={Explorer} />
+      <Route 
+        path={"explorer"} component={Explorer} 
+        organisations={popular} 
+      />
       <Route
         path={"searchresults"} component={SearchResults}
         organisations={popular}

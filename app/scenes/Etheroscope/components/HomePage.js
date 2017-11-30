@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import fetchJson from './../xhr'
 
-import ContractCard from './ContractCard.js'
+import OrganisationCard from './OrganisationCard.js'
 
 const Wrapper = styled.div`
   background-color: white;
@@ -132,7 +132,7 @@ export default class HomePage extends React.Component {
         {displayButtons}
         <ContractGrid>
           {organisations &&
-          organisations.map((organisation, key) => <ContractCard organisation={organisation} key={key} />)
+          organisations.map((organisation, key) => <OrganisationCard organisation={organisation} key={key} />)
           }
         </ContractGrid>
       </Wrapper>
