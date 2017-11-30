@@ -8,6 +8,24 @@ import fetchJson from './../xhr'
 
 const ReactHighstock = require('react-highcharts/ReactHighstock')
 
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  height: 400px;
+  padding-top: 20px;
+`
+const Graph = styled(ReactHighstock)`
+  display: flex;
+`
+const Variables = styled(VariableSelection)`
+  display: flex;
+  justify-content: stretch;
+`
+const CenteredH = styled.h1`
+  text-align: center;
+`
+
 class ContractViewer extends React.Component {
   constructor(props) {
     super(props)
@@ -50,7 +68,7 @@ class ContractViewer extends React.Component {
             return [item.time * 1000, item.value]
           });
 
-          let clickedIndex = this.state.variableNames.indexOf(varName)
+          const clickedIndex = this.state.variableNames.indexOf(varName)
           this.setState({
             variableNames: [...this.state.variableNames.slice(0, clickedIndex), ...this.state.variableNames.slice(clickedIndex + 1, this.state.variableNames.length)],
             currentVar: this.state.variableNames[this.state.variableNames.length - 1],
@@ -60,42 +78,39 @@ class ContractViewer extends React.Component {
     }
   }
 
-  render() {
-    const variables = this.props.contract.variables
-    const abi = this.props.contract.abi;
-    const nullContract = this.props.contract.nullContract;
+  render () {
+    const variables = this.props.contract.variables // ['test', 'test', 'test', 'tegrebuizhfjopzihgrubhofzjpst', 'test', 'test', 'test', 'test', 'test', 'test', 'test', 'test', 'test']
+    const abi = this.props.contract.abi
+    const nullContract = this.props.contract.nullContract
 
-    const CenteredH = styled.h1` text-align: center `;
-
-    if ((!abi || abi.length === 0) && !nullContract) {
-      return <CenteredH> No ABI for this variable </CenteredH>
-    }
+    // if ((!abi || abi.length === 0) && !nullContract) {
+    //   return <CenteredH> No ABI for this variable </CenteredH>
+    // }
 
     if ((!variables || variables.length === 0) && !nullContract) {
       return <CenteredH> No variables in this contract </CenteredH>
     }
 
-    const graph = (this.state.variableData.length === 0) ? null
-      : (<ReactHighstock
-        config={{
-          rangeSelector: { selected: 1 },
-          title: { text: 'Smart Contract Explorer' },
-          series: [{
-            name: 'Explorer',
-            data: this.state.variableData,
-            tooltip: { valueDecimals: 2 }
-          }],
-          credits: { enabled: false }
-        }}
-       />)
-
       return (
-        <div>
-          <VariableSelection variables={variables} selectedVariables={this.state.variableNames}
-                             variableClicked={this.variableClicked}/>
-
-          {graph}
-        </div>
+        <Wrapper>
+          <ReactHighstock
+            config={{
+            rangeSelector: { selected: 1 },
+            title: { text: 'Smart Contract Explorer' },
+            series: [{
+              name: 'Explorer',
+              data: this.state.variableData,
+              tooltip: { valueDecimals: 2 }
+            }],
+            credits: { enabled: false }
+            }}
+          />
+          <Variables
+            variables={variables}
+            selectedVariables={this.state.variableNames}
+            variableClicked={this.variableClicked}
+          />
+        </Wrapper>
       )
 
   }
