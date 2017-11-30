@@ -66,7 +66,7 @@ export default class Explorer extends React.Component {
         .catch(err => {
             console.log(err);
             this.setState({
-                contract: {}
+                contract: { address }
                 // contractAddress: ""
             });
         })
