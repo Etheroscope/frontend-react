@@ -52,13 +52,13 @@ export default class Explorer extends React.Component {
     this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
-  static downloadContract(address) {
+  downloadContract(address) {
     const url = `/contracts/${address}`
     return fetchJson(url)
   }
 
   changeContract(address) {
-    return Explorer.downloadContract(address)
+    return this.downloadContract(address)
         .then(contract => this.setState({
             contract,
             contractAddress: address
