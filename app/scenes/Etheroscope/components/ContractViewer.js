@@ -44,9 +44,10 @@ class ContractViewer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
     if (prop('address', nextProps.contract) && !equals(this.props.contract, nextProps.contract)) {
-      const url = `/api?module=account&action=balance&address=${this.props.contract.address}&tag=latest&apikey=AJAF8TPSIH2TBUGQJTI2VU98NV3A3YFNCI`
-      fetchEtherscan(url).then(response => this.setState({ balance: response.status == 1 ? `${response.result} WEI` : `0 WEI` }))
+      const url = `/api?module=account&action=balance&address=${nextProps.contract.address}&tag=latest&apikey=AJAF8TPSIH2TBUGQJTI2VU98NV3A3YFNCI`
+      fetchEtherscan(url).then(response => this.setState({ balance: response.status == 1 ? `${response.result / 1000000000000000000} ETH` : `0 WEI` }))
     }
   }
 
@@ -98,19 +99,31 @@ class ContractViewer extends React.Component {
     const nullContract = this.props.contract.nullContract
 
     if ((!abi || abi.length === 0) && !nullContract) {
-      return <CenteredH> No ABI for this variable </CenteredH>
+      return (
+        this.state.balance ?
+          <CenteredH>
+            Balance: {this.state.balance}
+          </CenteredH>
+        : <CenteredH>No ABI found for this contract</CenteredH>
+      )
     }
 
     if ((!variables || variables.length === 0) && !nullContract) {
-      return <CenteredH> No variables in this contract </CenteredH>
+      return (
+        this.state.balance ?
+          <CenteredH>
+            Balance: {this.state.balance}
+          </CenteredH>
+          : <CenteredH>No variables found for this contract</CenteredH>
+      )
     }
 
       return (
         <Wrapper>
           {this.state.balance &&
-            <p>
+            <CenteredH>
               Balance: {this.state.balance}
-            </p>
+            </CenteredH>
           }
           <Container>
             {this.state.variableData.length > 0 ?
