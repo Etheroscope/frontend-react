@@ -83,9 +83,9 @@ class ContractViewer extends React.Component {
     const abi = this.props.contract.abi
     const nullContract = this.props.contract.nullContract
 
-    // if ((!abi || abi.length === 0) && !nullContract) {
-    //   return <CenteredH> No ABI for this variable </CenteredH>
-    // }
+    if ((!abi || abi.length === 0) && !nullContract) {
+      return <CenteredH> No ABI for this variable </CenteredH>
+    }
 
     if ((!variables || variables.length === 0) && !nullContract) {
       return <CenteredH> No variables in this contract </CenteredH>
@@ -93,23 +93,28 @@ class ContractViewer extends React.Component {
 
       return (
         <Wrapper>
-          <ReactHighstock
-            config={{
-            rangeSelector: { selected: 1 },
-            title: { text: 'Smart Contract Explorer' },
-            series: [{
-              name: 'Explorer',
-              data: this.state.variableData,
-              tooltip: { valueDecimals: 2 }
-            }],
-            credits: { enabled: false }
-            }}
-          />
-          <Variables
-            variables={variables}
-            selectedVariables={this.state.variableNames}
-            variableClicked={this.variableClicked}
-          />
+          {this.state.variableData.length > 0 ?
+            <div>
+              <ReactHighstock
+                config={{
+                rangeSelector: { selected: 1 },
+                title: { text: 'Smart Contract Explorer' },
+                series: [{
+                  name: 'Explorer',
+                  data: this.state.variableData,
+                  tooltip: { valueDecimals: 2 }
+                }],
+                credits: { enabled: false }
+              }}
+              />
+              <Variables
+                variables={variables}
+                selectedVariables={this.state.variableNames}
+                variableClicked={this.variableClicked}
+              />
+            </div>
+          : <CenteredH>Welcome to the explorer. Choose a contract and we will display the state of its variables here.</CenteredH>
+          }
         </Wrapper>
       )
 
