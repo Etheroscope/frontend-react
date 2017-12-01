@@ -15,12 +15,12 @@ const Wrapper = styled.div`
 `
 const BannerContainer = styled.div`
   width: 100%;
-  background-color: rgb(25, 152, 162);
+  background-color: #3398c0;
   padding-top: 10px;
   fontSize: 20px;
   color: #f9f9f9;
   width: 100%;
-  margin: 0 auto;
+  margin: -14px auto 0 auto;
   display: flex;
   flex-direction: column;
 `
@@ -37,24 +37,27 @@ const Page = styled.div`
 const ButtonStyle = styled.button`
   padding: 10px;
   width:200px;
-  background-color: rgb(25, 152, 162);
-  border-radius 5px;
+  background-color: #4B6575;
+  border-radius 3px;
   color: white;
   display: block;
   margin: 50px auto;
 `
 const InputStyle = styled.input`
  width:300px;
+ padding: 5px 10px;
+ border-radius: 3px;
 `
 const Formstyle=styled.form`
   margin-left:100px;
   padding: 10px;
 `
 const SubmitButton=styled.button`
-  border-radius 5px;
-  background-color: rgb(25, 152, 162);
-  color: white;
-  margin-left:20px;
+  border-radius 3px;
+  background-color: #4B6575;
+  color: #f9f9f9;
+  padding: 5px 10px;
+  margin-left: 16px;
 `
 const customStyles = {
   content : {
@@ -63,7 +66,8 @@ const customStyles = {
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+    transform             : 'translate(-50%, -50%)',
+    padding               : '18px 36px 24px 36px'
   }
 };
 
@@ -160,12 +164,6 @@ export default class Explorer extends React.Component {
       <Wrapper>
         <BannerContainer>
           <Banner>
-            <AddressFormContainer
-              address={this.state.contractAddress}
-              handleChange={this.addressChanged}
-              handleClick={this.exploreClicked}
-              handleKeyPress={this.handleKeyPress}
-            />
             <Favourites handleClick={this.changeContract} />
           </Banner>
         </BannerContainer>
@@ -189,7 +187,7 @@ export default class Explorer extends React.Component {
                     value={this.state.email}
                     onChange={this.handleEmailChange}
                   />
-                  <SubmitButton disabled={!this.validEmail()}>Submit</SubmitButton>
+                  <SubmitButton disabled={!this.validEmail()}>Subscribe</SubmitButton>
                 </Formstyle>         
               </Modal>
             </div>

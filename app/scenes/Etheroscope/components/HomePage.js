@@ -15,6 +15,7 @@ const Navbar = styled.div`
   align-self: center;
   height: 40%;
   width: 95%;
+  font-size: 18px;
 `
 
 const IntroTextWrapper = styled.div`
