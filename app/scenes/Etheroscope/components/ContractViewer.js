@@ -136,7 +136,7 @@ class ContractViewer extends React.Component {
     if (prop('address', nextProps.contract) && !equals(this.props.contract, nextProps.contract)) {
       const url = `/api?module=account&action=balance&address=${nextProps.contract.address}&tag=latest&apikey=AJAF8TPSIH2TBUGQJTI2VU98NV3A3YFNCI`
       fetchEtherscan(url).then(response => this.setState({ balance: response.status === 1 ? `${response.result / 1000000000000000000} ETH` : `0 WEI` }))
-      this.setState({orgName: this.findOrganisationName(nextProps.contract.address) })
+      this.setState({orgName: this.findOrganisationName(nextProps.contract.address), variableData:[] })
     }
   }
 
