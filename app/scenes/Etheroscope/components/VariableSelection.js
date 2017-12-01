@@ -27,7 +27,7 @@ const VarContainer = styled.div`
     width: auto;
     min-width: 160px;
     height: 60%;
-    overflow: scroll;
+    overflow: auto;
 `
 const Wrapper = styled.div`
     display: flex;

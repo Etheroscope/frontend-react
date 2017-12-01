@@ -70,7 +70,7 @@ const customStyles = {
 export default class Explorer extends React.Component {
   constructor(props) {
     super(props)
-    const address = document.location.hash.slice(1);
+    const address = props.params.address;
     this.state = {
       contract: { nullContract: true, variables: [], abi: [] },
       contractAddress: 'contract address',
@@ -94,12 +94,12 @@ export default class Explorer extends React.Component {
 
   downloadContract(address) {
     const url = `/contracts/${address}`
-    return Promise.resolve({});
-    // return fetchJson(url)
+    return fetchJson(url)
   }
 
   changeContract(address) {
     return this.downloadContract(address)
+        .then(contract => { contract.address = address; return contract; })
         .then(contract => this.setState({
             contract,
             contractAddress: address
@@ -108,7 +108,6 @@ export default class Explorer extends React.Component {
             console.log(err);
             this.setState({
                 contract: { address }
-                // contractAddress: ""
             });
         })
   }
