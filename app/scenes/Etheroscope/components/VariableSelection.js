@@ -1,5 +1,7 @@
 import React from 'react'
+import ReactDom from 'react-dom'
 import styled from 'styled-components'
+import {Icon} from 'react-fa'
 
 const VarButton = styled.button`
     justify-content: center;
@@ -39,6 +41,11 @@ const ChooseVar = styled.span`
     padding: 20px 0px 20px 0px;
 `
 
+const FlexDiv = styled.div`
+    display: flex;
+    margin: 15px 0;
+`
+
 class VariableSelection extends React.Component {
 
   render() {
@@ -50,23 +57,38 @@ class VariableSelection extends React.Component {
 
       const varMsg = (Vars.length > 0) ? <ChooseVar>Choose a variable:</ChooseVar> : null
 
-      console.log(selectedVars)
-
     return (
       <Wrapper>
         {varMsg}
         <VarContainer>
-          {Vars.map(({variable, selected}, index) => (
-            selected ?
-                (<VarSelectedButton key={index} onClick={() => { this.props.variableClicked(variable) }}>
+          {Vars.map(({ variable, selected }, index) => (
+            selected ? (
+              <FlexDiv key={index}>
+                <VarSelectedButton onClick={() => {
+                  this.props.variableClicked(variable)
+                }}>
                   {variable}
-                </VarSelectedButton>)
-            :
-                (<VarButton key={index} onClick={() => { this.props.variableClicked(variable) }}>
+                </VarSelectedButton>
+              </FlexDiv>
+            ) : (
+              <FlexDiv key={index}>
+                <VarButton key={index} onClick={() => {
+                  this.props.variableClicked(variable)
+                }}>
                   {variable}
-                </VarButton>)
-                )
-          )}
+                </VarButton>
+                {this.props.downloadingVariables[variable] &&
+                <FlexDiv>
+                  <progress max={100}
+                            value={this.props.downloadingVariables[variable].progress * 100}>
+                    {this.props.downloadingVariables[variable].progress * 100}%
+                  </progress>
+                  <button onClick={() => this.props.emailClicked(variable)}>Email</button>
+                </FlexDiv>
+                }
+              </FlexDiv>
+            )
+          ))}
         </VarContainer>
         <Separator />
       </Wrapper>
