@@ -9,7 +9,6 @@ import Modal from 'react-modal'
 import Delay from 'react-delay'
 
 const Wrapper = styled.div`
-  background-color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -19,7 +18,7 @@ const BannerContainer = styled.div`
   background-color: rgb(25, 152, 162);
   padding-top: 10px;
   fontSize: 20px;
-  color: white;
+  color: #f9f9f9;
   width: 100%;
   margin: 0 auto;
   display: flex;
