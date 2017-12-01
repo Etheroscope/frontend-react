@@ -90,7 +90,11 @@ export default class Header extends React.Component {
   }
 
   submitSearch() {
-    window.location = `../search?query=${this.props.query}`
+    const query = this.props.query
+    const regex = new RegExp("0x[a-fA-F0-9]{40}")
+    const isAddress = regex.test(query)
+    window.location = (isAddress) ? `/contracts/${query}`
+      : `/search?query=${query}`
   }
 
   handleKeyPress(e) {
