@@ -51,7 +51,7 @@ const Footer = () => {
     <Wrapper>
       <EtheroscopeAbout>
         <FooterLogo alt="Etheroscope" src="/static/etheroscope-black.png"/>
-        HEY! What a wonderful kind of day! Where we learn walk and play, and get along with each other.
+        Etheroscope is an agile smart contract viewer, showing how variables in a contract change over time.
       </EtheroscopeAbout>
       <CopyrightWrapper>
         <Copyright>© 2018 Etheroscope. Donations welcome!</Copyright>
