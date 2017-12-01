@@ -6,14 +6,20 @@ import HeaderContainer from './Header'
 import FooterContainer from './Footer'
 
 const Wrapper = styled.div`
-  background-color: white;
+`
+
+const BodyWrapper = styled.div`
+  padding: 132px 0 20px 0;
+  background-color: #efefef;
 `
 
 const EtheroscopeContainer = ({...props}) => {
   return (
     <Wrapper>
       <HeaderContainer />
-      <Etheroscope {...props} />
+      <BodyWrapper>
+        <Etheroscope {...props} />
+      </BodyWrapper>
       <FooterContainer />
     </Wrapper>
   )
