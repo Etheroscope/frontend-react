@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { equals, prop } from 'ramda'
 import fetchJson from './../xhr'
 import fetchEtherscan from './../etherscan'
+import { contracts } from '../organisationContractData'
 
 const GraphOption = styled.button`
     background-color: #1998a2;
@@ -97,11 +98,23 @@ class ContractViewer extends React.Component {
         'Navigator': false,
         'Percent_Change': false
       },
+      orgName: null,
       logError: false
     }
     this.variableClicked = this.variableClicked.bind(this)
     this.handleOptionClicked = this.handleOptionClicked.bind(this)
     this.allPositiveValues = this.allPositiveValues.bind(this)
+    this.findOrganisationName = this.findOrganisationName.bind(this)
+  }
+
+  findOrganisationName(addr) {
+    const entries = Object.values(contracts)
+    for (let i = 0; i < entries.length; i++) {
+      if(entries[i].address === addr) {
+        return(entries[i].organisation)
+      }
+    }
+    return addr
   }
 
   allPositiveValues(arr) {
@@ -122,7 +135,8 @@ class ContractViewer extends React.Component {
     console.log(nextProps)
     if (prop('address', nextProps.contract) && !equals(this.props.contract, nextProps.contract)) {
       const url = `/api?module=account&action=balance&address=${nextProps.contract.address}&tag=latest&apikey=AJAF8TPSIH2TBUGQJTI2VU98NV3A3YFNCI`
-      fetchEtherscan(url).then(response => this.setState({ balance: response.status == 1 ? `${response.result / 1000000000000000000} ETH` : `0 WEI` }))
+      fetchEtherscan(url).then(response => this.setState({ balance: response.status === 1 ? `${response.result / 1000000000000000000} ETH` : `0 WEI` }))
+      this.setState({orgName: this.findOrganisationName(nextProps.contract.address) })
     }
   }
 
@@ -245,9 +259,9 @@ class ContractViewer extends React.Component {
 
       return (
         <Wrapper>
-          {this.state.balance &&
+          {this.state.balance && this.state.orgName &&
             <CenteredH>
-              Balance: {this.state.balance}
+              {this.state.orgName} Balance: {this.state.balance}
             </CenteredH>
           }
           {/*<Container>*/}
@@ -258,7 +272,7 @@ class ContractViewer extends React.Component {
                   {/*<Separator />*/}
                   <CenteredH2>Options</CenteredH2>
                   {/*<Separator/>*/}
-                  {this.state.logError ? alert("Sorry, You can't have a logarithmic graph with non-positive values!") : <CenteredH3 />}
+                  {this.state.logError && alert("Sorry, You can't have a logarithmic graph with non-positive values!")}
                   {Object.entries(this.state.graphOptions).map(([option, selected], index) => (selected)
                     ? (<SelectedGraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g,' ')} </SelectedGraphOption>)
                     : (<GraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g,' ')} </GraphOption>)
