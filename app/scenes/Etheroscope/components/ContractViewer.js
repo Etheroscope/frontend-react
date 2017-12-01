@@ -5,7 +5,9 @@ import ReactDOM from 'react-dom'
 import VariableSelection from './VariableSelection'
 import styled from 'styled-components'
 import { equals, prop } from 'ramda'
-import fetchJson from './../xhr'
+import { fetchJson, postJson } from "../xhr"
+
+'./../xhr'
 import fetchEtherscan from './../etherscan'
 import { contracts } from '../organisationContractData'
 
@@ -94,6 +96,7 @@ class ContractViewer extends React.Component {
       variableNames: [],
       currentVar: null,
       variableData: [],
+      downloadingVariables: {}
       graphOptions: {
         'Crosshair': false,
         'Logarithmic_Scale': false,
@@ -137,7 +140,6 @@ class ContractViewer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps)
     if (prop('address', nextProps.contract) && !equals(this.props.contract, nextProps.contract)) {
       const url = `/api?module=account&action=balance&address=${nextProps.contract.address}&tag=latest&apikey=AJAF8TPSIH2TBUGQJTI2VU98NV3A3YFNCI`
       fetchEtherscan(url).then(response => this.setState({ balance: response.status === 1 ? `${response.result / 1000000000000000000} ETH` : `0 WEI` }))
@@ -145,9 +147,48 @@ class ContractViewer extends React.Component {
     }
   }
 
-  fetchVariableHistory(varName) {
+  fetchVariableHistory(varName, spawnInterval = true) {
     const url = `/contracts/${this.props.contract.address}/history/${varName}`
-    return fetchJson(url).then(response => response.data)
+    return fetchJson(url).then(result => {
+      switch (result.status) {
+        case 200:
+          delete this.state.downloadingVariables[varName];
+          this.setState({ downloadingVariables: this.state.downloadingVariables})
+          const history = result.response.data;
+          const processedHistory = history.map(item => {
+            item.value = parseFloat(item.value)
+            return [item.time * 1000, item.value]
+          })
+
+          this.setState({
+            variableNames: [...this.state.variableNames, varName],
+            currentVar: varName,
+            variableData: [...this.state.variableData, processedHistory.sort()]
+          })
+          break
+        case 503:
+          // Caching - display status & keep the user updates & give email notification option
+          const downloadingVariables = this.state.downloadingVariables
+          downloadingVariables[varName] = result.response
+          this.setState({ downloadingVariables })
+          if (spawnInterval) {
+            setInterval(() => {
+              this.fetchVariableHistory(varName, false)
+            }, 1000);
+          }
+          break
+        case 404:
+          // Send the initial request
+          postJson(url).then(result => {
+            if (result.status !== 201 && result.status !== 204) {
+              throw new Error('Bad response from the server')
+            }
+          }).then(() => this.fetchVariableHistory(varName))
+          break
+        default:
+          throw new Error('Unknown response from the server')
+      }
+    })
   }
 
   variableClicked(varName) {
@@ -162,19 +203,7 @@ class ContractViewer extends React.Component {
       return
     }
 
-    this.fetchVariableHistory(varName)
-      .then(history => {
-        const processedHistory = history.map(item => {
-          item.value = parseFloat(item.value)
-          return [item.time * 1000, item.value]
-        })
-
-        this.setState({
-          variableNames: [...this.state.variableNames, varName],
-          currentVar: varName,
-          variableData: [...this.state.variableData, processedHistory.sort()]
-        })
-      })
+    this.fetchVariableHistory(varName);
   }
 
   render () {
@@ -284,11 +313,13 @@ class ContractViewer extends React.Component {
                   )}
                 </GraphCol>
                 <VarCol>
-                  <Variables
-                    variables={variables}
-                    selectedVariables={this.state.variableNames}
-                    variableClicked={this.variableClicked}
-                  />
+                      <Variables
+                  emailClicked={variable => this.props.emailHandler(variable, this.props.contract.address )}
+                  variables={variables}
+                  selectedVariables={this.state.variableNames}
+                  downloadingVariables={this.state.downloadingVariables}
+                  variableClicked={this.variableClicked}
+                />
                 </VarCol>
               </Row>
           : <CenteredH>Welcome to the explorer. Choose a contract and we will display the state of its variables here.</CenteredH>

@@ -1,11 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import fetchJson from './../xhr'
+import { fetchJson, postJson } from "../xhr"
 
 import ContractViewer from './ContractViewer.js'
 import Favourites from './Favourites.js'
 import Modal from 'react-modal'
-import Delay from 'react-delay'
 
 const Wrapper = styled.div`
   display: flex;
@@ -97,7 +96,7 @@ export default class Explorer extends React.Component {
 
   downloadContract(address) {
     const url = `/contracts/${address}`
-    return fetchJson(url)
+    return fetchJson(url).then(response => response.response)
   }
 
   changeContract(address) {
@@ -129,8 +128,8 @@ export default class Explorer extends React.Component {
     }
   }
 
-  openModal() {
-    this.setState({modalIsOpen: true});
+  openModal(variable, contract) {
+    this.setState({emailData: {variable, contract}, modalIsOpen: true});
   }
 
   afterOpenModal() {
@@ -151,11 +150,15 @@ export default class Explorer extends React.Component {
 
   handleSubmit(evt) {
     if (!this.validEmail()) {
-      evt.preventDefault();
-      return;
+      return false;
     }
-    const { email } = this.state;
-    alert(`Signed up with email: ${email}`);
+    evt.preventDefault();
+    const { email, emailData } = this.state;
+    postJson(`/contracts/${emailData.contract}/history/${emailData.variable}/subscribe/${email}`)
+      .then(result => {
+        console.log(result);
+        this.closeModal();
+      });
   }
 
   render() {
@@ -167,30 +170,25 @@ export default class Explorer extends React.Component {
           </Banner>
         </BannerContainer>
         <Page>
-          <ContractViewer contract={this.state.contract} />
-          <Delay wait={1200}>
-            <div>
-              <ButtonStyle onClick={this.openModal}>Taking too long? </ButtonStyle>
-              <Modal
-                isOpen={this.state.modalIsOpen}
-                onAfterOpen={this.afterOpenModal}
-                onRequestClose={this.closeModal}
-                style={customStyles}
-              >
-                <h2 > Give us your email address so we can get back to you!</h2>
-                <Formstyle onSubmit={this.handleSubmit}>
-                  <InputStyle
-                    className={this.validEmail() ? "error" : ""}
-                    type="text"
-                    placeholder="name@example.com"
-                    value={this.state.email}
-                    onChange={this.handleEmailChange}
-                  />
-                  <SubmitButton disabled={!this.validEmail()}>Subscribe</SubmitButton>
-                </Formstyle>         
-              </Modal>
-            </div>
-          </Delay>
+          <ContractViewer contract={this.state.contract} emailHandler={this.openModal}/>
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            onAfterOpen={this.afterOpenModal}
+            onRequestClose={this.closeModal}
+            style={customStyles}
+          >
+            <h2> Give us your email address so we can get back to you!</h2>
+            <Formstyle onSubmit={this.handleSubmit}>
+              <InputStyle
+                className={this.validEmail() ? "error" : ""}
+                type="text"
+                placeholder="name@example.com"
+                value={this.state.email}
+                onChange={this.handleEmailChange}
+              />
+              <SubmitButton disabled={!this.validEmail()}>Subscribe</SubmitButton>
+            </Formstyle>
+          </Modal>
         </Page>
       </Wrapper>
     )
