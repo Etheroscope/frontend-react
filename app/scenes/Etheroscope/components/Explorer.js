@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import fetchJson from './../xhr'
 
-import AddressFormContainer from './../AddressForm'
 import ContractViewer from './ContractViewer.js'
 import Favourites from './Favourites.js'
 import Modal from 'react-modal'
