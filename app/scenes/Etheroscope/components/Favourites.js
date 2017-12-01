@@ -8,14 +8,14 @@ export default class Favourites extends React.Component {
       margin-bottom: 15px;
     `
     const FavouriteLink = styled.a`
-      color: white;
+      color: #f9f9f9;
       margin-right: 10px;
       border-bottom: white 1px solid;
       text-decoration: none;
       cursor: pointer;
     `
 
-    const favourites = JSON.parse(localStorage.favourites)
+    const favourites = JSON.parse(localStorage.favourites || '[]')
 
     return (
       <Section>

@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types';
 
 const Wrapper = styled.div`
-  background-color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -28,38 +28,27 @@ const CenteredP = styled.p`
   text-align: center;
 `
 
-const contracts = [
-  {
-    address: '0xa120Fd6CEc5733b544BC5276a815716F31951C35',
-    description: 'Minting contract: this contract mints tokens representing the value of donations made in fiat',
-    organisation: 'Alice'
-  },
-  {
-    address: '0xBd897c8885b40d014Fb7941B3043B21adcC9ca1C',
-    description: 'Donations: the main contract storing donations made to the London Street Impact: 15 Lives (LSI:15L) appeal',
-    organisation: 'Alice'
-  },
-  {
-    address: '0x2299B133551318fC3C34Bf81b46694651dA11282',
-    description: 'Registry contract: this contract keeps track of donor balances and goals achieved',
-    organisation: 'Alice'
-  },
-  {
-    address: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413',
-    description: 'A contract belonging to the DAO.',
-    organisation: 'The DAO'
-  }
-]
-
 export default class SearchResults extends React.Component {
 
   constructor (props) {
     super(props)
-    const query = window.location.search.slice(1).toLowerCase()
-    this.matchingOrgs = this.props.route.organisations.filter(org => org.name.toLowerCase().indexOf(query) !== -1)
-    
-    // Add matching orgs to recent
-    if (this.matchingOrgs && this.matchingOrgs.length > 0) {
+  }
+
+  render() {
+    const query = this.context.query
+    this.matchingOrgs = this.props.route.popularOrgs.filter(org =>
+      org.name.toLowerCase().indexOf(query) !== -1
+    )
+    this.matchingContracts = this.props.route.contracts.filter(contract =>
+      contract.address.toLowerCase().indexOf(query) !== -1
+      || contract.organisation.toLowerCase().indexOf(query) !== -1)
+    if (this.matchingOrgs.length === 0 && this.matchingContracts.length === 0) {
+      return (<CenteredP>No results found</CenteredP>)
+    }
+
+    // TODO: Move this to the organisation page
+    // Add organisations to recent
+    if (this.matchingOrgs.length > 0) {
       const recent = localStorage.recent && JSON.parse(localStorage.recent) || []
       for(var j=0; j < this.matchingOrgs.length; j++) {
         for(var i = 0; i < recent.length; i++) {
@@ -72,16 +61,8 @@ export default class SearchResults extends React.Component {
       }
       localStorage.recent = JSON.stringify(recent)
     }
-    
-    this.matchingContracts = contracts.filter(contract =>
-      contract.address.toLowerCase().indexOf(query) !== -1
-      || contract.organisation.toLowerCase().indexOf(query) !== -1)
-  }
 
-  render() {
-    if (this.matchingOrgs.length === 0 && this.matchingContracts.length === 0) {
-      return (<CenteredP>No results found</CenteredP>)
-    }
+
     return (
       <Wrapper>
         <Page>
@@ -103,19 +84,23 @@ export default class SearchResults extends React.Component {
   }
 }
 
+SearchResults.contextTypes = {
+  query: PropTypes.string
+};
+
 function renderOrganisation(org) {
   return (
     <Result>
-      <p>Organisation: {org.name} </p>
+      <a href={'/organisations/' + org.name}><h2>{org.name}</h2></a>
       {org.url && <p>Website: <a href={org.url}>{org.url}</a></p>}
       {org.description && <p>Description: {org.description}</p>}
       {org.contracts && org.contracts.length > 0 &&
       <div>
         <p>Contracts:</p>
         <ul>
-          {org.contracts.map((contractAddress, contractKey) => (
+          {org.contracts.map((contract, contractKey) => (
             <li key={contractKey}>
-              <p>{contractAddress}</p>
+              <a href={`/contracts/${contract.address}`}>{contract.address}</a>
             </li>
           ))}
         </ul>
@@ -130,7 +115,7 @@ function renderContract(contract) {
   return (
     <Result>
       {contract.name && <p>Result: {contract.name}</p>}
-      <p>Address: <a href={`/explorer#${contract.address}`}>{contract.address}</a> </p>
+      <p>Address: <a href={`/contracts/${contract.address}`}>{contract.address}</a> </p>
       {contract.description && <p>Description: {contract.description}</p>}
     </Result>
   )

@@ -4,7 +4,9 @@ import ReactDOM from 'react-dom'
 // Don't remove ReactDOM; needed for highstocks
 import VariableSelection from './VariableSelection'
 import styled from 'styled-components'
+import { equals, prop } from 'ramda'
 import fetchJson from './../xhr'
+import fetchEtherscan from './../etherscan'
 
 const GraphOption = styled.button`
     background-color: #1998a2;
@@ -20,18 +22,67 @@ const SelectedGraphOption = styled.button`
     padding: 5px 50px;
 `
 
-const Separator = styled.hr`
+const Separator = styled.div`
+  height:1px;
+  background:#4B6575;
+  border-bottom:1px solid #4B6575;
 `
 
-const Wrapper = styled.div`
+const InWrapper = styled.div`
   display: inline-block;
 `
+//
+// const CenteredWrapper = styled.div`
+//   text-align: center;
+// `
 
-const CenteredWrapper = styled.div`
+const CenteredH2 = styled.h2`
+  text-align: center;
+`
+
+const CenteredH3 = styled.h3`
   text-align: center;
 `
 
 const ReactHighstock = require('react-highcharts/ReactHighstock')
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+//  display: inline-block;
+`
+const Container = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  height: 400px;
+  padding-top: 20px;
+`
+
+const Variables = styled(VariableSelection)`
+  display: flex;
+  justify-content: stretch;
+`
+const CenteredH = styled.h1`
+  text-align: center;
+`
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`
+
+const GraphCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+`
+const VarCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+`
 
 class ContractViewer extends React.Component {
   constructor(props) {
@@ -45,66 +96,91 @@ class ContractViewer extends React.Component {
         'Logarithmic_Scale': false,
         'Navigator': false,
         'Percent_Change': false
-      }
+      },
+      logError: false
     }
     this.variableClicked = this.variableClicked.bind(this)
     this.handleOptionClicked = this.handleOptionClicked.bind(this)
+    this.allPositiveValues = this.allPositiveValues.bind(this)
+  }
+
+  allPositiveValues(arr) {
+    return arr.every(series => series.every(([_,v]) => (v > 0)))
   }
 
   handleOptionClicked(option) {
-    const tempOptions = this.state.graphOptions
-    tempOptions[option] = !tempOptions[option]
-    this.setState({graphOptions: tempOptions})
+    if (option === 'Logarithmic_Scale' && !this.allPositiveValues(this.state.variableData)) {
+      this.setState({logError: true})
+    } else {
+      const tempOptions = this.state.graphOptions
+      tempOptions[option] = !tempOptions[option]
+      this.setState({graphOptions: tempOptions, logError: false})
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
+    if (prop('address', nextProps.contract) && !equals(this.props.contract, nextProps.contract)) {
+      const url = `/api?module=account&action=balance&address=${nextProps.contract.address}&tag=latest&apikey=AJAF8TPSIH2TBUGQJTI2VU98NV3A3YFNCI`
+      fetchEtherscan(url).then(response => this.setState({ balance: response.status == 1 ? `${response.result / 1000000000000000000} ETH` : `0 WEI` }))
+    }
   }
 
   fetchVariableHistory(varName) {
-    const url = `/contracts/${this.props.contract.address}/history?variable=${varName}`
-    return fetchJson(url)
+    const url = `/contracts/${this.props.contract.address}/history/${varName}`
+    return fetchJson(url).then(response => response.data)
   }
 
-  // only fetch history if variable not already in variableNames
   variableClicked(varName) {
-    if (!(this.state.variableNames.includes(varName))) {
-      this.fetchVariableHistory(varName)
-        .then(history => {
-          const processedHistory = history.map(item => {
-            item.value = parseFloat(item.value);
-            return [item.time * 1000, item.value]
-          });
-
-          this.setState({
-            variableNames: [...this.state.variableNames, varName],
-            currentVar: varName,
-            variableData: [...this.state.variableData, processedHistory.sort()]
-          });
-        })
-    } else {
-      // remove from graph
-      this.fetchVariableHistory(varName)
-        .then(() => {
-          let clickedIndex = this.state.variableNames.indexOf(varName)
-          this.setState({
-            variableNames: [...this.state.variableNames.slice(0, clickedIndex), ...this.state.variableNames.slice(clickedIndex + 1, this.state.variableNames.length)],
-            currentVar: this.state.variableNames[this.state.variableNames.length - 1],
-            variableData: [...this.state.variableData.slice(0, clickedIndex), ...this.state.variableData.slice(clickedIndex + 1, this.state.variableData.length)]
-          });
-        })
+    // Remove the variable from the set of displayed variables if it's displayed
+    if (this.state.variableNames.includes(varName)) {
+      const clickedIndex = this.state.variableNames.indexOf(varName)
+      this.setState({
+        variableNames: [...this.state.variableNames.slice(0, clickedIndex), ...this.state.variableNames.slice(clickedIndex + 1, this.state.variableNames.length)],
+        currentVar: this.state.variableNames[this.state.variableNames.length - 1],
+        variableData: [...this.state.variableData.slice(0, clickedIndex), ...this.state.variableData.slice(clickedIndex + 1, this.state.variableData.length)]
+      })
+      return
     }
+
+    this.fetchVariableHistory(varName)
+      .then(history => {
+        const processedHistory = history.map(item => {
+          item.value = parseFloat(item.value)
+          return [item.time * 1000, item.value]
+        })
+
+        this.setState({
+          variableNames: [...this.state.variableNames, varName],
+          currentVar: varName,
+          variableData: [...this.state.variableData, processedHistory.sort()]
+        })
+      })
   }
 
-  render() {
+  render () {
     const variables = this.props.contract.variables
-    const abi = this.props.contract.abi;
-    const nullContract = this.props.contract.nullContract;
-
-    const CenteredH = styled.h1` text-align: center `;
+    const abi = this.props.contract.abi
+    const nullContract = this.props.contract.nullContract
 
     if ((!abi || abi.length === 0) && !nullContract) {
-      return <CenteredH> No ABI for this variable </CenteredH>
+      return (
+        this.state.balance ?
+          <CenteredH>
+            Balance: {this.state.balance}
+          </CenteredH>
+        : <CenteredH>No ABI found for this contract</CenteredH>
+      )
     }
 
     if ((!variables || variables.length === 0) && !nullContract) {
-      return <CenteredH> No variables in this contract </CenteredH>
+      return (
+        this.state.balance ?
+          <CenteredH>
+            Balance: {this.state.balance}
+          </CenteredH>
+          : <CenteredH>No variables found for this contract</CenteredH>
+      )
     }
 
     const seriesOptions = this.state.variableNames.map((name, i) =>
@@ -114,7 +190,7 @@ class ContractViewer extends React.Component {
           split: true
         }}));
 
-    let y_axis = {
+    const y_axis = {
       crosshair: this.state.graphOptions.Crosshair,
       type: (this.state.graphOptions.Logarithmic_Scale) ? 'logarithmic' : 'linear'
     }
@@ -134,15 +210,13 @@ class ContractViewer extends React.Component {
     // )
 
     const graph =
-        (<ReactHighstock
+      (<ReactHighstock
         config={{
           rangeSelector: { selected: 1 },
           title: { text: 'Smart Contract Explorer' },
           yAxis: y_axis,
           navigator: nav,
             // {
-            // type: 'logarithmic',
-            // minorTickInterval: 0.1
             // labels: {
             //   //     formatter: function () {
             //   //         return (this.value > 0 ? ' + ' : '') + this.value + '%';
@@ -170,26 +244,39 @@ class ContractViewer extends React.Component {
        />)
 
       return (
-        <div>
-          <VariableSelection variables={variables} selectedVariables={this.state.variableNames}
-                             variableClicked={this.variableClicked}/>
-
-          {(this.state.variableData.length === 0) ? null :
-            <CenteredWrapper>
-              {graph}
-              <Wrapper>
-                <Separator/>
-                {Object.entries(this.state.graphOptions).map(([option, selected], index) => (selected)
-                  ? (<SelectedGraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g,' ')} </SelectedGraphOption>)
-                  : (<GraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g,' ')} </GraphOption>)
-                )}
-              </Wrapper>
-            </CenteredWrapper>
+        <Wrapper>
+          {this.state.balance &&
+            <CenteredH>
+              Balance: {this.state.balance}
+            </CenteredH>
           }
-
-        </div>
+          {/*<Container>*/}
+            {variables.length > 0 ?
+              <Row>
+                <GraphCol>
+                  {graph}
+                  {/*<Separator />*/}
+                  <CenteredH2>Options</CenteredH2>
+                  {/*<Separator/>*/}
+                  {this.state.logError ? alert("Sorry, You can't have a logarithmic graph with non-positive values!") : <CenteredH3 />}
+                  {Object.entries(this.state.graphOptions).map(([option, selected], index) => (selected)
+                    ? (<SelectedGraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g,' ')} </SelectedGraphOption>)
+                    : (<GraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g,' ')} </GraphOption>)
+                  )}
+                </GraphCol>
+                <VarCol>
+                  <Variables
+                    variables={variables}
+                    selectedVariables={this.state.variableNames}
+                    variableClicked={this.variableClicked}
+                  />
+                </VarCol>
+              </Row>
+          : <CenteredH>Welcome to the explorer. Choose a contract and we will display the state of its variables here.</CenteredH>
+          }
+          {/*</Container>*/}
+        </Wrapper>
       )
-
   }
 }
 
