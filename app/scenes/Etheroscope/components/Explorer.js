@@ -8,15 +8,12 @@ import Favourites from './Favourites.js'
 import Modal from 'react-modal'
 import Delay from 'react-delay'
 
-
-
 const Wrapper = styled.div`
   background-color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
 `
-
 const BannerContainer = styled.div`
   width: 100%;
   background-color: rgb(25, 152, 162);
@@ -28,14 +25,12 @@ const BannerContainer = styled.div`
   display: flex;
   flex-direction: column;
 `
-
 const Banner = styled.div`
   width: 90%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
 `
-
 const Page = styled.div`
   width: 90%;
   margin: auto;
@@ -48,7 +43,6 @@ const ButtonStyle = styled.button`
   color: white;
   display: block;
   margin: 50px auto;
-
 `
 const InputStyle = styled.input`
  width:300px;
@@ -57,14 +51,12 @@ const Formstyle=styled.form`
   margin-left:100px;
   padding: 10px;
 `
-
 const SubmitButton=styled.button`
   border-radius 5px;
   background-color: rgb(25, 152, 162);
   color: white;
   margin-left:20px;
 `
-
 const customStyles = {
   content : {
     top                   : '50%',
@@ -85,10 +77,10 @@ export default class Explorer extends React.Component {
       contractAddress: 'contract address',
       modalIsOpen: false,
       email: '',
-       everFocusedEmail: false,
+      everFocusedEmail: false,
       inFocus: '',
-
     }
+    
     if (address) this.changeContract(address);
     this.changeContract = this.changeContract.bind(this)
     this.addressChanged = this.addressChanged.bind(this)
@@ -96,8 +88,6 @@ export default class Explorer extends React.Component {
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-
-
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -142,7 +132,6 @@ export default class Explorer extends React.Component {
   }
 
   afterOpenModal() {
-    // references are now sync'd and can be accessed.
     this.subtitle.style.color = '#f00';
   }
 
@@ -197,12 +186,11 @@ export default class Explorer extends React.Component {
                   <InputStyle
                     className={this.validEmail() ? "error" : ""}
                     type="text"
-                    placeholder="Email"
+                    placeholder="name@example.com"
                     value={this.state.email}
                     onChange={this.handleEmailChange}
                   />
                   <SubmitButton disabled={!this.validEmail()}>Submit</SubmitButton>
-
                 </Formstyle>         
               </Modal>
             </div>
