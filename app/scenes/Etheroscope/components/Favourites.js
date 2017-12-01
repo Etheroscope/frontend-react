@@ -15,7 +15,7 @@ export default class Favourites extends React.Component {
       cursor: pointer;
     `
 
-    const favourites = JSON.parse(localStorage.favourites)
+    const favourites = JSON.parse(localStorage.favourites || '[]')
 
     return (
       <Section>

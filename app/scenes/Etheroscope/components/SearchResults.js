@@ -91,7 +91,7 @@ SearchResults.contextTypes = {
 function renderOrganisation(org) {
   return (
     <Result>
-      <p>Organisation: {org.name} </p>
+      <a href={'/organisations/' + org.name}><h2>{org.name}</h2></a>
       {org.url && <p>Website: <a href={org.url}>{org.url}</a></p>}
       {org.description && <p>Description: {org.description}</p>}
       {org.contracts && org.contracts.length > 0 &&
@@ -100,7 +100,7 @@ function renderOrganisation(org) {
         <ul>
           {org.contracts.map((contract, contractKey) => (
             <li key={contractKey}>
-              <a href={`/explorer#${contract.address}`}>{contract.address}</a>
+              <a href={`/contracts/${contract.address}`}>{contract.address}</a>
             </li>
           ))}
         </ul>
@@ -115,7 +115,7 @@ function renderContract(contract) {
   return (
     <Result>
       {contract.name && <p>Result: {contract.name}</p>}
-      <p>Address: <a href={`/explorer#${contract.address}`}>{contract.address}</a> </p>
+      <p>Address: <a href={`/contracts/${contract.address}`}>{contract.address}</a> </p>
       {contract.description && <p>Description: {contract.description}</p>}
     </Result>
   )

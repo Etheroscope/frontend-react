@@ -90,7 +90,7 @@ export default class Header extends React.Component {
   }
 
   submitSearch() {
-    window.location = `../searchresults?query=${this.props.query}`
+    window.location = `../search?query=${this.props.query}`
   }
 
   handleKeyPress(e) {

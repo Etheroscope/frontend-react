@@ -94,7 +94,8 @@ export default class Explorer extends React.Component {
 
   downloadContract(address) {
     const url = `/contracts/${address}`
-    return fetchJson(url)
+    return Promise.resolve({});
+    // return fetchJson(url)
   }
 
   changeContract(address) {
