@@ -5,7 +5,6 @@ import fetchJson from './../xhr'
 import OrganisationCard from './OrganisationCard.js'
 
 const Wrapper = styled.div`
-  background-color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -15,35 +14,50 @@ const Navbar = styled.div`
   flex-direction: row;
   justify-content: center;
   align-self: center;
-  border:1px solid white;
   height: 40%;
   width: 95%;
 `
 
+const IntroTextWrapper = styled.div`
+  width: 95%;
+  color: #4B6575;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 500;
+  margin-bottom: 20px;
+` 
+
+const IntroText = styled.p`
+  margin: 3px 0;
+` 
+
 // button?
 const Box = styled.button`
-  background-color:#1998a2;
+  background-color:#4B6575;
   cursor: pointer;
-  border:1px solid white;
   padding:5px;
   width:33.3%;
   text-align:center;
-  background-color: #1998a2;
-  color:white;
+  background-color: #4B6575;
+  color: #f9f9f9;
   &:hover {
-    opacity: 0.7;
-    background-color: darkblue;
+    color: white;
+    background-color: #3398c0;
   }
 `
 
 const SelectedBox = styled.button`
     cursor: pointer;
-    border: 1px solid #1998a2;
+    border: 1px solid #4B6575;
     padding: 5px;
     width: 33.3%;
     text-align: center;
     background-color: white;
-    color: #1998a2;
+    color: #4B6575;
 `
 
 const ContractGrid = styled.div`
@@ -129,6 +143,10 @@ export default class HomePage extends React.Component {
 
     return (
       <Wrapper>
+        <IntroTextWrapper>
+          <IntroText>An agile smart contract viewer, showing how variables in a contract change over time.</IntroText>
+          <IntroText>Select an organisation below or use search for a smart contract to get started.</IntroText>
+        </IntroTextWrapper>
         {displayButtons}
         <ContractGrid>
           {organisations &&

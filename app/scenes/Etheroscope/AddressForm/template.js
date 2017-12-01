@@ -12,7 +12,7 @@ const AddressInput = styled.input`
   flex: 1 500px;
   border: none;
   border-bottom: 1px solid white;
-  color: white;
+  color: #f9f9f9;
   outline: none;
   box-shadow: none;
   max-width: 500px;
@@ -21,9 +21,9 @@ const AddressInput = styled.input`
 
 `
 const ExploreButton = styled.button`
-  background-color: #1998a2;
+  background-color: #4B6575;
   border: 1px solid white;
-  color: white;
+  color: #f9f9f9;
   padding: 5px 50px;
   letter-spacing: 2px;
   line-height: 1.42;
