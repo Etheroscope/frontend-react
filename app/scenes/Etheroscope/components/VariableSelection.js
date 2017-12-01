@@ -50,8 +50,6 @@ class VariableSelection extends React.Component {
 
       const varMsg = (Vars.length > 0) ? <ChooseVar>Choose a variable:</ChooseVar> : null
 
-      console.log(selectedVars)
-
     return (
       <Wrapper>
         {varMsg}
