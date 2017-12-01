@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import fetchJson from './../xhr'
 
 import ContractCard from './ContractCard.js'
 
@@ -62,12 +61,9 @@ export default class HomePage extends React.Component {
     super(props)
     this.setCategory = this.setCategory.bind(this)
     this.state = {
+      organisations: this.props.route.popularOrgs,
       category: 'popular'
     };
-  }
-
-  componentWillMount() {
-    this.setCategory('popular')
   }
 
   setCategory(category) {
@@ -83,14 +79,13 @@ export default class HomePage extends React.Component {
         break
       case 'popular':
       default:
-        this.setState({organisations: this.props.route.organisations, category: 'popular'})
+        this.setState({organisations: this.props.route.popularOrgs, category: 'popular'})
         break
     }
   }
 
   render() {
-    const {organisations} = this.state
-    const category = this.state.category
+    const {organisations, category} = this.state
 
     let displayButtons = null
     switch (category) {

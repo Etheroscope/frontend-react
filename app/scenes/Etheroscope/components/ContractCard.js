@@ -107,14 +107,19 @@ class ContractCard extends React.Component {
           <p>Website: <Link href={url}>{url}</Link></p>
           <p>Contracts:</p>
           <ContractList>
-            {contracts.map((contract, contractKey) => (
-              <Row key={contractKey}>
-                <Link href={`/searchresults?${contract}`}><li>{contract}</li></Link>
-                <CopyToClipboard text={contract}>
-                  <Copy>Copy</Copy>
-                </CopyToClipboard>
-              </Row>
-            ))}
+            {contracts.map((contract, contractKey) => {
+              const address = contract.address
+              return (
+                <Row key={contractKey}>
+                  <Link href={`/searchresults?${address}`}>
+                    <li>{address}</li>
+                  </Link>
+                  <CopyToClipboard text={address}>
+                    <Copy>Copy</Copy>
+                  </CopyToClipboard>
+                </Row>
+              )
+            })}
           </ContractList>
         </Container>
       </Card>
