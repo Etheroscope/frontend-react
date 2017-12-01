@@ -4,32 +4,14 @@ import {Router, Route, browserHistory} from 'react-router'
 import HomePage from './components/HomePage'
 import Explorer from './components/Explorer'
 import SearchResults from './components/SearchResults'
-import { popular } from './Organisations'
-
-// wrapper to pass props to HomePage
-const HomePageWrapper = (props) => {
-    return ( <HomePage {...props} />)
-}
-
-// wrapper to pass props to Explorer
-const ExplorerWrapper = (props) => {
-    return ( <Explorer {...props} /> )
-}
+import {contracts, popularOrgs} from './organisationContractData'
 
 const Etheroscope = () => {
-  
-
   return(
     <Router history={browserHistory}>
-      <Route
-        path={"/"} component={HomePage}
-        organisations={popular}
-      />
-      <Route path={"explorer"} component={Explorer} />
-      <Route
-        path={"searchresults"} component={SearchResults}
-        organisations={popular}
-      />
+      <Route path="/" component={HomePage} popularOrgs={popularOrgs} />
+      <Route path="explorer" component={Explorer} />
+      <Route path="searchresults" component={SearchResults} popularOrgs={popularOrgs} contracts={contracts}/>
     </Router>
   )
 }
