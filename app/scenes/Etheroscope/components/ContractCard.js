@@ -45,6 +45,8 @@ const Row = styled.div`
 `
 const Copy = styled.span`
   cursor: pointer;
+  font-size: 24px;
+  font-weight: bold;
   &:hover {
     color: #3398c0;
   }
@@ -118,7 +120,7 @@ class ContractCard extends React.Component {
                     <li>{address}</li>
                   </Link>
                   <CopyToClipboard text={address}>
-                    <Copy>Copy</Copy>
+                    <Copy><i className={"fa fa-copy"}/></Copy>
                   </CopyToClipboard>
                 </Row>
               )
