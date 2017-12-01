@@ -10,17 +10,19 @@ import fetchEtherscan from './../etherscan'
 import { contracts } from '../organisationContractData'
 
 const GraphOption = styled.button`
-    background-color: #1998a2;
-    border: 1px solid white;
-    color: white;
-    padding: 5px 50px;
+   justify-content: center;
+    background-color: #4B6575;
+    color: #f9f9f9;
+    min-height: 30px;
+    width:100%;
 `
 
 const SelectedGraphOption = styled.button`
-    background-color: white;
-    border: 1px solid #1998a2;
-    color: #1998a2;
-    padding: 5px 50px;
+    justify-content: center;
+    background-color: #f9f9f9;
+    color: #4B6575;
+    min-height: 30px;
+    width: 100%;
 `
 
 const Separator = styled.div`
@@ -122,7 +124,10 @@ class ContractViewer extends React.Component {
   }
 
   handleOptionClicked(option) {
+    console.log(option)
+    console.log(this.state.variableData)
     if (option === 'Logarithmic_Scale' && !this.allPositiveValues(this.state.variableData)) {
+      console.log("bad log")
       this.setState({logError: true})
     } else {
       const tempOptions = this.state.graphOptions
@@ -242,7 +247,7 @@ class ContractViewer extends React.Component {
             //     // color: 'silver'
             //   }]
           // },
-
+          chart: { backgroundColor: "#efefef" },
           tooltip: {
             // pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
             // above is to represent percent change
