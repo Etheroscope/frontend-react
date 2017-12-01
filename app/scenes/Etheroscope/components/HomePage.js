@@ -138,10 +138,10 @@ export default class HomePage extends React.Component {
 
     return (
       <Wrapper>
-        <IntroTextWrapper>
+        {location.pathname !== '/organisations' && (<IntroTextWrapper>
           <IntroText>An agile smart contract viewer, showing how variables in a contract change over time.</IntroText>
           <IntroText>Select an organisation below or use search for a smart contract to get started.</IntroText>
-        </IntroTextWrapper>
+        </IntroTextWrapper>)}
         {displayButtons}
         <ContractGrid>
           {organisations &&
