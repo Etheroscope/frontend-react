@@ -60,15 +60,14 @@ export default class Favourites extends React.Component {
     return (
       <Section>
         <FavouritesLabel>Favourites: </FavouritesLabel>
-        {favourites.map(fav => fav.contracts.map(contract =>
-          (<FavouriteName key={contract}>
+        {favourites.map((fav, index) =>
+          (<FavouriteName key={index}>
             {fav.name}
             <FavouriteDropDown> 
             {fav.contracts.map(c => (
-              <FavouriteContract onClick={() => window.location='/contracts/' + c.address}>{c.address}</FavouriteContract>))}
+              <FavouriteContract key={c.address} onClick={() => window.location='/contracts/' + c.address}>{c.address}</FavouriteContract>))}
             </FavouriteDropDown>
           </FavouriteName>)
-        )
         )}
       </Section>
     )
