@@ -76,7 +76,7 @@ export default class Header extends React.Component {
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      window.location = `../explorer#${document.getElementById('search').value}`
+      window.location = `../searchresults?${document.getElementById('search').value}`
     }
   }
 
@@ -97,7 +97,7 @@ export default class Header extends React.Component {
                 onMouseEnter={() => this.input.focus()}
               />
               <SearchButton onClick={() => {
-                window.location = `../explorer#${document.getElementById('search').value}`
+                window.location = `../searchresults?${document.getElementById('search').value}`
               }}>
                 <Icon name="search"/>
               </SearchButton>

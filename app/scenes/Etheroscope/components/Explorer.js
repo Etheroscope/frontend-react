@@ -5,7 +5,6 @@ import fetchJson from './../xhr'
 import AddressFormContainer from './../AddressForm'
 import ContractViewer from './ContractViewer.js'
 import Favourites from './Favourites.js'
-import OrganisationCard from './OrganisationCard.js'
 
 const Wrapper = styled.div`
   background-color: white;
@@ -34,34 +33,19 @@ const Banner = styled.div`
 `
 
 const Page = styled.div`
-  width: 100%;
+  width: 90%;
   margin: auto;
-`
-const CardContainer = styled.div`
-  display: flex; 
-  justify-content: center;
-  & > {
-    width: 100% !important;
-  }
-`
-const CenterH = styled.h3`
-  text-align: center;
 `
 
 export default class Explorer extends React.Component {
   constructor(props) {
     super(props)
-    console.log(document.location.hash.slice(1)[0])
-    const isAddress = document.location.hash.slice(1)[0] === '0'
-    console.log(isAddress)
-    const addressOrOrg = document.location.hash.slice(1)
+    const address = document.location.hash.slice(1);
     this.state = {
-      contract: { isAddress, addressOrOrg, nullContract: true, variables: [], abi: [] },
+      contract: { nullContract: true, variables: [], abi: [] },
       contractAddress: 'contract address'
     }
-    if (isAddress) {
-      this.changeContract(addressOrOrg)
-    }
+    if (address) this.changeContract(address);
     this.changeContract = this.changeContract.bind(this)
     this.addressChanged = this.addressChanged.bind(this)
     this.exploreClicked = this.exploreClicked.bind(this)
@@ -103,24 +87,21 @@ export default class Explorer extends React.Component {
   }
 
   render() {
-    const addressOrOrg = document.location.hash.slice(1)
-
     return (
       <Wrapper>
         <BannerContainer>
           <Banner>
-            <Favourites />
+            <AddressFormContainer
+              address={this.state.contractAddress}
+              handleChange={this.addressChanged}
+              handleClick={this.exploreClicked}
+              handleKeyPress={this.handleKeyPress}
+            />
+            <Favourites handleClick={this.changeContract} />
           </Banner>
         </BannerContainer>
         <Page>
-          { addressOrOrg ?
-            (addressOrOrg[0] === '0' 
-              ? <ContractViewer contract={this.state.contract} />
-              : <CardContainer>
-                  <OrganisationCard fullwidth organisation={this.props.route.organisations.find(org => org.name === addressOrOrg)} />
-                </CardContainer>)
-            : <CenterH>Please look for a valid contract or organisation name</CenterH>
-          }
+          <ContractViewer contract={this.state.contract} />
         </Page>
       </Wrapper>
     )
