@@ -96,7 +96,7 @@ class ContractViewer extends React.Component {
       variableNames: [],
       currentVar: null,
       variableData: [],
-      downloadingVariables: {}
+      downloadingVariables: {},
       graphOptions: {
         'Crosshair': false,
         'Logarithmic_Scale': false,
