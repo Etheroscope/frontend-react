@@ -10,12 +10,14 @@ const VarButton = styled.button`
 `
 
 const VarSelectedButton = styled.button`
-    background-color: white;
-    border: 1px solid #4B6575;
+    justify-content: center;
+    background-color: #f9f9f9;
     color: #4B6575;
-    padding: 5px 50px;
-    height: 50px;
+    min-height: 30px;
     width: 100%;
+    // border: 1px solid #4B6575;
+    // padding: 5px 50px;
+    // height: 50px;
 `
 
 const Separator = styled.hr`
