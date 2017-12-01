@@ -22,11 +22,14 @@ const EtheroscopeAbout = styled.div`
 const CopyrightWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   align-self: center;
   width: 33.3%;
   padding: 0 3px;
 `
-
+const AliceImage = styled.img`
+  height: 80px;
+`
 const Copyright = styled.p`
   display: flex;
   align-self: center;
@@ -61,6 +64,7 @@ const Footer = () => {
         Etheroscope is an agile smart contract viewer, showing how variables in a contract change over time. Created by Kian Mayne, Sixte de Maupeou, Dheeraj Geetala, Rafael Ballestiero, Diana Avram and Maurice Yap.
       </EtheroscopeAbout>
       <CopyrightWrapper>
+        <a href="http://www.alice.si"><AliceImage src="https://s3.eu-west-2.amazonaws.com/alice-res/Logotype_right.png" /></a>
         <Copyright>© 2018 Etheroscope. Donations welcome!</Copyright>
       </CopyrightWrapper>
       <QRCodeWrapper>
