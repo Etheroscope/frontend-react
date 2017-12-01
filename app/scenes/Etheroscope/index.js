@@ -7,7 +7,11 @@ import Header from './Header'
 import FooterContainer from './Footer'
 
 const Wrapper = styled.div`
-  background-color: white;
+`
+
+const BodyWrapper = styled.div`
+  padding: 132px 0 20px 0;
+  background-color: #efefef;
 `
 
 class EtheroscopeContainer extends React.Component {
@@ -21,17 +25,18 @@ class EtheroscopeContainer extends React.Component {
   getChildContext() {
     return { query: this.state.searchBarQuery };
   }
-
+  
   render() {
     return (
       <Wrapper>
-        <Header query={this.state.searchBarQuery}
-                queryChanged={query => this.setState({ searchBarQuery: query })}/>
-        <Etheroscope {...this.props} />
-        <FooterContainer/>
+        <HeaderContainer query={this.state.searchBarQuery}
+                 queryChanged={query => this.setState({ searchBarQuery: query })}/>
+        <BodyWrapper>
+          <Etheroscope {...props} />
+        </BodyWrapper>
+        <FooterContainer />
       </Wrapper>
-    )
-  }
+  )
 }
 
 EtheroscopeContainer.childContextTypes = {
