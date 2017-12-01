@@ -65,7 +65,7 @@ export default class Favourites extends React.Component {
             {fav.name}
             <FavouriteDropDown> 
             {fav.contracts.map(c => (
-              <FavouriteContract onClick={() => this.props.handleClick(contract)}>{c}</FavouriteContract>))}
+              <FavouriteContract onClick={() => window.location='/contracts/' + c.address}>{c.address}</FavouriteContract>))}
             </FavouriteDropDown>
           </FavouriteName>)
         )
