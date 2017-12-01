@@ -43,6 +43,29 @@ export default function Organisation(props) {
   const org = props.route.organisations.find(org => org.name === props.params.name)
   if (!org) return (<CenteredP>No organisation found with the name "{props.params.name}"</CenteredP>)
   console.log(org)
+
+  const matchingOrgs = props.route.organisations.filter(orga =>
+    orga.name.toLowerCase().indexOf(org.name.toLowerCase()) !== -1
+  )
+  if (matchingOrgs.length === 0) {
+    return (<CenteredP>No results found</CenteredP>)
+  }
+  // TODO: Move this to the organisation page
+  // Add organisations to recent
+  if (matchingOrgs.length > 0) {
+    const recent = localStorage.recent && JSON.parse(localStorage.recent) || []
+    for (var j = 0; j < matchingOrgs.length; j++) {
+      for (var i = 0; i < recent.length; i++) {
+        if (recent[i].name === matchingOrgs[j].name) {
+          recent.splice(i, 1)
+          break
+        }
+      }
+      recent.unshift(matchingOrgs[j])
+    }
+    localStorage.recent = JSON.stringify(recent)
+  }
+
   return (
     <Wrapper>
       <Page>

@@ -10,6 +10,7 @@ const Card = styled.div`
   margin-top: 8px;
   margin-bottom: 8px;
   color: #f9f9f9;
+  overflow-x: auto;
 `
 const Container = styled.div`
   position: relative;
