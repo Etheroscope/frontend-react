@@ -34,7 +34,6 @@ const IntroText = styled.p`
   margin: 3px 0;
 ` 
 
-// button?
 const Box = styled.button`
   background-color:#4B6575;
   cursor: pointer;
@@ -43,10 +42,13 @@ const Box = styled.button`
   text-align:center;
   background-color: #4B6575;
   color: #f9f9f9;
+  border: none;
+  margin: 0 2px;
+  outline: none;
   &:hover {
     color: white;
     background-color: #3398c0;
-  }
+  } 
 `
 
 const SelectedBox = styled.button`
