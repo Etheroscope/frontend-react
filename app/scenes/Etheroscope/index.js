@@ -12,6 +12,7 @@ const Wrapper = styled.div`
 const BodyWrapper = styled.div`
   padding: 132px 0 20px 0;
   background-color: #efefef;
+  min-height: 70vh;
 `
 
 class EtheroscopeContainer extends React.Component {
