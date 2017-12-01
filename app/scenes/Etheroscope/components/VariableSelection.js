@@ -3,17 +3,16 @@ import styled from 'styled-components'
 
 const VarButton = styled.button`
     justify-content: center;
-    background-color: #1998a2;
-    border: 1px solid white;
-    color: white;
+    background-color: #4B6575;
+    color: #f9f9f9;
     min-height: 30px;
     width:100%;
 `
 
 const VarSelectedButton = styled.button`
     background-color: white;
-    border: 1px solid #1998a2;
-    color: #1998a2;
+    border: 1px solid #4B6575;
+    color: #4B6575;
     padding: 5px 50px;
     height: 50px;
     width: 100%;
