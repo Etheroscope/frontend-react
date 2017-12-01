@@ -30,14 +30,10 @@ const CenteredP = styled.p`
 
 export default class SearchResults extends React.Component {
 
-  constructor (props) {
-    super(props)
-  }
-
   render() {
     const query = this.context.query
-    this.matchingOrgs = this.props.route.popularOrgs.filter(org =>
-      org.name.toLowerCase().indexOf(query) !== -1
+    this.matchingOrgs = this.props.route.popularOrgs.filter(orga =>
+      orga.name.toLowerCase().indexOf(query) !== -1
     )
     this.matchingContracts = this.props.route.contracts.filter(contract =>
       contract.address.toLowerCase().indexOf(query) !== -1
@@ -45,24 +41,6 @@ export default class SearchResults extends React.Component {
     if (this.matchingOrgs.length === 0 && this.matchingContracts.length === 0) {
       return (<CenteredP>No results found</CenteredP>)
     }
-
-    // TODO: Move this to the organisation page
-    // Add organisations to recent
-    if (this.matchingOrgs.length > 0) {
-      const recent = localStorage.recent && JSON.parse(localStorage.recent) || []
-      for(var j=0; j < this.matchingOrgs.length; j++) {
-        for(var i = 0; i < recent.length; i++) {
-          if (recent[i].name === this.matchingOrgs[j].name) {
-            recent.splice(i, 1)
-            break
-          }
-        }
-        recent.unshift(this.matchingOrgs[j])
-      }
-      localStorage.recent = JSON.stringify(recent)
-    }
-
-
     return (
       <Wrapper>
         <Page>

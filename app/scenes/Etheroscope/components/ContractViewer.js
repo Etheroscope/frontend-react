@@ -9,6 +9,43 @@ import { fetchJson, postJson } from "../xhr"
 
 './../xhr'
 import fetchEtherscan from './../etherscan'
+import { contracts } from '../organisationContractData'
+
+const GraphOption = styled.button`
+    background-color: #1998a2;
+    border: 1px solid white;
+    color: white;
+    padding: 5px 50px;
+`
+
+const SelectedGraphOption = styled.button`
+    background-color: white;
+    border: 1px solid #1998a2;
+    color: #1998a2;
+    padding: 5px 50px;
+`
+
+const Separator = styled.div`
+  height:1px;
+  background:#4B6575;
+  border-bottom:1px solid #4B6575;
+`
+
+const InWrapper = styled.div`
+  display: inline-block;
+`
+//
+// const CenteredWrapper = styled.div`
+//   text-align: center;
+// `
+
+const CenteredH2 = styled.h2`
+  text-align: center;
+`
+
+const CenteredH3 = styled.h3`
+  text-align: center;
+`
 
 const ReactHighstock = require('react-highcharts/ReactHighstock')
 
@@ -16,6 +53,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+//  display: inline-block;
 `
 const Container = styled.div`
   display: flex;
@@ -24,9 +62,7 @@ const Container = styled.div`
   height: 400px;
   padding-top: 20px;
 `
-const Graph = styled(ReactHighstock)`
-  display: flex;
-`
+
 const Variables = styled(VariableSelection)`
   display: flex;
   justify-content: stretch;
@@ -37,6 +73,18 @@ const CenteredH = styled.h1`
 const Row = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+`
+
+const GraphCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+`
+const VarCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 20%;
 `
 
 class ContractViewer extends React.Component {
@@ -47,14 +95,50 @@ class ContractViewer extends React.Component {
       currentVar: null,
       variableData: [],
       downloadingVariables: {}
+      graphOptions: {
+        'Crosshair': false,
+        'Logarithmic_Scale': false,
+        'Navigator': false,
+        'Percent_Change': false
+      },
+      orgName: null,
+      logError: false
     }
     this.variableClicked = this.variableClicked.bind(this)
+    this.handleOptionClicked = this.handleOptionClicked.bind(this)
+    this.allPositiveValues = this.allPositiveValues.bind(this)
+    this.findOrganisationName = this.findOrganisationName.bind(this)
+  }
+
+  findOrganisationName(addr) {
+    const entries = Object.values(contracts)
+    for (let i = 0; i < entries.length; i++) {
+      if(entries[i].address === addr) {
+        return(entries[i].organisation)
+      }
+    }
+    return addr
+  }
+
+  allPositiveValues(arr) {
+    return arr.every(series => series.every(([_,v]) => (v > 0)))
+  }
+
+  handleOptionClicked(option) {
+    if (option === 'Logarithmic_Scale' && !this.allPositiveValues(this.state.variableData)) {
+      this.setState({logError: true})
+    } else {
+      const tempOptions = this.state.graphOptions
+      tempOptions[option] = !tempOptions[option]
+      this.setState({graphOptions: tempOptions, logError: false})
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     if (prop('address', nextProps.contract) && !equals(this.props.contract, nextProps.contract)) {
       const url = `/api?module=account&action=balance&address=${nextProps.contract.address}&tag=latest&apikey=AJAF8TPSIH2TBUGQJTI2VU98NV3A3YFNCI`
-      fetchEtherscan(url).then(response => this.setState({ balance: response.status == 1 ? `${response.result / 1000000000000000000} ETH` : `0 WEI` }))
+      fetchEtherscan(url).then(response => this.setState({ balance: response.status === 1 ? `${response.result / 1000000000000000000} ETH` : `0 WEI` }))
+      this.setState({orgName: this.findOrganisationName(nextProps.contract.address), variableData:[] })
     }
   }
 
@@ -149,49 +233,95 @@ class ContractViewer extends React.Component {
           split: true
         }}));
 
+    const y_axis = {
+      crosshair: this.state.graphOptions.Crosshair,
+      type: (this.state.graphOptions.Logarithmic_Scale) ? 'logarithmic' : 'linear'
+    }
+
+    const nav = { enabled: this.state.graphOptions.Navigator }
+
+    const plotOptions = {
+      series: {
+        compare: (this.state.graphOptions.Percent_Change) ? 'percent' : 'value',
+        showInNavigator: true
+      }
+    }
+
+    // Object.entries(this.state.graphOptions).forEach(([option, selected], index) => (selected)
+    //   ? console.log(option, " selected")
+    //   : console.log(option, " not selected")
+    // )
+
     const graph =
       (<ReactHighstock
         config={{
           rangeSelector: { selected: 1 },
           title: { text: 'Smart Contract Explorer' },
+          yAxis: y_axis,
+          navigator: nav,
+            // {
+            // labels: {
+            //   //     formatter: function () {
+            //   //         return (this.value > 0 ? ' + ' : '') + this.value + '%';
+            //   //     }
+            //   // },
+            //   plotLines: [{
+            //     value: 0,
+            //     width: 1000
+            //     // color: 'silver'
+            //   }]
+          // },
 
           tooltip: {
+            // pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+            // above is to represent percent change
             shared: true,
             valueDecimals: 2,
             split: true
           },
 
+          plotOptions: plotOptions,
           series: seriesOptions,
           credits: { enabled: false }
         }}
-      />)
+       />)
 
       return (
         <Wrapper>
-          {this.state.balance &&
+          {this.state.balance && this.state.orgName &&
             <CenteredH>
-              Balance: {this.state.balance}
+              {this.state.orgName} Balance: {this.state.balance}
             </CenteredH>
           }
-          <Container>
+          {/*<Container>*/}
             {variables.length > 0 ?
               <Row>
-                {graph}
-
-                <Variables
+                <GraphCol>
+                  {graph}
+                  {/*<Separator />*/}
+                  <CenteredH2>Options</CenteredH2>
+                  {/*<Separator/>*/}
+                  {this.state.logError && alert("Sorry, You can't have a logarithmic graph with non-positive values!")}
+                  {Object.entries(this.state.graphOptions).map(([option, selected], index) => (selected)
+                    ? (<SelectedGraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g,' ')} </SelectedGraphOption>)
+                    : (<GraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g,' ')} </GraphOption>)
+                  )}
+                </GraphCol>
+                <VarCol>
+                      <Variables
                   emailClicked={variable => this.props.emailHandler(variable, this.props.contract.address )}
                   variables={variables}
                   selectedVariables={this.state.variableNames}
                   downloadingVariables={this.state.downloadingVariables}
                   variableClicked={this.variableClicked}
                 />
+                </VarCol>
               </Row>
           : <CenteredH>Welcome to the explorer. Choose a contract and we will display the state of its variables here.</CenteredH>
           }
-          </Container>
+          {/*</Container>*/}
         </Wrapper>
       )
-
   }
 }
 

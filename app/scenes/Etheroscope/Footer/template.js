@@ -6,7 +6,7 @@ const Wrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   padding: 15px 0;
-  border-top: 3px solid #4B6575;
+  border-top: 5px solid #4B6575;
 `
 const EtheroscopeAbout = styled.div`
   display: flex;
@@ -14,24 +14,33 @@ const EtheroscopeAbout = styled.div`
   align-self: center;
   width: 33.3%;
   text-align: center;
+  padding: 0 30px;
+  font-size: 13px;
+  color: #4B6575;
 `
 
 const CopyrightWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   align-self: center;
   width: 33.3%;
+  padding: 0 3px;
 `
-
+const AliceImage = styled.img`
+  height: 80px;
+`
 const Copyright = styled.p`
   display: flex;
   align-self: center;
   text-align: center;
+  color: #4B6575;
 `
 
 const FooterLogo = styled.img`
   align-self: center;
   width: 200px;
+  margin-bottom: 16px;
 `
 
 const QRCodeWrapper = styled.div`
@@ -39,11 +48,12 @@ const QRCodeWrapper = styled.div`
   display: flex;
   align-self: center;
   justify-content: center;
+  padding: 0 3px;
 `
 
 const QRCode = styled.img`
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
 `
 
 const Footer = () => {
@@ -51,9 +61,10 @@ const Footer = () => {
     <Wrapper>
       <EtheroscopeAbout>
         <FooterLogo alt="Etheroscope" src="/static/etheroscope-black.png"/>
-        Etheroscope is an agile smart contract viewer, showing how variables in a contract change over time.
+        Etheroscope is an agile smart contract viewer, showing how variables in a contract change over time. Created by Kian Mayne, Sixte de Maupeou, Dheeraj Geetala, Rafael Ballestiero, Diana Avram and Maurice Yap.
       </EtheroscopeAbout>
       <CopyrightWrapper>
+        <a href="http://www.alice.si"><AliceImage src="https://s3.eu-west-2.amazonaws.com/alice-res/Logotype_right.png" /></a>
         <Copyright>© 2018 Etheroscope. Donations welcome!</Copyright>
       </CopyrightWrapper>
       <QRCodeWrapper>
