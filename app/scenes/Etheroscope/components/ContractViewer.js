@@ -10,7 +10,7 @@ import { fetchJson, postJson } from "../xhr"
 import fetchEtherscan from './../etherscan'
 import { contracts } from '../organisationContractData'
 
-const ReactHighstock = require('react-highcharts/ReactHighstock')
+import ReactHighstock from 'react-highcharts/ReactHighstock'
 
 const GraphOption = styled.button`
    justify-content: center;
@@ -50,7 +50,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-//  display: inline-block;
 `
 const Container = styled.div`
   display: flex;
@@ -127,10 +126,7 @@ class ContractViewer extends React.Component {
   }
 
   handleOptionClicked(option) {
-    console.log(option)
-    console.log(this.state.variableData)
     if (option === 'Logarithmic_Scale' && !ContractViewer.allPositiveValues(this.state.variableData)) {
-      console.log("bad log")
       this.setState({logError: true})
     } else {
       const tempOptions = this.state.graphOptions
@@ -208,7 +204,6 @@ class ContractViewer extends React.Component {
 
   render () {
     const contract = this.props.contract
-    console.log(contract)
     const org = this.state.orgName && this.state.orgName.length > 0
       ? ` (${this.state.orgName})` : ''
     const balance = this.state.balance ? ` - Balance: ${this.state.balance}` : ''
