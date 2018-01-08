@@ -213,21 +213,17 @@ class ContractViewer extends React.Component {
 
     if ((!abi || abi.length === 0) && !nullContract) {
       return (
-        this.state.balance ?
-          <CenteredH>
-            Balance: {this.state.balance}
-          </CenteredH>
-        : <CenteredH>No ABI found for this contract</CenteredH>
+        <CenteredH>
+          No ABI found for this contract {this.state.balance && (<span>Balance: {this.state.balance}</span>)}
+        </CenteredH>
       )
     }
 
     if ((!variables || variables.length === 0) && !nullContract) {
       return (
-        this.state.balance ?
-          <CenteredH>
-            Balance: {this.state.balance}
-          </CenteredH>
-          : <CenteredH>No variables found for this contract</CenteredH>
+        <CenteredH>
+          No variables found for this contract {this.state.balance && (<span>Balance: {this.state.balance}</span>)}
+        </CenteredH>
       )
     }
 
