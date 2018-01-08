@@ -10,6 +10,8 @@ import { fetchJson, postJson } from "../xhr"
 import fetchEtherscan from './../etherscan'
 import { contracts } from '../organisationContractData'
 
+const ReactHighstock = require('react-highcharts/ReactHighstock')
+
 const GraphOption = styled.button`
    justify-content: center;
     background-color: #4B6575;
@@ -43,8 +45,6 @@ const CenteredH2 = styled.h2`
 const CenteredH3 = styled.h3`
   text-align: center;
 `
-
-const ReactHighstock = require('react-highcharts/ReactHighstock')
 
 const Wrapper = styled.div`
   display: flex;
@@ -85,7 +85,7 @@ const GraphCol = styled.div`
   flex-direction: column;
   width: 80%;
 `
-const VarCol = styled.div`
+const OptsCol = styled.div`
   display: flex;
   flex-direction: column;
   width: 20%;
@@ -208,6 +208,7 @@ class ContractViewer extends React.Component {
 
   render () {
     const contract = this.props.contract
+    console.log(contract)
     const org = this.state.orgName && this.state.orgName.length > 0
       ? ` (${this.state.orgName})` : ''
     const balance = this.state.balance ? ` - Balance: ${this.state.balance}` : ''
@@ -237,52 +238,42 @@ class ContractViewer extends React.Component {
           </p>
         </Centered>)
     } else {
+      const highstocksConfig = {
+        rangeSelector: { selected: 1 },
+        title: { text: 'Smart Contract Explorer' },
+        yAxis: {
+          crosshair: this.state.graphOptions.Crosshair,
+          type: (this.state.graphOptions.Logarithmic_Scale) ? 'logarithmic' : 'linear'
+        },
+        navigator: { enabled: this.state.graphOptions.Navigator },
+
+        chart: { backgroundColor: '#efefef' },
+        tooltip: {
+          shared: true,
+          valueDecimals: 2,
+          split: true
+        },
+
+        plotOptions: {
+          series: {
+            compare: (this.state.graphOptions.Percent_Change) ? 'percent' : 'value',
+            showInNavigator: true
+          }
+        },
+        series: this.state.variableNames.map((name, i) =>
+          ({
+            name, data: this.state.variableData[i],
+            tooltip: {
+              valueDecimals: 2,
+              split: true
+            }
+          })),
+        credits: { enabled: false },
+      }
       graphSection = (
         <Row>
           <GraphCol>
-            <ReactHighstock
-              config={{
-                rangeSelector: { selected: 1 },
-                title: { text: 'Smart Contract Explorer' },
-                yAxis: {
-                  crosshair: this.state.graphOptions.Crosshair,
-                  type: (this.state.graphOptions.Logarithmic_Scale) ? 'logarithmic' : 'linear'
-                },
-                navigator: { enabled: this.state.graphOptions.Navigator },
-
-                chart: { backgroundColor: '#efefef' },
-                tooltip: {
-                  shared: true,
-                  valueDecimals: 2,
-                  split: true
-                },
-
-                plotOptions: {
-                  series: {
-                    compare: (this.state.graphOptions.Percent_Change) ? 'percent' : 'value',
-                    showInNavigator: true
-                  }
-                },
-                series: this.state.variableNames.map((name, i) =>
-                  ({
-                    name, data: this.state.variableData[i],
-                    tooltip: {
-                      valueDecimals: 2,
-                      split: true
-                    }
-                  })),
-                credits: { enabled: false }
-              }}
-            />
-            <CenteredH2>Options</CenteredH2>
-            {Object.entries(this.state.graphOptions).map(([option, selected], index) => (selected)
-              ? (<SelectedGraphOption key={index}
-                                      onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g, ' ')} </SelectedGraphOption>)
-              : (<GraphOption key={index}
-                              onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g, ' ')} </GraphOption>)
-            )}
-          </GraphCol>
-          <VarCol>
+            <ReactHighstock config={highstocksConfig}/>
             <Variables
               emailClicked={variable => this.props.emailHandler(variable, this.props.contract.address)}
               variables={this.props.contract.variables}
@@ -290,7 +281,16 @@ class ContractViewer extends React.Component {
               downloadingVariables={this.state.downloadingVariables}
               variableClicked={this.variableClicked}
             />
-          </VarCol>
+          </GraphCol>
+          <OptsCol>
+            <CenteredH2>Options</CenteredH2>
+            {Object.entries(this.state.graphOptions).map(([option, selected], index) => (selected)
+              ? (<SelectedGraphOption key={index}
+                                      onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g, ' ')} </SelectedGraphOption>)
+              : (<GraphOption key={index}
+                              onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g, ' ')} </GraphOption>)
+            )}
+          </OptsCol>
         </Row>
       )
     }
