@@ -7,7 +7,6 @@ import styled from 'styled-components'
 import { equals, prop } from 'ramda'
 import { fetchJson, postJson } from "../xhr"
 
-'./../xhr'
 import fetchEtherscan from './../etherscan'
 import { contracts } from '../organisationContractData'
 
@@ -36,10 +35,6 @@ const Separator = styled.div`
 const InWrapper = styled.div`
   display: inline-block;
 `
-//
-// const CenteredWrapper = styled.div`
-//   text-align: center;
-// `
 
 const CenteredH2 = styled.h2`
   text-align: center;
@@ -65,11 +60,18 @@ const Container = styled.div`
   padding-top: 20px;
 `
 
+const Centered = styled.div`
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+`
+
 const Variables = styled(VariableSelection)`
   display: flex;
   justify-content: stretch;
 `
-const CenteredH = styled.h1`
+
+const Heading = styled.h1`
   text-align: center;
 `
 const Row = styled.div`
@@ -108,11 +110,9 @@ class ContractViewer extends React.Component {
     }
     this.variableClicked = this.variableClicked.bind(this)
     this.handleOptionClicked = this.handleOptionClicked.bind(this)
-    this.allPositiveValues = this.allPositiveValues.bind(this)
-    this.findOrganisationName = this.findOrganisationName.bind(this)
   }
 
-  findOrganisationName(addr) {
+  static findOrganisationName(addr) {
     const entries = Object.values(contracts)
     for (let i = 0; i < entries.length; i++) {
       if(entries[i].address === addr) {
@@ -122,14 +122,14 @@ class ContractViewer extends React.Component {
     return addr
   }
 
-  allPositiveValues(arr) {
+  static allPositiveValues(arr) {
     return arr.every(series => series.every(([_,v]) => (v > 0)))
   }
 
   handleOptionClicked(option) {
     console.log(option)
     console.log(this.state.variableData)
-    if (option === 'Logarithmic_Scale' && !this.allPositiveValues(this.state.variableData)) {
+    if (option === 'Logarithmic_Scale' && !ContractViewer.allPositiveValues(this.state.variableData)) {
       console.log("bad log")
       this.setState({logError: true})
     } else {
@@ -143,7 +143,7 @@ class ContractViewer extends React.Component {
     if (prop('address', nextProps.contract) && !equals(this.props.contract, nextProps.contract)) {
       const url = `/api?module=account&action=balance&address=${nextProps.contract.address}&tag=latest&apikey=AJAF8TPSIH2TBUGQJTI2VU98NV3A3YFNCI`
       fetchEtherscan(url).then(response => this.setState({ balance: response.status === 1 ? `${response.result / 1000000000000000000} ETH` : `0 WEI` }))
-      this.setState({orgName: this.findOrganisationName(nextProps.contract.address), variableData:[] })
+      this.setState({orgName: ContractViewer.findOrganisationName(nextProps.contract.address), variableData:[] })
     }
   }
 
@@ -207,122 +207,100 @@ class ContractViewer extends React.Component {
   }
 
   render () {
-    const variables = this.props.contract.variables
-    const abi = this.props.contract.abi
-    const nullContract = this.props.contract.nullContract
+    const contract = this.props.contract
+    const org = this.state.orgName && this.state.orgName.length > 0
+      ? ` (${this.state.orgName})` : ''
+    const balance = this.state.balance ? ` - Balance: ${this.state.balance}` : ''
+    const address = contract.address || 'Loading...'
+    const heading = address + org + balance
+    let graphSection
 
-    if ((!abi || abi.length === 0) && !nullContract) {
-      return (
-        <CenteredH>
-          No ABI found for this contract {this.state.balance && (<span>Balance: {this.state.balance}</span>)}
-        </CenteredH>
+    if (!contract.abi || contract.abi.length === 0) {
+      graphSection = (
+        <Centered>
+          <h1>No ABI found for this contract</h1>
+          <p style={{ width: '80%', margin: 'auto' }}>
+            Etheroscope needs an ABI to see what variables a contract contains.
+            If you are the contract owner, you can upload the source code for
+            your contract <a href="https://etherscan.io/verifyContract?a={contract.address}">here</a>.
+            Please note it may take up to 24 hours for the ABI to become
+            available after uploading.
+          </p>
+        </Centered>)
+    } else if (!contract.variables || contract.variables.length === 0) {
+      graphSection = (
+        <Centered>
+          <h1>No variables found in the ABI for this contract</h1>
+          <p>
+            Oops! It looks like this contract doesn't actually contain any
+            persistent variables.
+          </p>
+        </Centered>)
+    } else {
+      graphSection = (
+        <Row>
+          <GraphCol>
+            <ReactHighstock
+              config={{
+                rangeSelector: { selected: 1 },
+                title: { text: 'Smart Contract Explorer' },
+                yAxis: {
+                  crosshair: this.state.graphOptions.Crosshair,
+                  type: (this.state.graphOptions.Logarithmic_Scale) ? 'logarithmic' : 'linear'
+                },
+                navigator: { enabled: this.state.graphOptions.Navigator },
+
+                chart: { backgroundColor: '#efefef' },
+                tooltip: {
+                  shared: true,
+                  valueDecimals: 2,
+                  split: true
+                },
+
+                plotOptions: {
+                  series: {
+                    compare: (this.state.graphOptions.Percent_Change) ? 'percent' : 'value',
+                    showInNavigator: true
+                  }
+                },
+                series: this.state.variableNames.map((name, i) =>
+                  ({
+                    name, data: this.state.variableData[i],
+                    tooltip: {
+                      valueDecimals: 2,
+                      split: true
+                    }
+                  })),
+                credits: { enabled: false }
+              }}
+            />
+            <CenteredH2>Options</CenteredH2>
+            {Object.entries(this.state.graphOptions).map(([option, selected], index) => (selected)
+              ? (<SelectedGraphOption key={index}
+                                      onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g, ' ')} </SelectedGraphOption>)
+              : (<GraphOption key={index}
+                              onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g, ' ')} </GraphOption>)
+            )}
+          </GraphCol>
+          <VarCol>
+            <Variables
+              emailClicked={variable => this.props.emailHandler(variable, this.props.contract.address)}
+              variables={this.props.contract.variables}
+              selectedVariables={this.state.variableNames}
+              downloadingVariables={this.state.downloadingVariables}
+              variableClicked={this.variableClicked}
+            />
+          </VarCol>
+        </Row>
       )
     }
 
-    if ((!variables || variables.length === 0) && !nullContract) {
-      return (
-        <CenteredH>
-          No variables found for this contract {this.state.balance && (<span>Balance: {this.state.balance}</span>)}
-        </CenteredH>
-      )
-    }
-
-    const seriesOptions = this.state.variableNames.map((name, i) =>
-      ({name, data: this.state.variableData[i],
-        tooltip: {
-          valueDecimals: 2,
-          split: true
-        }}));
-
-    const y_axis = {
-      crosshair: this.state.graphOptions.Crosshair,
-      type: (this.state.graphOptions.Logarithmic_Scale) ? 'logarithmic' : 'linear'
-    }
-
-    const nav = { enabled: this.state.graphOptions.Navigator }
-
-    const plotOptions = {
-      series: {
-        compare: (this.state.graphOptions.Percent_Change) ? 'percent' : 'value',
-        showInNavigator: true
-      }
-    }
-
-    // Object.entries(this.state.graphOptions).forEach(([option, selected], index) => (selected)
-    //   ? console.log(option, " selected")
-    //   : console.log(option, " not selected")
-    // )
-
-    const graph =
-      (<ReactHighstock
-        config={{
-          rangeSelector: { selected: 1 },
-          title: { text: 'Smart Contract Explorer' },
-          yAxis: y_axis,
-          navigator: nav,
-            // {
-            // labels: {
-            //   //     formatter: function () {
-            //   //         return (this.value > 0 ? ' + ' : '') + this.value + '%';
-            //   //     }
-            //   // },
-            //   plotLines: [{
-            //     value: 0,
-            //     width: 1000
-            //     // color: 'silver'
-            //   }]
-          // },
-          chart: { backgroundColor: "#efefef" },
-          tooltip: {
-            // pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
-            // above is to represent percent change
-            shared: true,
-            valueDecimals: 2,
-            split: true
-          },
-
-          plotOptions: plotOptions,
-          series: seriesOptions,
-          credits: { enabled: false }
-        }}
-       />)
-
-      return (
-        <Wrapper>
-          {this.state.balance && this.state.orgName &&
-            <CenteredH>
-              {this.state.orgName} Balance: {this.state.balance}
-            </CenteredH>
-          }
-          {/*<Container>*/}
-            {variables.length > 0 ?
-              <Row>
-                <GraphCol>
-                  {graph}
-                  {/*<Separator />*/}
-                  <CenteredH2>Options</CenteredH2>
-                  {/*<Separator/>*/}
-                  {this.state.logError && alert("Sorry, You can't have a logarithmic graph with non-positive values!")}
-                  {Object.entries(this.state.graphOptions).map(([option, selected], index) => (selected)
-                    ? (<SelectedGraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g,' ')} </SelectedGraphOption>)
-                    : (<GraphOption key={index} onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g,' ')} </GraphOption>)
-                  )}
-                </GraphCol>
-                <VarCol>
-                      <Variables
-                  emailClicked={variable => this.props.emailHandler(variable, this.props.contract.address )}
-                  variables={variables}
-                  selectedVariables={this.state.variableNames}
-                  downloadingVariables={this.state.downloadingVariables}
-                  variableClicked={this.variableClicked}
-                />
-                </VarCol>
-              </Row>
-          : <CenteredH>Welcome to the explorer. Choose a contract and we will display the state of its variables here.</CenteredH>
-          }
-          {/*</Container>*/}
-        </Wrapper>
-      )
+    return (
+      <Wrapper>
+        <Heading>{heading}</Heading>
+        {graphSection}
+      </Wrapper>
+    )
   }
 }
 
