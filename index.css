@@ -2,3 +2,8 @@
 html, input {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
+button {
+    border: none;
+    border-radius: 2px;
+}
