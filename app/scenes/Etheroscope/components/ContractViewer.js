@@ -100,10 +100,10 @@ class ContractViewer extends React.Component {
       variableData: [],
       downloadingVariables: {},
       graphOptions: {
-        'Crosshair': false,
-        'Logarithmic_Scale': false,
-        'Navigator': false,
-        'Percent_Change': false
+        Crosshair: false,
+        Logarithmic_Scale: false,
+        Navigator: false,
+        Percent_Change: false
       },
       orgName: null,
       logError: false
@@ -284,7 +284,7 @@ class ContractViewer extends React.Component {
           </GraphCol>
           <OptsCol>
             <CenteredH2>Options</CenteredH2>
-            {Object.entries(this.state.graphOptions).map(([option, selected], index) => (selected)
+            {Object.entries(this.state.graphOptions).map(([option, selected], index) => selected
               ? (<SelectedGraphOption key={index}
                                       onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g, ' ')} </SelectedGraphOption>)
               : (<GraphOption key={index}
