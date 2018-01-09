@@ -147,12 +147,13 @@ class ContractViewer extends React.Component {
     }
   }
 
-  fetchVariableHistory(varName, spawnInterval = true) {
+  fetchVariableHistory(varName, interval) {
     const url = `/contracts/${this.props.contract.address}/history/${varName}`
     return fetchJson(url).then(result => {
       switch (result.status) {
         case 200:
-          delete this.state.downloadingVariables[varName];
+          clearInterval(interval)
+          delete this.state.downloadingVariables[varName]
           this.setState({ downloadingVariables: this.state.downloadingVariables})
           const history = result.response.data;
           const processedHistory = history.map(item => {
@@ -171,10 +172,10 @@ class ContractViewer extends React.Component {
           const downloadingVariables = this.state.downloadingVariables
           downloadingVariables[varName] = result.response
           this.setState({ downloadingVariables })
-          if (spawnInterval) {
-            setInterval(() => {
-              this.fetchVariableHistory(varName, false)
-            }, 1000);
+          if (!interval) {
+            const interval = setInterval(() => {
+              this.fetchVariableHistory(varName, interval)
+            }, 2000);
           }
           break
         case 404:
