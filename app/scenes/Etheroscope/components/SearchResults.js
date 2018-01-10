@@ -30,14 +30,10 @@ const CenteredP = styled.p`
 
 export default class SearchResults extends React.Component {
 
-  constructor (props) {
-    super(props)
-  }
-
   render() {
     const query = this.context.query
-    this.matchingOrgs = this.props.route.popularOrgs.filter(org =>
-      org.name.toLowerCase().indexOf(query) !== -1
+    this.matchingOrgs = this.props.route.popularOrgs.filter(orga =>
+      orga.name.toLowerCase().indexOf(query) !== -1
     )
     this.matchingContracts = this.props.route.contracts.filter(contract =>
       contract.address.toLowerCase().indexOf(query) !== -1
@@ -45,24 +41,6 @@ export default class SearchResults extends React.Component {
     if (this.matchingOrgs.length === 0 && this.matchingContracts.length === 0) {
       return (<CenteredP>No results found</CenteredP>)
     }
-
-    // TODO: Move this to the organisation page
-    // Add organisations to recent
-    if (this.matchingOrgs.length > 0) {
-      const recent = localStorage.recent && JSON.parse(localStorage.recent) || []
-      for(var j=0; j < this.matchingOrgs.length; j++) {
-        for(var i = 0; i < recent.length; i++) {
-          if (recent[i].name === this.matchingOrgs[j].name) {
-            recent.splice(i, 1)
-            break
-          }
-        }
-        recent.unshift(this.matchingOrgs[j])
-      }
-      localStorage.recent = JSON.stringify(recent)
-    }
-
-
     return (
       <Wrapper>
         <Page>
@@ -91,7 +69,7 @@ SearchResults.contextTypes = {
 function renderOrganisation(org) {
   return (
     <Result>
-      <p>Organisation: {org.name} </p>
+      <a href={'/organisations/' + org.name}><h2>{org.name}</h2></a>
       {org.url && <p>Website: <a href={org.url}>{org.url}</a></p>}
       {org.description && <p>Description: {org.description}</p>}
       {org.contracts && org.contracts.length > 0 &&
@@ -100,7 +78,7 @@ function renderOrganisation(org) {
         <ul>
           {org.contracts.map((contract, contractKey) => (
             <li key={contractKey}>
-              <a href={`/explorer#${contract.address}`}>{contract.address}</a>
+              <a href={`/contracts/${contract.address}`}>{contract.address}</a>
             </li>
           ))}
         </ul>
@@ -115,7 +93,7 @@ function renderContract(contract) {
   return (
     <Result>
       {contract.name && <p>Result: {contract.name}</p>}
-      <p>Address: <a href={`/explorer#${contract.address}`}>{contract.address}</a> </p>
+      <p>Address: <a href={`/contracts/${contract.address}`}>{contract.address}</a> </p>
       {contract.description && <p>Description: {contract.description}</p>}
     </Result>
   )

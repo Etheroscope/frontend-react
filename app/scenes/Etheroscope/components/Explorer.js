@@ -1,12 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import fetchJson from './../xhr'
+import { fetchJson, postJson } from "../xhr"
 
-import AddressFormContainer from './../AddressForm'
 import ContractViewer from './ContractViewer.js'
 import Favourites from './Favourites.js'
 import Modal from 'react-modal'
-import Delay from 'react-delay'
 
 const Wrapper = styled.div`
   display: flex;
@@ -15,12 +13,12 @@ const Wrapper = styled.div`
 `
 const BannerContainer = styled.div`
   width: 100%;
-  background-color: rgb(25, 152, 162);
+  background-color: #3398c0;
   padding-top: 10px;
   fontSize: 20px;
   color: #f9f9f9;
   width: 100%;
-  margin: 0 auto;
+  margin: -14px auto 0 auto;
   display: flex;
   flex-direction: column;
 `
@@ -37,24 +35,27 @@ const Page = styled.div`
 const ButtonStyle = styled.button`
   padding: 10px;
   width:200px;
-  background-color: rgb(25, 152, 162);
-  border-radius 5px;
+  background-color: #4B6575;
+  border-radius 3px;
   color: white;
   display: block;
   margin: 50px auto;
 `
 const InputStyle = styled.input`
  width:300px;
+ padding: 5px 10px;
+ border-radius: 3px;
 `
 const Formstyle=styled.form`
   margin-left:100px;
   padding: 10px;
 `
 const SubmitButton=styled.button`
-  border-radius 5px;
-  background-color: rgb(25, 152, 162);
-  color: white;
-  margin-left:20px;
+  border-radius 3px;
+  background-color: #4B6575;
+  color: #f9f9f9;
+  padding: 5px 10px;
+  margin-left: 16px;
 `
 const customStyles = {
   content : {
@@ -63,14 +64,15 @@ const customStyles = {
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+    transform             : 'translate(-50%, -50%)',
+    padding               : '18px 36px 24px 36px'
   }
 };
 
 export default class Explorer extends React.Component {
   constructor(props) {
     super(props)
-    const address = document.location.hash.slice(1);
+    const address = props.params.address;
     this.state = {
       contract: { nullContract: true, variables: [], abi: [] },
       contractAddress: 'contract address',
@@ -94,20 +96,20 @@ export default class Explorer extends React.Component {
 
   downloadContract(address) {
     const url = `/contracts/${address}`
-    return fetchJson(url)
+    return fetchJson(url).then(response => response.response)
   }
 
   changeContract(address) {
     return this.downloadContract(address)
+        .then(contract => { contract.address = address; return contract; })
         .then(contract => this.setState({
             contract,
             contractAddress: address
         }))
         .catch(err => {
-            console.log(err);
+            console.error('Error changing contract.', err);
             this.setState({
                 contract: { address }
-                // contractAddress: ""
             });
         })
   }
@@ -126,8 +128,8 @@ export default class Explorer extends React.Component {
     }
   }
 
-  openModal() {
-    this.setState({modalIsOpen: true});
+  openModal(variable, contract) {
+    this.setState({emailData: {variable, contract}, modalIsOpen: true});
   }
 
   afterOpenModal() {
@@ -148,11 +150,14 @@ export default class Explorer extends React.Component {
 
   handleSubmit(evt) {
     if (!this.validEmail()) {
-      evt.preventDefault();
-      return;
+      return false;
     }
-    const { email } = this.state;
-    alert(`Signed up with email: ${email}`);
+    evt.preventDefault();
+    const { email, emailData } = this.state;
+    postJson(`/contracts/${emailData.contract}/history/${emailData.variable}/subscribe/${email}`)
+      .then(result => {
+        this.closeModal();
+      });
   }
 
   render() {
@@ -160,40 +165,29 @@ export default class Explorer extends React.Component {
       <Wrapper>
         <BannerContainer>
           <Banner>
-            <AddressFormContainer
-              address={this.state.contractAddress}
-              handleChange={this.addressChanged}
-              handleClick={this.exploreClicked}
-              handleKeyPress={this.handleKeyPress}
-            />
             <Favourites handleClick={this.changeContract} />
           </Banner>
         </BannerContainer>
         <Page>
-          <ContractViewer contract={this.state.contract} />
-          <Delay wait={1200}>
-            <div>
-              <ButtonStyle onClick={this.openModal}>Taking too long? </ButtonStyle>
-              <Modal
-                isOpen={this.state.modalIsOpen}
-                onAfterOpen={this.afterOpenModal}
-                onRequestClose={this.closeModal}
-                style={customStyles}
-              >
-                <h2 > Give us your email address so we can get back to you!</h2>
-                <Formstyle onSubmit={this.handleSubmit}>
-                  <InputStyle
-                    className={this.validEmail() ? "error" : ""}
-                    type="text"
-                    placeholder="name@example.com"
-                    value={this.state.email}
-                    onChange={this.handleEmailChange}
-                  />
-                  <SubmitButton disabled={!this.validEmail()}>Submit</SubmitButton>
-                </Formstyle>         
-              </Modal>
-            </div>
-          </Delay>
+          <ContractViewer contract={this.state.contract} emailHandler={this.openModal}/>
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            onAfterOpen={this.afterOpenModal}
+            onRequestClose={this.closeModal}
+            style={customStyles}
+          >
+            <h2> Give us your email address so we can get back to you!</h2>
+            <Formstyle onSubmit={this.handleSubmit}>
+              <InputStyle
+                className={this.validEmail() ? "error" : ""}
+                type="text"
+                placeholder="name@example.com"
+                value={this.state.email}
+                onChange={this.handleEmailChange}
+              />
+              <SubmitButton disabled={!this.validEmail()}>Subscribe</SubmitButton>
+            </Formstyle>
+          </Modal>
         </Page>
       </Wrapper>
     )

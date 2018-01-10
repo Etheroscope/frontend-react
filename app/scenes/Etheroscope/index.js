@@ -12,6 +12,7 @@ const Wrapper = styled.div`
 const BodyWrapper = styled.div`
   padding: 132px 0 20px 0;
   background-color: #efefef;
+  min-height: 70vh;
 `
 
 class EtheroscopeContainer extends React.Component {
@@ -29,12 +30,12 @@ class EtheroscopeContainer extends React.Component {
   render() {
     return (
       <Wrapper>
-        <HeaderContainer query={this.state.searchBarQuery}
-                 queryChanged={query => this.setState({ searchBarQuery: query })}/>
+        <Header query={this.state.searchBarQuery}
+                queryChanged={query => this.setState({ searchBarQuery: query })} />
         <BodyWrapper>
-          <Etheroscope {...props} />
+          <Etheroscope {...this.props} />
         </BodyWrapper>
-        <FooterContainer />
+        <FooterContainer/>
       </Wrapper>
   )
 }

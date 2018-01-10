@@ -15,6 +15,7 @@ const Navbar = styled.div`
   align-self: center;
   height: 40%;
   width: 95%;
+  font-size: 18px;
 `
 
 const IntroTextWrapper = styled.div`
@@ -34,7 +35,6 @@ const IntroText = styled.p`
   margin: 3px 0;
 ` 
 
-// button?
 const Box = styled.button`
   background-color:#4B6575;
   cursor: pointer;
@@ -43,10 +43,13 @@ const Box = styled.button`
   text-align:center;
   background-color: #4B6575;
   color: #f9f9f9;
+  border: none;
+  margin: 0 2px;
+  outline: none;
   &:hover {
     color: white;
     background-color: #3398c0;
-  }
+  } 
 `
 
 const SelectedBox = styled.button`
@@ -138,10 +141,10 @@ export default class HomePage extends React.Component {
 
     return (
       <Wrapper>
-        <IntroTextWrapper>
+        {location.pathname !== '/organisations' && (<IntroTextWrapper>
           <IntroText>An agile smart contract viewer, showing how variables in a contract change over time.</IntroText>
           <IntroText>Select an organisation below or use search for a smart contract to get started.</IntroText>
-        </IntroTextWrapper>
+        </IntroTextWrapper>)}
         {displayButtons}
         <ContractGrid>
           {organisations &&
