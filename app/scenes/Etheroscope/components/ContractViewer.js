@@ -239,7 +239,6 @@ class ContractViewer extends React.Component {
         </Centered>)
     } else {
       const highstocksConfig = {
-        rangeSelector: { selected: 1 },
         title: { text: 'Smart Contract Explorer' },
         yAxis: {
           crosshair: this.state.graphOptions.Crosshair,
@@ -250,13 +249,13 @@ class ContractViewer extends React.Component {
         chart: { backgroundColor: '#efefef' },
         tooltip: {
           shared: true,
-          valueDecimals: 2,
+          valueDecimals: 0,
           split: true
         },
 
         plotOptions: {
           series: {
-            compare: (this.state.graphOptions.Percent_Change) ? 'percent' : 'value',
+            compare: (this.state.graphOptions.Percent_Change) ? 'percent' : undefined,
             showInNavigator: true
           }
         },
