@@ -13,19 +13,22 @@ import { contracts } from '../organisationContractData'
 import ReactHighstock from 'react-highcharts/ReactHighstock'
 
 const GraphOption = styled.button`
-   justify-content: center;
+    justify-content: center;
     background-color: #4B6575;
     color: #f9f9f9;
     min-height: 30px;
     width:100%;
+    margin: 5px 0;    
 `
 
 const SelectedGraphOption = styled.button`
     justify-content: center;
     background-color: #f9f9f9;
+    border: 1px #4B6575 solid;
     color: #4B6575;
     min-height: 30px;
     width: 100%;
+    margin: 5px 0;
 `
 
 const Separator = styled.div`
