@@ -129,14 +129,9 @@ class ContractViewer extends React.Component {
   handleOptionClicked(option) {
     console.log(option)
     console.log(this.state.variableData)
-    if (option === 'Logarithmic_Scale' && !ContractViewer.allPositiveValues(this.state.variableData)) {
-      console.log("bad log")
-      this.setState({logError: true})
-    } else {
-      const tempOptions = this.state.graphOptions
-      tempOptions[option] = !tempOptions[option]
-      this.setState({graphOptions: tempOptions, logError: false})
-    }
+    const graphOptions = this.state.graphOptions
+    graphOptions[option] = !graphOptions[option]
+    this.setState({ graphOptions })
   }
 
   componentWillReceiveProps(nextProps) {
