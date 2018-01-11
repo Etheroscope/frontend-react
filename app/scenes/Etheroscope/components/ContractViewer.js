@@ -218,9 +218,10 @@ class ContractViewer extends React.Component {
           <p style={{ width: '80%', margin: 'auto' }}>
             Etheroscope needs an ABI to see what variables a contract contains.
             If you are the contract owner, you can upload the source code for
-            your contract <a href="https://etherscan.io/verifyContract?a={contract.address}">here</a>.
+            your contract <a href={`https://etherscan.io/verifyContract?a=${contract.address}`}>here</a>.
             Please note it may take up to 24 hours for the ABI to become
-            available after uploading.
+            available after uploading. Also note that the full source must be
+            available for Etherscan to provide the ABI to our system.
           </p>
         </Centered>)
     } else if (!contract.variables || contract.variables.length === 0) {
