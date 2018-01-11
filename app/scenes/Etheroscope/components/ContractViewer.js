@@ -102,10 +102,10 @@ class ContractViewer extends React.Component {
       variableData: [],
       downloadingVariables: {},
       graphOptions: {
-        'Crosshair': false,
-        'Logarithmic_Scale': false,
-        'Navigator': false,
-        'Percent_Change': false
+        Crosshair: false,
+        Logarithmic_Scale: false,
+        Navigator: false,
+        Percent_Change: false
       },
       orgName: null,
       logError: false
@@ -129,13 +129,9 @@ class ContractViewer extends React.Component {
   }
 
   handleOptionClicked(option) {
-    if (option === 'Logarithmic_Scale' && !ContractViewer.allPositiveValues(this.state.variableData)) {
-      this.setState({logError: true})
-    } else {
-      const tempOptions = this.state.graphOptions
-      tempOptions[option] = !tempOptions[option]
-      this.setState({graphOptions: tempOptions, logError: false})
-    }
+    const graphOptions = this.state.graphOptions
+    graphOptions[option] = !graphOptions[option]
+    this.setState({ graphOptions })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -238,7 +234,6 @@ class ContractViewer extends React.Component {
         </Centered>)
     } else {
       const highstocksConfig = {
-        rangeSelector: { selected: 1 },
         title: { text: 'Smart Contract Explorer' },
         yAxis: {
           crosshair: this.state.graphOptions.Crosshair,
@@ -249,13 +244,13 @@ class ContractViewer extends React.Component {
         chart: { backgroundColor: '#efefef' },
         tooltip: {
           shared: true,
-          valueDecimals: 2,
+          valueDecimals: 0,
           split: true
         },
 
         plotOptions: {
           series: {
-            compare: (this.state.graphOptions.Percent_Change) ? 'percent' : 'value',
+            compare: (this.state.graphOptions.Percent_Change) ? 'percent' : undefined,
             showInNavigator: true
           }
         },
@@ -283,7 +278,7 @@ class ContractViewer extends React.Component {
           </GraphCol>
           <OptsCol>
             <CenteredH2>Options</CenteredH2>
-            {Object.entries(this.state.graphOptions).map(([option, selected], index) => (selected)
+            {Object.entries(this.state.graphOptions).map(([option, selected], index) => selected
               ? (<SelectedGraphOption key={index}
                                       onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g, ' ')} </SelectedGraphOption>)
               : (<GraphOption key={index}
