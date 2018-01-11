@@ -107,7 +107,7 @@ export default class Explorer extends React.Component {
             contractAddress: address
         }))
         .catch(err => {
-            console.log(err);
+            console.error('Error changing contract.', err);
             this.setState({
                 contract: { address }
             });
@@ -156,7 +156,6 @@ export default class Explorer extends React.Component {
     const { email, emailData } = this.state;
     postJson(`/contracts/${emailData.contract}/history/${emailData.variable}/subscribe/${email}`)
       .then(result => {
-        console.log(result);
         this.closeModal();
       });
   }

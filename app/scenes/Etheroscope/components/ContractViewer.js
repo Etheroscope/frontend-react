@@ -10,22 +10,25 @@ import { fetchJson, postJson } from "../xhr"
 import fetchEtherscan from './../etherscan'
 import { contracts } from '../organisationContractData'
 
-const ReactHighstock = require('react-highcharts/ReactHighstock')
+import ReactHighstock from 'react-highcharts/ReactHighstock'
 
 const GraphOption = styled.button`
-   justify-content: center;
+    justify-content: center;
     background-color: #4B6575;
     color: #f9f9f9;
     min-height: 30px;
     width:100%;
+    margin: 5px 0;    
 `
 
 const SelectedGraphOption = styled.button`
     justify-content: center;
     background-color: #f9f9f9;
+    border: 1px #4B6575 solid;
     color: #4B6575;
     min-height: 30px;
     width: 100%;
+    margin: 5px 0;
 `
 
 const Separator = styled.div`
@@ -50,7 +53,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-//  display: inline-block;
 `
 const Container = styled.div`
   display: flex;
@@ -127,8 +129,6 @@ class ContractViewer extends React.Component {
   }
 
   handleOptionClicked(option) {
-    console.log(option)
-    console.log(this.state.variableData)
     const graphOptions = this.state.graphOptions
     graphOptions[option] = !graphOptions[option]
     this.setState({ graphOptions })
@@ -142,12 +142,13 @@ class ContractViewer extends React.Component {
     }
   }
 
-  fetchVariableHistory(varName, spawnInterval = true) {
+  fetchVariableHistory(varName, interval) {
     const url = `/contracts/${this.props.contract.address}/history/${varName}`
     return fetchJson(url).then(result => {
       switch (result.status) {
         case 200:
-          delete this.state.downloadingVariables[varName];
+          clearInterval(interval)
+          delete this.state.downloadingVariables[varName]
           this.setState({ downloadingVariables: this.state.downloadingVariables})
           const history = result.response.data;
           const processedHistory = history.map(item => {
@@ -166,10 +167,10 @@ class ContractViewer extends React.Component {
           const downloadingVariables = this.state.downloadingVariables
           downloadingVariables[varName] = result.response
           this.setState({ downloadingVariables })
-          if (spawnInterval) {
-            setInterval(() => {
-              this.fetchVariableHistory(varName, false)
-            }, 1000);
+          if (!interval) {
+            const interval = setInterval(() => {
+              this.fetchVariableHistory(varName, interval)
+            }, 2000);
           }
           break
         case 404:
@@ -203,7 +204,6 @@ class ContractViewer extends React.Component {
 
   render () {
     const contract = this.props.contract
-    console.log(contract)
     const org = this.state.orgName && this.state.orgName.length > 0
       ? ` (${this.state.orgName})` : ''
     const balance = this.state.balance ? ` - Balance: ${this.state.balance}` : ''

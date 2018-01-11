@@ -42,7 +42,6 @@ const NoPointList = styled.ul`
 export default function Organisation(props) {
   const org = props.route.organisations.find(org => org.name === props.params.name)
   if (!org) return (<CenteredP>No organisation found with the name "{props.params.name}"</CenteredP>)
-  console.log(org)
 
   const matchingOrgs = props.route.organisations.filter(orga =>
     orga.name.toLowerCase().indexOf(org.name.toLowerCase()) !== -1
