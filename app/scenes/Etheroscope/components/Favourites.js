@@ -44,12 +44,11 @@ export default class Favourites extends React.Component {
       }
     `
     
-    const FavouriteContract = styled.li`
+    const FavouriteContract = styled.a`
       color: #4B6575;
       margin-right: 10px;
       border-bottom: white 1px solid;
       text-decoration: none;
-      cursor: pointer;
       padding: 8px 16px;
       background: #f9f9f9;
       font-weight: 600;
@@ -65,7 +64,8 @@ export default class Favourites extends React.Component {
             {fav.name}
             <FavouriteDropDown> 
             {fav.contracts.map(c => (
-              <FavouriteContract key={c.address} onClick={() => window.location='/contracts/' + c.address}>{c.address}</FavouriteContract>))}
+              <FavouriteContract key={c.address} href={`/contracts/${c.address}`}>{c.address}</FavouriteContract>
+            ))}
             </FavouriteDropDown>
           </FavouriteName>)
         )}

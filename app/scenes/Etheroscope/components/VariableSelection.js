@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDom from 'react-dom'
 import styled from 'styled-components'
-import {Icon} from 'react-fa'
+import EmailModal from './EmailModal'
 
 const VarButton = styled.button`
     justify-content: center;
@@ -14,14 +14,7 @@ const VarButton = styled.button`
     border-radius: 2px;
 `
 
-const VarSelectedButton = styled.button`
-    justify-content: center;
-    ;
-    min-height: 30px;
-    width: 100%;
-    // padding: 5px 50px;
-    // height: 50px;
-`
+
 
 const Separator = styled.hr`
 `
@@ -62,10 +55,14 @@ const Progress = styled.progress`
 `
 
 class VariableSelection extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { emailVariable: null, modalOpen: false }
+    this.notifyEmailClicked = this.notifyEmailClicked.bind(this)
+  }
 
   render() {
     const selectedVars = this.props.selectedVariables
-
     const Vars = this.props.variables.map((variable) => (
       { variable, selected: selectedVars.includes(variable) }
     ))
@@ -92,7 +89,7 @@ class VariableSelection extends React.Component {
                 {this.props.downloadingVariables[variable].progress * 100}%
               </Progress>}
               {this.props.downloadingVariables[variable] &&
-              <button onClick={() => this.props.emailClicked(variable)}>
+              <button onClick={() => this.notifyEmailClicked(variable)}>
                 Email me when complete
               </button>
               }
@@ -100,8 +97,18 @@ class VariableSelection extends React.Component {
           ))}
         </VarContainer>
         <Separator />
+        <EmailModal
+          modalOpen={this.state.modalOpen}
+          variable={this.state.emailVariable}
+          contractAddress={this.props.address}
+          closeModal={() => this.setState({ modalOpen: false })}
+        />
       </div>
     )
+  }
+
+  notifyEmailClicked(emailVariable) {
+    this.setState({ modalOpen: true, emailVariable })
   }
 }
 
