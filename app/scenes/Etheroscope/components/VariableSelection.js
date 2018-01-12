@@ -17,7 +17,8 @@ const VarButton = styled.button`
 const Separator = styled.hr`
 `
 const VarContainer = styled.div`
-    display: inline-flex;
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
     width: auto;
     min-width: 160px;

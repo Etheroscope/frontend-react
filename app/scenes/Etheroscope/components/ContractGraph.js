@@ -64,10 +64,10 @@ class ContractGraph extends React.Component {
     this.state = {
       variables,
       graphOptions: {
-        'Crosshair': false,
-        'Logarithmic_Scale': false,
-        'Navigator': false,
-        'Percent_Change': false
+        Crosshair: false,
+        Logarithmic_Scale: false,
+        Navigator: false,
+        Percent_Change: false
       },
       orgName: null,
       logError: false
@@ -77,16 +77,16 @@ class ContractGraph extends React.Component {
   }
 
   static allPositiveValues(arr) {
-    return arr.every(series => series.every(([_,v]) => (v > 0)))
+    return arr.every(series => series.every(([_, v]) => (v > 0)))
   }
 
   handleOptionClicked(option) {
-    if (option === 'Logarithmic_Scale' && !ContractGraph.allPositiveValues(this.state.variableData)) {
-      this.setState({logError: true})
+    if (option === 'Logarithmic_Scale'
+      && !ContractGraph.allPositiveValues(Object.values(this.state.variables).filter(v => v.selected).map(v => v.data))) {
+      this.setState({ logError: true })
     } else {
-      const tempOptions = this.state.graphOptions
-      tempOptions[option] = !tempOptions[option]
-      this.setState({graphOptions: tempOptions, logError: false})
+      this.state.graphOptions[option] = !this.state.graphOptions[option];
+      this.setState({ graphOptions: this.state.graphOptions, logError: false })
     }
   }
 
@@ -142,11 +142,11 @@ class ContractGraph extends React.Component {
     variable.downloading = true
     variable.progress = -1
     this.setState({ variables })
-    this.fetchVariableHistory(varName);
+    this.fetchVariableHistory(varName)
   }
+
   render () {
     const highstocksConfig = {
-      rangeSelector: { selected: 1 },
       title: { text: 'Smart Contract Explorer' },
       yAxis: {
         crosshair: this.state.graphOptions.Crosshair,
@@ -157,19 +157,19 @@ class ContractGraph extends React.Component {
       chart: { backgroundColor: '#efefef' },
       tooltip: {
         shared: true,
-        valueDecimals: 2,
+        valueDecimals: 0,
         split: true
       },
 
       plotOptions: {
         series: {
-          compare: (this.state.graphOptions.Percent_Change) ? 'percent' : 'value',
+          compare: (this.state.graphOptions.Percent_Change) ? 'percent' : undefined,
           showInNavigator: true
         }
       },
       series: Object.entries(this.state.variables)
         .filter(([_, { selected }]) => selected)
-        .map(([varName, { data }]) => ({ varName, data })),
+        .map(([varName, { data }]) => ({ name: varName, data })),
       credits: { enabled: false }
     }
     return (
@@ -181,6 +181,7 @@ class ContractGraph extends React.Component {
             variables={this.state.variables}
             variableClicked={this.variableClicked}
           />
+          {this.state.logError && <p>Sorry cannot display log graph with zeroes or negative values</p>}
         </GraphCol>
         <OptsCol>
           <CenteredH2>Options</CenteredH2>
