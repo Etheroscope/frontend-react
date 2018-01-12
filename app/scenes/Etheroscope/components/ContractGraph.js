@@ -105,7 +105,7 @@ class ContractGraph extends React.Component {
         case 503:
           // Caching - display status & keep the user updates & give email notification option
           if (!this.state.variables[varName].downloading) return
-          const progress = result.response * 50 + result.status === 'processing' ? 50 : 0
+          const progress = result.response.progress * 50 + (result.response.status === 'processing' ? 50.0 : 0.0)
           setTimeout(() => {
             this.fetchVariableHistory(varName)
           }, 1500)
