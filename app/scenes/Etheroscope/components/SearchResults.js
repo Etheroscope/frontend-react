@@ -37,7 +37,8 @@ export default class SearchResults extends React.Component {
     )
     this.matchingContracts = this.props.route.contracts.filter(contract =>
       contract.address.toLowerCase().indexOf(query) !== -1
-      || contract.organisation.toLowerCase().indexOf(query) !== -1)
+      || contract.organisation.toLowerCase().indexOf(query) !== -1
+      || contract.description.toLowerCase().indexOf(query) !== -1)
     if (this.matchingOrgs.length === 0 && this.matchingContracts.length === 0) {
       return (<CenteredP>No results found</CenteredP>)
     }
