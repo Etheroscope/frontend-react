@@ -17,26 +17,9 @@ const GraphOption = styled.button`
     margin: 5px 0;    
 `
 
-const SelectedGraphOption = styled.button`
-    justify-content: center;
-    background-color: #f9f9f9;
-    border: 1px #4B6575 solid;
-    color: #4B6575;
-    min-height: 30px;
-    width: 100%;
-    margin: 5px 0;
-`
-
-
-
-
-
 const CenteredH2 = styled.h2`
   text-align: center;
 `
-
-
-
 
 
 const Variables = styled(VariableSelection)`
@@ -61,14 +44,25 @@ const OptsCol = styled.div`
   width: 20%;
 `
 
+const selectedButtonStyle = {
+  backgroundColor: '#f9f9f9',
+  border: '1px #4B6575 solid',
+  color: '#4B6575'
+}
+
 class ContractGraph extends React.Component {
   constructor(props) {
     super(props)
+    const variables = {}
+    this.props.contract.variables.forEach(varName => variables[varName] = {
+      selected: false,
+      downloading: false,
+      progress: -1,
+      data: [],
+    });
+
     this.state = {
-      variableNames: [],
-      currentVar: null,
-      variableData: [],
-      downloadingVariables: {},
+      variables,
       graphOptions: {
         'Crosshair': false,
         'Logarithmic_Scale': false,
@@ -96,36 +90,32 @@ class ContractGraph extends React.Component {
     }
   }
 
-  fetchVariableHistory(varName, interval) {
+  fetchVariableHistory(varName) {
     const url = `/contracts/${this.props.address}/history/${varName}`
     return fetchJson(url).then(result => {
       switch (result.status) {
         case 200:
-          clearInterval(interval)
-          delete this.state.downloadingVariables[varName]
-          this.setState({ downloadingVariables: this.state.downloadingVariables})
-          const history = result.response.data;
-          const processedHistory = history.map(item => {
+          const processedHistory = result.response.data.map(item => {
             item.value = parseFloat(item.value)
             return [item.time * 1000, item.value]
-          })
-
-          this.setState({
-            variableNames: [...this.state.variableNames, varName],
-            currentVar: varName,
-            variableData: [...this.state.variableData, processedHistory.sort()]
-          })
-          break
+          }).sort()
+          this.state.variables[varName] = {
+            selected: true,
+            downloading: false,
+            progress: 100,
+            data: processedHistory
+          }
+          this.setState({ variables: this.state.variables })
+          break;
         case 503:
           // Caching - display status & keep the user updates & give email notification option
-          const downloadingVariables = this.state.downloadingVariables
-          downloadingVariables[varName] = result.response
-          this.setState({ downloadingVariables })
-          if (!interval) {
-            const interval = setInterval(() => {
-              this.fetchVariableHistory(varName, interval)
-            }, 2000);
-          }
+          if (!this.state.variables[varName].downloading) return
+          const progress = result.response * 50 + result.status === 'processing' ? 50 : 0
+          setTimeout(() => {
+            this.fetchVariableHistory(varName)
+          }, 1500)
+          this.state.variables[varName].progress = progress
+          this.setState({ variables: this.state.variables })
           break
         case 404:
           // Send the initial request
@@ -142,19 +132,18 @@ class ContractGraph extends React.Component {
   }
 
   variableClicked(varName) {
-    // Remove the variable from the set of displayed variables if it's displayed
-    if (this.state.variableNames.includes(varName)) {
-      const clickedIndex = this.state.variableNames.indexOf(varName)
-      this.setState({
-        variableNames: [...this.state.variableNames.slice(0, clickedIndex), ...this.state.variableNames.slice(clickedIndex + 1, this.state.variableNames.length)],
-        currentVar: this.state.variableNames[this.state.variableNames.length - 1],
-          variableData: [...this.state.variableData.slice(0, clickedIndex), ...this.state.variableData.slice(clickedIndex + 1, this.state.variableData.length)]
-      })
-      return
+    const variables = this.state.variables
+    const variable = variables[varName]
+    if (variable.selected || variable.downloading) {
+      variable.selected = false
+      variable.downloading = false
+      return this.setState({ variables })
     }
+    variable.downloading = true
+    variable.progress = -1
+    this.setState({ variables })
     this.fetchVariableHistory(varName);
   }
-
   render () {
     const highstocksConfig = {
       rangeSelector: { selected: 1 },
@@ -178,35 +167,27 @@ class ContractGraph extends React.Component {
           showInNavigator: true
         }
       },
-      series: this.state.variableNames.map((name, i) =>
-        ({
-          name, data: this.state.variableData[i],
-          tooltip: {
-            valueDecimals: 2,
-            split: true
-          }
-        })),
+      series: Object.entries(this.state.variables)
+        .filter(([_, { selected }]) => selected)
+        .map(([varName, { data }]) => ({ varName, data })),
       credits: { enabled: false }
     }
     return (
       <Row>
         <GraphCol>
-          <ReactHighstock config={highstocksConfig}/>
+          <ReactHighstock config={highstocksConfig} />
           <Variables
             address={this.props.address}
-            variables={this.props.contract.variables}
-            selectedVariables={this.state.variableNames}
-            downloadingVariables={this.state.downloadingVariables}
+            variables={this.state.variables}
             variableClicked={this.variableClicked}
           />
         </GraphCol>
         <OptsCol>
           <CenteredH2>Options</CenteredH2>
-          {Object.entries(this.state.graphOptions).map(([option, selected], index) => (selected)
-            ? (<SelectedGraphOption key={index}
-                                    onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g, ' ')} </SelectedGraphOption>)
-            : (<GraphOption key={index}
-                            onClick={() => this.handleOptionClicked(option)}> {option.replace(/_/g, ' ')} </GraphOption>)
+          {Object.entries(this.state.graphOptions).map(([option, selected], index) =>
+            (<GraphOption key={index} style={selected ? selectedButtonStyle : {}} onClick={() => this.handleOptionClicked(option)}>
+              {option.replace(/_/g, ' ')}
+            </GraphOption>)
           )}
         </OptsCol>
       </Row>
