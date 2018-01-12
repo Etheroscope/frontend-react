@@ -81,13 +81,8 @@ class ContractGraph extends React.Component {
   }
 
   handleOptionClicked(option) {
-    if (option === 'Logarithmic_Scale'
-      && !ContractGraph.allPositiveValues(Object.values(this.state.variables).filter(v => v.selected).map(v => v.data))) {
-      this.setState({ logError: true })
-    } else {
       this.state.graphOptions[option] = !this.state.graphOptions[option];
       this.setState({ graphOptions: this.state.graphOptions, logError: false })
-    }
   }
 
   fetchVariableHistory(varName) {
