@@ -1,11 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
-import { fetchJson, postJson } from "../xhr"
 
-import ContractViewer from './ContractViewer.js'
+import { fetchJson } from "../xhr"
+import fetchEtherscan from '../etherscan'
+
+import ContractGraph from './ContractGraph.js'
 import Favourites from './Favourites.js'
-import Modal from 'react-modal'
+import {contracts} from '../organisationContractData'
+import { ExplorerErrors, ErrorTypes } from './ExplorerErrors'
 
+const Heading = styled.h1`
+  text-align: center;
+`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -32,169 +38,101 @@ const Page = styled.div`
   width: 90%;
   margin: auto;
 `
-const ButtonStyle = styled.button`
-  padding: 10px;
-  width:200px;
-  background-color: #4B6575;
-  border-radius 3px;
-  color: white;
-  display: block;
-  margin: 50px auto;
+
+const ViewerWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 `
-const InputStyle = styled.input`
- width:300px;
- padding: 5px 10px;
- border-radius: 3px;
-`
-const Formstyle=styled.form`
-  margin-left:100px;
-  padding: 10px;
-`
-const SubmitButton=styled.button`
-  border-radius 3px;
-  background-color: #4B6575;
-  color: #f9f9f9;
-  padding: 5px 10px;
-  margin-left: 16px;
-`
-const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
-    padding               : '18px 36px 24px 36px'
-  }
-};
+
+const DA_WEI_PER_ETH = 1000000000000000000
 
 export default class Explorer extends React.Component {
   constructor(props) {
     super(props)
     const address = props.params.address;
+
     this.state = {
-      contract: { nullContract: true, variables: [], abi: [] },
-      contractAddress: 'contract address',
-      modalIsOpen: false,
-      email: '',
-      everFocusedEmail: false,
-      inFocus: '',
+      address,
+      contract: null,
+      error: null,
+      balance: 'Loading...',
+      orgName: Explorer.findOrganisationName(address)
     }
-    
-    if (address) this.changeContract(address);
-    this.changeContract = this.changeContract.bind(this)
-    this.addressChanged = this.addressChanged.bind(this)
-    this.exploreClicked = this.exploreClicked.bind(this)
-    this.handleKeyPress = this.handleKeyPress.bind(this)
-    this.handleEmailChange = this.handleEmailChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.openModal = this.openModal.bind(this);
-    this.afterOpenModal = this.afterOpenModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-  }
-
-  downloadContract(address) {
-    const url = `/contracts/${address}`
-    return fetchJson(url).then(response => response.response)
-  }
-
-  changeContract(address) {
-    return this.downloadContract(address)
-        .then(contract => { contract.address = address; return contract; })
-        .then(contract => this.setState({
-            contract,
-            contractAddress: address
-        }))
-        .catch(err => {
-            console.error('Error changing contract.', err);
-            this.setState({
-                contract: { address }
-            });
-        })
-  }
-
-  exploreClicked() {
-    this.changeContract(this.state.contractAddress)
-  }
-
-  addressChanged(newAddress) {
-    this.setState({ contractAddress: newAddress })
-  }
-
-  handleKeyPress(e) {
-    if (e.key === 'Enter') {
-      this.changeContract(this.state.contractAddress)
-    }
-  }
-
-  openModal(variable, contract) {
-    this.setState({emailData: {variable, contract}, modalIsOpen: true});
-  }
-
-  afterOpenModal() {
-    this.subtitle.style.color = '#f00';
-  }
-
-  closeModal() {
-    this.setState({modalIsOpen: false});
-  }
-
-  handleEmailChange(evt) {
-    this.setState({ email: evt.target.value });
-  }
-
-  validEmail() {
-    return validate(this.state.email);
-  }
-
-  handleSubmit(evt) {
-    if (!this.validEmail()) {
-      return false;
-    }
-    evt.preventDefault();
-    const { email, emailData } = this.state;
-    postJson(`/contracts/${emailData.contract}/history/${emailData.variable}/subscribe/${email}`)
-      .then(result => {
-        this.closeModal();
-      });
   }
 
   render() {
+    const org = this.state.orgName && this.state.orgName.length > 0
+      ? ` (${this.state.orgName})` : ''
+    const balance = this.state.balance ? ` - Balance: ${this.state.balance}` : ''
+    const contract = this.state.contract
+    const error = this.state.error
     return (
       <Wrapper>
         <BannerContainer>
           <Banner>
-            <Favourites handleClick={this.changeContract} />
+            <Favourites />
           </Banner>
         </BannerContainer>
         <Page>
-          <ContractViewer contract={this.state.contract} emailHandler={this.openModal}/>
-          <Modal
-            isOpen={this.state.modalIsOpen}
-            onAfterOpen={this.afterOpenModal}
-            onRequestClose={this.closeModal}
-            style={customStyles}
-          >
-            <h2> Give us your email address so we can get back to you!</h2>
-            <Formstyle onSubmit={this.handleSubmit}>
-              <InputStyle
-                className={this.validEmail() ? "error" : ""}
-                type="text"
-                placeholder="name@example.com"
-                value={this.state.email}
-                onChange={this.handleEmailChange}
-              />
-              <SubmitButton disabled={!this.validEmail()}>Subscribe</SubmitButton>
-            </Formstyle>
-          </Modal>
+          <ViewerWrapper>
+            <Heading>{this.state.address + org + balance}</Heading>
+            {error && <ExplorerErrors error={error} address={this.state.address} />}
+            {(!contract && !error) && (
+            <div className="loading-container">
+              <div className="lds-rolling"><div /></div>
+              <p>Loading...</p>
+            </div>
+            )}
+            {contract && <ContractGraph contract={contract} address={this.state.address} />}
+          </ViewerWrapper>
         </Page>
       </Wrapper>
     )
   }
-}
 
-function validate(email) {
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
+  componentDidMount() {
+    const backendContractURL = `/contracts/${this.state.address}`
+    const balanceURL = `/api?module=account&action=balance&address=${this.state.address}&tag=latest&apikey=AJAF8TPSIH2TBUGQJTI2VU98NV3A3YFNCI`
+
+    fetchEtherscan(balanceURL)
+      .then(response => this.setState({
+        balance: response.status === '1'
+          ? `${response.result / DA_WEI_PER_ETH} ETH`
+          : `Error loading balance`
+      }))
+
+    fetchJson(backendContractURL)
+      .then(response => response.response)
+      .then(contract => {
+        if (!contract) {
+          return this.setState({ error: ErrorTypes.NO_CONTRACT })
+        }
+        if (!contract.abi || contract.abi.length === 0) {
+          return this.setState({ error: ErrorTypes.NO_ABI })
+        }
+        if (!contract.variables || contract.variables.length === 0) {
+          return this.setState({ error: ErrorTypes.NO_VARIABLES })
+        }
+        return this.setState({ contract })
+      })
+      .catch(err => {
+        this.setState({
+          error: {
+            heading: 'Error whilst retrieving contract',
+            message: err.message
+          }
+        })
+      });
+  }
+
+  static findOrganisationName(addr) {
+    const entries = Object.values(contracts)
+    for (let i = 0; i < entries.length; i++) {
+      if(entries[i].address === addr) {
+        return(entries[i].organisation)
+      }
+    }
+    return null;
+  }
 }

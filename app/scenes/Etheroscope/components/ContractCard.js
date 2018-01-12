@@ -69,8 +69,8 @@ class ContractCard extends React.Component {
   retrieveFavourites (properties) {
     const favourites = localStorage.favourites && JSON.parse(localStorage.favourites) || []
 
-    var isFavourite = false
-    for (var i = 0; i < favourites.length; i++) {
+    let isFavourite = false
+    for (let i = 0; i < favourites.length; i++) {
       if (favourites[i].name === properties.organisation.name) {
         isFavourite = true
         break
@@ -89,7 +89,7 @@ class ContractCard extends React.Component {
       storage.push(organisation)
     } else {
       this.setState({ isFavourite: false })
-      for (var j = 0; j < storage.length; j++) {
+      for (let j = 0; j < storage.length; j++) {
         if (storage[j].name === organisation.name) {
           storage.splice(j, 1)
         }

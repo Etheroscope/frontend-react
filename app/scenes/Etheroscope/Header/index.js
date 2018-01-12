@@ -12,7 +12,7 @@ const Wrapper = styled.div`
   width: 100%;
   background: #4B6575;
   position: fixed;
-  z-index: 10000;
+  z-index: 20;
   border-bottom: 5px solid #f9f9f9; 
 `
 const InnerWrapper = styled.div`

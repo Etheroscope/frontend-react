@@ -1,5 +1,5 @@
 export function fetchJson(url) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const xmlHttp = new XMLHttpRequest()
     xmlHttp.open('GET', BACKEND_BASE_URL + url)
     xmlHttp.responseType = 'json'
@@ -13,7 +13,7 @@ export function fetchJson(url) {
 }
 
 export function postJson(url) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const xmlHttp = new XMLHttpRequest()
     xmlHttp.open('POST', BACKEND_BASE_URL + url)
     xmlHttp.responseType = 'json'

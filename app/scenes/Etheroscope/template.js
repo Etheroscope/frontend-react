@@ -1,5 +1,5 @@
 import React from 'react'
-import {Router, IndexRoute, Route, browserHistory} from 'react-router'
+import {Router, Route, browserHistory} from 'react-router'
 
 import HomePage from './components/HomePage'
 import Explorer from './components/Explorer'

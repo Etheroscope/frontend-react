@@ -53,8 +53,8 @@ export default function Organisation(props) {
   // Add organisations to recent
   if (matchingOrgs.length > 0) {
     const recent = localStorage.recent && JSON.parse(localStorage.recent) || []
-    for (var j = 0; j < matchingOrgs.length; j++) {
-      for (var i = 0; i < recent.length; i++) {
+    for (let j = 0; j < matchingOrgs.length; j++) {
+      for (let i = 0; i < recent.length; i++) {
         if (recent[i].name === matchingOrgs[j].name) {
           recent.splice(i, 1)
           break
