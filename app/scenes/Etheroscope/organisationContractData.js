@@ -4,10 +4,6 @@ export const contracts = [
     description: 'Minting contract: this contract mints tokens representing the value of donations made in fiat',
     organisation: 'Alice'
   }, {
-    address: '0xBd897c8885b40d014Fb7941B3043B21adcC9ca1C',
-    description: 'Donations: the main contract storing donations made to the London Street Impact: 15 Lives (LSI:15L) appeal',
-    organisation: 'Alice'
-  }, {
     address: '0x2299B133551318fC3C34Bf81b46694651dA11282',
     description: 'Registry contract: this contract keeps track of donor balances and goals achieved',
     organisation: 'Alice'
